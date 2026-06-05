@@ -160,8 +160,17 @@
   };
 
   // 가운데(현재) 캐릭터 → 메인 비주얼/디테일/밴드색 부드러운 전환
-  const applyDetail = (key) => {
+  // dir: +1(다음/아래), -1(이전/위), 0(초기) — GSAP 방향성 퇴장/등장에 사용
+  const applyDetail = (key, dir = 0) => {
     const data = CHARACTERS[key];
+
+    /* ── GSAP 화려 버전 ── */
+    if (window.gsap && !reduceMotion && dir !== 0) {
+      _swapCharGSAP(window.gsap, key, data, dir);
+      return;
+    }
+
+    /* ── CSS 폴백 (GSAP 미로드 / reduceMotion / 초기 호출) ── */
     if (charBand) charBand.style.background = data.color;
     charMain.classList.add("swapping");
     if (charFace) charFace.style.opacity = "0";
@@ -176,16 +185,16 @@
   };
 
   // 세 슬롯(이전/현재/다음) 그리기
-  const render = (animateDetail) => {
+  const render = (animateDetail, dir = 0) => {
     const n = ORDER.length;
     const cur = ORDER[mod(current, n)];
     setThumb(slot["-1"], ORDER[mod(current - 1, n)]);
     setThumb(slot["0"], cur);
     setThumb(slot["1"], ORDER[mod(current + 1, n)]);
-    if (animateDetail) applyDetail(cur);
+    if (animateDetail) applyDetail(cur, dir);
   };
 
-  const go = (dir) => { current = mod(current + dir, ORDER.length); render(true); };
+  const go = (dir) => { current = mod(current + dir, ORDER.length); render(true, dir); };
 
   if (charPrev) charPrev.addEventListener("click", () => go(-1));
   if (charNext) charNext.addEventListener("click", () => go(1));
@@ -321,6 +330,9 @@
     });
     vnClose.addEventListener("click", (e) => { e.stopPropagation(); closeVn(); });
     vnCta.addEventListener("click", () => { closeVn(); });   // href="#home" 네이티브 앵커로 상단 이동 + 닫기
+    // 헤더 "프롤로그" 버튼 → 오프닝 미리보기 모달 (JS 없으면 #home 앵커 폴백)
+    const prologueBtn = document.getElementById("prologueBtn");
+    if (prologueBtn) prologueBtn.addEventListener("click", (e) => { e.preventDefault(); openVn(); });
     document.addEventListener("keydown", (e) => {
       if (!vnModal.classList.contains("open")) return;
       if (e.key === "Escape") { closeVn(); }
@@ -426,21 +438,6 @@
     }
 
     if (window.ScrollTrigger) {
-      // (히어로 필름 패럴랙스 제거 — 필름은 고정)
-      // 캐릭터 메인 등장: 왼쪽에서 휘리릭 슈욱(skew 잔상) → 탄성 정착 — 화려하게
-      // (배경 흐린 얼굴은 지금처럼 유지 / 등장 후 인라인 정리해 캐릭터 전환 정상)
-      if (charMain) charMain.style.transition = "none";  // GSAP 모션 ↔ CSS transition 충돌 방지
-      g.timeline({
-        scrollTrigger: { trigger: ".characters", start: "top 65%", once: true },
-        onComplete() { g.set(".char-main", { clearProps: "all" }); if (charMain) charMain.style.transition = ""; },
-      })
-        .from(".char-main", { x: -280, skewX: 16, rotation: -13, scale: 0.8, autoAlpha: 0,
-          transformOrigin: "50% 100%", duration: 0.8, ease: "power4.out" })
-        .to(".char-main", { rotation: 3.5, duration: 0.15, ease: "sine.out" })   // 살짝 오버슈트
-        .to(".char-main", { rotation: 0, duration: 0.75, ease: "elastic.out(1, 0.45)" });  // 탄성 정착
-      // 썸네일 스태거 등장
-      g.from(".char-thumbs .thumb", { y: 16, stagger: 0.07, duration: 0.5, ease: "power2.out",
-        scrollTrigger: { trigger: ".char-selector", start: "top 82%", once: true } });
       // 스틸 스태거 등장 — 3D 카드 플립 인 (왼쪽 축으로 펼쳐지듯)
       g.set(".still-grid", { perspective: 900 });
       g.from(".still", { autoAlpha: 0, rotationY: -58, y: 16, transformOrigin: "left center",
@@ -461,5 +458,147 @@
     document.querySelectorAll(".thumb").forEach((t) =>
       hov(t, () => g.to(t, { y: -4, scale: 1.05, duration: 0.22, ease: "power2.out" }),
              () => g.to(t, { y: 0, scale: 1, duration: 0.22, ease: "power2.out" })));
+  }
+
+  /* =====================================================================
+     _swapCharGSAP — 캐릭터 교체 GSAP 화려 전환
+     ─────────────────────────────────────────────────────────────────────
+     · 이전 캐릭터 퇴장: 방향성 Y 슬라이드 + 스케일↓ + 블러 + 페이드
+     · 컬러밴드: 즉시 업데이트 (배경 전환)
+     · 반짝임 파티클 버스트 (음표 스폰)
+     · 새 캐릭터 등장: back.out 탄성 + 살짝 오버슈트
+     · 텍스트(이름/역할/설명/대사) stagger 슬라이드
+     · 연타 안전: 진행 중 타임라인 kill + clearProps 후 새 타임라인 시작
+     ===================================================================== */
+  let _swapTL = null;   // 현재 진행 중인 swap 타임라인 참조
+
+  function _swapCharGSAP(gsap, key, data, dir) {
+    const stage = document.querySelector(".char-visual");
+
+    // 연타 안전: 이전 타임라인이 남아있으면 즉시 중단 + 잔여 인라인 정리
+    if (_swapTL) {
+      _swapTL.kill();
+      _swapTL = null;
+      gsap.set(charMain, { clearProps: "all" });
+      // CSS .swapping 클래스 혹시 남아있으면 제거
+      charMain.classList.remove("swapping");
+    }
+
+    // 퇴장 방향: dir=+1(다음) → 위로 퇴장, dir=-1(이전) → 아래로 퇴장
+    const exitY  = dir > 0 ? -55 : 55;
+    const enterY = dir > 0 ?  60 : -60;
+
+    // charFace(배경 큰 얼굴) 페이드아웃
+    if (charFace) gsap.to(charFace, { opacity: 0, duration: 0.18, ease: "power1.out", overwrite: true });
+
+    const tl = gsap.timeline({ onComplete() { _swapTL = null; } });
+    _swapTL = tl;
+
+    // ── 0. 퇴장: 현재 캐릭터 슬라이드 아웃 ──
+    // CSS transition이 GSAP과 충돌하지 않도록 transition 일시 제거
+    charMain.style.transition = "none";
+    tl.to(charMain, {
+      y: exitY, scale: 0.82, opacity: 0,
+      filter: "blur(4px)",
+      duration: 0.26, ease: "power3.in",
+      transformOrigin: "50% 100%",
+    }, 0);
+
+    // ── 1. 이미지·텍스트 교체 + 컬러밴드 + 파티클 버스트 ──
+    tl.call(() => {
+      // 이미지 교체
+      charMain.src  = data.img;
+      charMain.alt  = data.name;
+      if (charFace) { charFace.src = data.img; }
+
+      // 텍스트 교체
+      charName.textContent  = data.name;
+      charRole.textContent  = data.role;
+      charDesc.textContent  = data.desc;
+      if (charQuote) charQuote.textContent = data.quote;
+
+      // 컬러밴드 즉시 전환
+      if (charBand) charBand.style.background = data.color;
+
+      // charFace 재등장 (살짝 지연)
+      if (charFace) gsap.fromTo(charFace, { opacity: 0 }, { opacity: 0.3, duration: 0.5, ease: "power2.out", delay: 0.1 });
+
+      // 파티클 버스트
+      _spawnCharNotes(gsap, stage);
+    }, null, 0.24);
+
+    // ── 2. 등장: 반대 방향에서 탄성 솟구침 ──
+    tl.fromTo(charMain,
+      { y: enterY, scale: 0.78, opacity: 0, filter: "blur(6px)", rotation: dir > 0 ? 6 : -6, transformOrigin: "50% 100%" },
+      { y: 0,      scale: 1,    opacity: 1, filter: "blur(0px)", rotation: 0,
+        duration: 0.62, ease: "back.out(1.8)",
+        onComplete() {
+          // CSS transition 복원 + 잔여 인라인 정리
+          charMain.style.transition = "";
+          gsap.set(charMain, { clearProps: "filter,rotation,scale,x,y,opacity" });
+        },
+      }, 0.22);
+
+    // ── 3. 텍스트 stagger 슬라이드 인 ──
+    const textLines = [charName, charRole, charDesc, charQuote].filter(Boolean);
+    tl.fromTo(textLines,
+      { y: dir > 0 ? 18 : -18, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.38, ease: "power2.out",
+        stagger: { each: 0.07 },
+        onComplete() { gsap.set(textLines, { clearProps: "y,opacity" }); },
+      }, 0.30);
+  }
+
+  /* =====================================================================
+     _spawnCharNotes — CHARACTERS 등장 완료 직후 1회 음표 파티클 스폰
+     캐릭터 비주얼 영역(#charStage) 위로 음표가 반짝 흩날리며 소멸.
+     DOM은 애니메이션 완료 후 자동 제거 — 누적 없음.
+     prefers-reduced-motion 사용자는 이 함수 자체가 호출되지 않음(GSAP블록 밖).
+     ===================================================================== */
+  function _spawnCharNotes(gsap, container) {
+    const stage = container || document.querySelector(".char-visual");
+    if (!stage) return;
+    const GLYPHS  = ["♪", "♫", "♩", "♬", "♭", "♮"];
+    const COLORS  = ["#ef94ac", "#f4b25c", "#c79be6", "#fff0f4", "#8fb4f0", "#f07ba0", "#ffd6e8"];
+    const rand    = (a, b) => a + Math.random() * (b - a);
+    const pick    = (arr) => arr[Math.floor(Math.random() * arr.length)];
+    const COUNT   = 11;  // 너무 많으면 산만 — 11개가 화려함과 절제의 균형
+
+    for (let i = 0; i < COUNT; i++) {
+      // 딜레이 분산: 0~0.55s 사이에 등장 → 폭죽처럼 퍼짐
+      const delay = rand(0, 0.55);
+      setTimeout(() => {
+        const span = document.createElement("span");
+        span.className = "char-note-particle";
+        span.textContent = pick(GLYPHS);
+        span.style.cssText = [
+          "position:absolute",
+          "pointer-events:none",
+          "z-index:10",
+          "left:"  + rand(8, 88) + "%",
+          "bottom:" + rand(12, 72) + "%",
+          "font-size:" + rand(18, 38) + "px",
+          "color:" + pick(COLORS),
+          "opacity:0",
+          "will-change:transform,opacity",   // 개별 요소 레이어 — inner전체 재래스터 방지
+        ].join(";");
+        stage.appendChild(span);
+
+        const driftX = rand(-55, 55);
+        const riseY  = rand(90, 160);
+        const dur    = rand(0.9, 1.4);
+        gsap.fromTo(span,
+          { y: 0, opacity: 0, scale: 0.4, rotation: rand(-18, 0) },
+          { y: -riseY, x: driftX, opacity: 1, scale: 1,
+            rotation: rand(0, 18), duration: dur * 0.65, ease: "power2.out",
+            onComplete() {
+              gsap.to(span, {
+                opacity: 0, y: -(riseY + 40), duration: dur * 0.45, ease: "power1.in",
+                onComplete() { span.remove(); },
+              });
+            },
+          });
+      }, delay * 1000);
+    }
   }
 })();
