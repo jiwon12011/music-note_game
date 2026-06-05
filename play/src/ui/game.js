@@ -6,6 +6,7 @@ import { profile, trackByCg } from "../state/profile.js";
 import { save, loadInto } from "../state/saves.js";
 import { openSaveLoad } from "./saveload.js";
 import { openSettings } from "./settings.js";
+import { openAffection } from "./affection.js";
 import { openOverlay } from "./overlay.js";
 
 const ASSET = "public/img";
@@ -63,7 +64,13 @@ export async function startGame(app, opts = {}) {
     requestAnimationFrame(() => requestAnimationFrame(() => charEl.classList.remove("enter")));
   };
   const hideChar = () => { view.char = null; charEl.style.opacity = "0"; setTimeout(() => { charEl.hidden = true; }, 350); };
-  const setSpeaker = (k) => { view.speaker = k || null; if (!k) { speakerEl.hidden = true; return; } speakerEl.hidden = false; speakerEl.textContent = charName(k); speakerEl.style.background = charColor(k); };
+  const setSpeaker = (k) => {
+    view.speaker = k || null;
+    if (!k) { speakerEl.hidden = true; return; }
+    speakerEl.hidden = false; speakerEl.style.background = charColor(k);
+    const v = story.variablesState[`aff_${k}`] ?? 0;
+    speakerEl.innerHTML = `${charName(k)}<span class="heart-mini">♥${v}</span>`;
+  };
   const applyTags = (t) => {
     if (t.scene) view.scene = t.scene;
     if (t.track) profile.unlockTrack(t.track);
@@ -139,12 +146,14 @@ export async function startGame(app, opts = {}) {
       <button class="menu-item" data-a="resume">계속하기</button>
       <button class="menu-item" data-a="save">저장하기</button>
       <button class="menu-item" data-a="load">불러오기</button>
+      <button class="menu-item" data-a="affection">호감도</button>
       <button class="menu-item" data-a="settings">설정</button>
       <button class="menu-item" data-a="title">타이틀로</button></div>`;
     const { close } = openOverlay(panel);
     panel.querySelector('[data-a="resume"]').addEventListener("click", close);
     panel.querySelector('[data-a="save"]').addEventListener("click", () => { close(); openSaveLoad("save", { onPick: (slot) => { save(slot, story, getPreview()); } }); });
     panel.querySelector('[data-a="load"]').addEventListener("click", () => { close(); openSaveLoad("load", { onPick: (slot) => { startGame(app, { ...opts, resumeSlot: slot }); } }); });
+    panel.querySelector('[data-a="affection"]').addEventListener("click", () => { close(); openAffection(story); });
     panel.querySelector('[data-a="settings"]').addEventListener("click", () => { close(); openSettings(); });
     panel.querySelector('[data-a="title"]').addEventListener("click", () => { close(); onExit && onExit(); });
   };

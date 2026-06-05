@@ -201,6 +201,18 @@ button { font-family: inherit; cursor: pointer; }
 .slot-sub { font-size: .8rem; color: rgba(246,233,227,.6); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .slot-empty { color: rgba(246,233,227,.45); font-size: .9rem; }
 
+/* 호감도 게이지 */
+.aff-list { display: flex; flex-direction: column; gap: 14px; }
+.aff-row { display: grid; grid-template-columns: 66px 1fr auto; align-items: center; gap: 12px; row-gap: 2px; }
+.aff-name { font-weight: 700; font-size: .95rem; }
+.aff-bar { height: 8px; border-radius: 4px; background: rgba(250,241,236,.12); overflow: hidden; }
+.aff-fill { height: 100%; border-radius: 4px; transition: width .5s var(--ease); }
+.aff-num { font-family: var(--font-display); font-weight: 700; color: var(--c-cream); font-size: .95rem; }
+.aff-num small { font-weight: 500; color: rgba(246,233,227,.5); font-size: .7rem; }
+.aff-tier { grid-column: 2 / 4; font-size: .74rem; color: rgba(246,233,227,.55); }
+/* 화자 펠릿 옆 현재 ♥ */
+.vn-speaker .heart-mini { margin-left: 8px; opacity: .85; font-weight: 600; }
+
 /* 컬렉션(내 플레이리스트) 트랙 */
 .track-list { display: flex; flex-direction: column; gap: 10px; }
 .track {
