@@ -1,0 +1,27 @@
+{
+  "name": "music-note_game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiwon12011/music-note_game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/jiwon12011/music-note_game/issues"
+  },
+  "homepage": "https://github.com/jiwon12011/music-note_game#readme",
+  "dependencies": {
+    "sharp": "^0.34.5"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0"
+  }
+}

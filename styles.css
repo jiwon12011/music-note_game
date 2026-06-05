@@ -1,0 +1,310 @@
+/* ============================================================
+   PLAYLIST : Between Us — 디자인 토큰
+   색감/레이아웃은 아래 :root 변수만 바꾸면 전체가 바뀝니다.
+   ============================================================ */
+:root {
+  --color-primary: #ef94ac;      /* 메인 핑크 (버튼, 배지) */
+  --color-primary-dark: #e57a96; /* 진한 핑크 (호버) */
+  --color-pink-band: #f6c9d6;    /* 캐릭터 섹션 핑크 밴드 */
+  --color-cream: #faf1ec;        /* 크림 배경 */
+  --color-cream-2: #f3e6df;      /* 약간 진한 크림 */
+  --color-dark: #382c29;         /* 다크 브라운 패널 */
+  --color-dark-2: #2b2120;       /* 더 진한 브라운 */
+  --color-text: #4a3d3a;
+  --color-text-soft: #9a8b85;
+  --color-on-dark: #f6e9e3;
+  --color-border: #ecdcd3;
+  --color-white: #ffffff;
+
+  --font-body: 'Noto Sans KR', sans-serif;
+  --font-display: 'Poppins', 'Noto Sans KR', sans-serif;
+
+  --space-sm: 8px; --space-md: 16px; --space-lg: 24px;
+  --space-xl: 40px; --space-2xl: 64px; --space-3xl: 96px;
+
+  --container: 1200px;
+  --radius: 18px;
+  --radius-lg: 28px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur: 320ms;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-cream);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+.container { width: 100%; max-width: var(--container); margin: 0 auto; padding: 0 var(--space-lg); }
+
+/* ---------- 버튼 ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: var(--space-sm);
+  padding: 11px 24px; border-radius: 999px;
+  font-weight: 700; font-size: .92rem; cursor: pointer; border: none;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur), background var(--dur);
+}
+.btn-primary { background: var(--color-primary); color: #fff; box-shadow: 0 8px 20px rgba(239,148,172,.4); }
+.btn-primary:hover { background: var(--color-primary-dark); transform: translateY(-2px); box-shadow: 0 12px 26px rgba(239,148,172,.5); }
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.site-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 76px;
+  background: rgba(250,241,236,.7); backdrop-filter: blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: background var(--dur), border-color var(--dur), box-shadow var(--dur);
+}
+.site-header.scrolled { background: rgba(250,241,236,.95); border-color: var(--color-border); box-shadow: 0 6px 22px rgba(120,80,70,.08); }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+.logo { display: flex; align-items: center; }
+.logo-img { width: 52px; height: 52px; object-fit: contain; }
+.logo-note {
+  width: 44px; height: 44px; display: grid; place-items: center;
+  background: var(--color-dark); color: var(--color-cream);
+  border: 2px solid var(--color-primary); border-radius: 50%; font-size: 1.2rem;
+}
+.main-nav { display: flex; gap: clamp(12px, 2vw, 32px); }
+.nav-link {
+  font-family: var(--font-display); font-size: .82rem; font-weight: 600; letter-spacing: .08em;
+  color: var(--color-text-soft); position: relative; padding: 6px 0; transition: color var(--dur);
+}
+.nav-link::after { content: ""; position: absolute; left: 0; bottom: 0; width: 0; height: 2px; background: var(--color-primary); transition: width var(--dur) var(--ease); }
+.nav-link:hover, .nav-link.active { color: var(--color-primary); }
+.nav-link.active::after, .nav-link:hover::after { width: 100%; }
+.header-actions { display: flex; align-items: center; gap: 10px; }
+.icon-btn {
+  width: 44px; height: 44px; border-radius: 12px; border: 1.5px solid var(--color-border);
+  background: #fff; color: var(--color-dark); font-size: 1.2rem; cursor: pointer; transition: all var(--dur);
+}
+.icon-btn:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.menu-toggle { display: none; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero { position: relative; padding-top: 76px; background: var(--color-cream); overflow: hidden; }
+/* 히어로는 더 넓은 캔버스를 써서 LP를 크게 */
+.hero-inner { max-width: 1660px; padding: var(--space-sm) var(--space-lg) var(--space-xl); }
+/* LP는 꽉 차지 않고 왼쪽에 배지 여백을 둔다 (목업: 좌 15%, 우 3%) */
+.hero-stage { position: relative; margin: 0 5% 0 9%; }
+/* 뒤에 깔리는 기차역 노을 배경 (둥근 사각형, LP보다 약간 작게) */
+.hero-bg-img {
+  position: absolute; left: 0; top: 3%; width: 100%; height: 93%;
+  object-fit: cover; border-radius: 22px; z-index: 0;
+  box-shadow: 0 30px 50px rgba(160,110,120,.22);
+}
+/* LP+캐릭터(투명)는 배경 위로 (z-index 높게), 배경보다 약간 크게 겹침 */
+.hero-lp { position: relative; z-index: 2; width: 100%; height: auto; filter: drop-shadow(0 16px 26px rgba(0,0,0,.18)); }
+.hero-badge {
+  position: absolute; z-index: 5; top: 51px; left: -10%; width: clamp(245px, 26vw, 380px);
+  transform: rotate(-4deg);
+  filter: drop-shadow(0 10px 18px rgba(0,0,0,.14));
+  animation: bob 3s ease-in-out infinite;
+}
+
+/* 필름 스트립 장식 (오른쪽 대각선) — 얇고 가파르게, 코너에서 시작 */
+.filmstrip { position: absolute; pointer-events: none; opacity: .95; z-index: 4; }
+/* 히어로 필름은 무대 안에서 배경(0)과 LP(2) 사이 (z-index 1) → LP가 항상 위 */
+.filmstrip--hero { top: -24%; right: -15%; height: 158%; width: auto; z-index: 1; }
+.filmstrip--still { bottom: -10%; right: -6%; height: 120%; width: auto; transform: scaleX(-1); }
+
+/* ============================================================
+   섹션 공통
+   ============================================================ */
+.section-head { display: flex; align-items: center; gap: 14px; margin-bottom: var(--space-lg); }
+.section-num {
+  font-family: var(--font-display); font-size: 1.3rem; font-weight: 800;
+  width: 50px; height: 50px; flex-shrink: 0; display: grid; place-items: center;
+  background: var(--color-primary); color: #fff; border-radius: 14px;
+}
+.section-eyebrow { font-family: var(--font-display); font-size: .78rem; letter-spacing: .2em; color: var(--color-primary); }
+.section-title { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 900; color: var(--color-dark); }
+
+/* ============================================================
+   ABOUT (02) — 각진 다크 패널 + 작업실 사진
+   ============================================================ */
+.about { position: relative; background: var(--color-cream); padding: 0 0 var(--space-3xl); }
+.about-inner { display: grid; grid-template-columns: 0.85fr 1.15fr; align-items: stretch; gap: 0; }
+.about-panel {
+  background: var(--color-dark); color: var(--color-on-dark);
+  padding: var(--space-2xl) var(--space-2xl) var(--space-2xl) var(--space-lg);
+  margin-left: calc(-1 * max(0px, (100vw - var(--container)) / 2));
+  padding-left: max(var(--space-lg), (100vw - var(--container)) / 2 + var(--space-lg));
+  clip-path: polygon(0 0, 100% 0, 86% 50%, 100% 100%, 0 100%);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.about-panel .section-title { color: var(--color-cream); }
+.about-panel .section-eyebrow { color: var(--color-primary); }
+.about-lead { font-size: 1.15rem; font-weight: 700; color: var(--color-cream); margin-bottom: var(--space-md); }
+.about-body { color: rgba(246,233,227,.82); }
+.about-photo { position: relative; }
+.about-photo img {
+  width: 100%; height: 100%; object-fit: cover; min-height: 360px;
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+}
+
+/* ============================================================
+   CHARACTERS (03) — 다크 + 핑크 밴드 + 인터랙티브 캐릭터
+   ============================================================ */
+.characters { position: relative; background: var(--color-dark); padding: var(--space-3xl) 0; overflow: hidden; }
+.characters::before {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(160deg, #41332f 0%, #2b2120 100%); z-index: 0;
+}
+/* 다크 지그재그(번개) 장식 — 왼쪽 */
+.char-zigzag {
+  position: absolute; left: -2%; top: 50%; transform: translateY(-50%);
+  height: 132%; width: auto; z-index: 1; pointer-events: none; opacity: .96;
+}
+.char-inner {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: 1fr 1.15fr 100px; gap: var(--space-xl);
+  align-items: center; min-height: 540px;
+}
+.char-info { color: var(--color-on-dark); }
+.char-info .section-title { color: var(--color-cream); }
+.char-detail { margin-top: var(--space-xl); }
+.char-name { font-size: 2.2rem; font-weight: 900; color: var(--color-cream); }
+.char-role {
+  display: inline-block; margin: 8px 0 16px; padding: 4px 14px;
+  background: var(--color-primary); color: #fff; border-radius: 999px; font-size: .85rem; font-weight: 700;
+}
+.char-desc { color: rgba(246,233,227,.8); max-width: 32ch; }
+
+/* 캐릭터 무대: 색상 박스 + 얼굴 포인트 + 전신 */
+.char-stage { position: relative; height: 540px; display: flex; align-items: flex-end; justify-content: center; }
+.char-box {
+  position: absolute; inset: 5% -18% 5% -6%;
+  background: var(--char-color, var(--color-pink-band));
+  border-radius: 22px; overflow: hidden; z-index: 0;
+  box-shadow: 0 24px 50px rgba(0,0,0,.3);
+  transition: background .45s var(--ease);
+}
+/* 박스 안의 큰 얼굴 (은은한 포인트) */
+.char-face {
+  position: absolute; left: 2%; top: 8%; width: 46%; height: 86%;
+  overflow: hidden; opacity: .28; z-index: 0;
+  -webkit-mask-image: linear-gradient(90deg, #000 60%, transparent);
+  mask-image: linear-gradient(90deg, #000 60%, transparent);
+}
+.char-face img {
+  width: 235%; max-width: none; display: block;
+  transform: translate(-30%, -3%);
+  transition: opacity var(--dur) var(--ease);
+}
+.char-main {
+  position: relative; z-index: 1; height: 560px; width: auto; max-width: 100%;
+  object-fit: contain; object-position: bottom;
+  filter: drop-shadow(0 24px 40px rgba(0,0,0,.4));
+  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.char-main.swapping { opacity: 0; transform: translateY(14px); }
+
+.char-thumbs { display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 3; }
+.thumb {
+  width: 88px; height: 88px; padding: 0; border-radius: 14px; cursor: pointer; overflow: hidden;
+  border: 2px solid rgba(255,255,255,.25); background: var(--color-pink-band);
+  transition: border-color var(--dur), transform var(--dur);
+}
+.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.thumb:hover { transform: translateY(-3px); }
+.thumb.active { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(239,148,172,.45); }
+
+/* ============================================================
+   STILL CUT (04)
+   ============================================================ */
+.stillcut { position: relative; background: var(--color-cream); padding: var(--space-3xl) 0; overflow: hidden; }
+.still-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-top: var(--space-xl);
+  position: relative; z-index: 1;
+}
+.still {
+  border-radius: var(--radius); overflow: hidden; border: 3px solid #fff;
+  box-shadow: 0 16px 34px rgba(150,100,110,.16); aspect-ratio: 16/10;
+}
+.still img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
+.still:hover img { transform: scale(1.06); }
+
+/* ============================================================
+   BOTTOM BANNER
+   ============================================================ */
+.banner { position: relative; min-height: 380px; display: flex; align-items: center; overflow: hidden; }
+.banner-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(40,30,40,.55), rgba(40,30,40,.15) 60%, transparent); z-index: 1; }
+.banner-inner { position: relative; z-index: 2; color: #fff; text-align: left; padding: var(--space-2xl) var(--space-lg); }
+.banner-eyebrow { font-family: var(--font-display); letter-spacing: .22em; font-size: .8rem; opacity: .9; }
+.banner-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; margin: 8px 0 12px; text-shadow: 0 4px 20px rgba(0,0,0,.3); }
+.banner-desc { margin-bottom: var(--space-lg); max-width: 40ch; opacity: .92; }
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer { background: var(--color-dark-2); color: var(--color-on-dark); padding: var(--space-xl) 0; }
+.footer-inner { display: flex; align-items: center; gap: var(--space-lg); flex-wrap: wrap; justify-content: space-between; }
+.logo.small { display: flex; align-items: center; gap: 10px; }
+.logo.small .logo-note { background: var(--color-primary); border-color: transparent; }
+.logo-text { display: flex; flex-direction: column; line-height: 1.05; }
+.logo-text strong { font-family: var(--font-display); letter-spacing: .14em; color: var(--color-cream); }
+.logo-text small { font-size: .62rem; letter-spacing: .26em; color: var(--color-text-soft); }
+.footer-links { display: flex; gap: var(--space-lg); }
+.footer-links a { font-size: .88rem; opacity: .8; transition: opacity var(--dur), color var(--dur); }
+.footer-links a:hover { opacity: 1; color: var(--color-primary); }
+.copyright { font-size: .8rem; opacity: .6; }
+
+/* ============================================================
+   스크롤 등장 애니메이션
+   ============================================================ */
+.reveal { opacity: 0; transform: translateY(34px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+/* ============================================================
+   반응형
+   ============================================================ */
+@media (max-width: 980px) {
+  .about-inner { grid-template-columns: 1fr; }
+  .about-panel {
+    margin-left: 0; padding-left: var(--space-lg);
+    clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
+  }
+  .about-photo img { clip-path: none; border-radius: 0; min-height: 280px; }
+  .char-inner { grid-template-columns: 1fr; min-height: auto; gap: var(--space-lg); text-align: center; }
+  .char-detail { margin-top: var(--space-md); }
+  .char-desc { margin: 0 auto; }
+  .char-stage { height: 460px; }
+  .char-main { height: 440px; }
+  .char-box { inset: 4% 4% 4% 4%; }
+  .char-face { width: 50%; opacity: .24; }
+  .char-zigzag { display: none; }
+  .char-thumbs { flex-direction: row; justify-content: center; flex-wrap: wrap; }
+  .still-grid { grid-template-columns: repeat(2, 1fr); }
+  .filmstrip { display: none; }
+}
+@media (max-width: 640px) {
+  .main-nav { display: none; }
+  .main-nav.open {
+    display: flex; flex-direction: column; position: absolute; top: 76px; left: 0; right: 0;
+    background: rgba(250,241,236,.98); padding: var(--space-lg); gap: var(--space-md);
+    box-shadow: 0 12px 24px rgba(120,80,70,.12); border-bottom: 1px solid var(--color-border);
+  }
+  .menu-toggle { display: block; }
+  .start-btn { display: none; }
+  .hero-stage { margin-left: 0; }
+  .hero-badge { left: 0; top: -2%; width: 130px; }
+  .still-grid { grid-template-columns: 1fr; }
+  .footer-inner { flex-direction: column; text-align: center; }
+  .char-stage { height: 380px; }
+  .char-main { height: 360px; }
+  .thumb { width: 64px; height: 64px; }
+}
