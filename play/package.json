@@ -10,7 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "inkjs": "^2.2.4"
+    "inkjs": "^2.4.0"
   },
   "devDependencies": {
     "vite": "^6.0.0"
