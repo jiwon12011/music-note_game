@@ -332,26 +332,48 @@ ul { list-style: none; }
 /* ============================================================
    반응형
    ============================================================ */
-@media (max-width: 980px) {
-  .about-inner { grid-template-columns: 1fr; }
-  .about-panel {
-    margin-left: 0; padding-left: var(--space-lg);
-    clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
-  }
-  .about-photo img { clip-path: none; border-radius: 0; min-height: 280px; }
-  .char-inner { grid-template-columns: 1fr; min-height: auto; gap: var(--space-lg); text-align: center; }
-  .char-detail { margin-top: var(--space-md); }
+/* ============ 태블릿/모바일: 데스크탑 전용 장식 정리 + 세로 스택 ============ */
+@media (max-width: 900px) {
+  /* 좌측 당김·우측 정렬 공식 전부 해제 (모바일은 일반 패딩) */
+  .about-panel, .char-info { margin-left: 0; }
+  .stillcut .section-head { margin-left: 0; }
+  .about-photo { margin-left: 0; margin-right: 0; }
+  .char-selector { margin-right: 0; }
+  .banner-inner { margin-left: 0; margin-right: 0; max-width: none; }
+
+  /* 데스크탑 전용 지그재그·필름 제거 → 섹션 자체에 브라운 배경 */
+  .story-zigzag, .filmstrip { display: none; }
+
+  /* ABOUT: 텍스트(브라운) 위, 사진 아래 1열 */
+  .about { background: var(--color-dark); padding: var(--space-2xl) 0; }
+  .about-inner { grid-template-columns: 1fr; gap: var(--space-lg); align-items: stretch; }
+  .about-photo img { min-height: 220px; }
+
+  /* CHARACTERS: 브라운 배경, 1열 스택 (헤딩 → 캐릭터 → 썸네일) */
+  .characters { background: var(--color-dark); padding: var(--space-2xl) 0; }
+  .char-inner { grid-template-columns: 1fr; min-height: auto; gap: var(--space-md); text-align: center; }
   .char-desc { margin: 0 auto; }
-  .char-stage { height: 460px; }
-  .char-main { height: 440px; }
-  .char-box { inset: 4% 4% 4% 4%; }
-  .char-face { width: 50%; opacity: .24; }
-  .char-zigzag { display: none; }
-  .char-thumbs { flex-direction: row; justify-content: center; flex-wrap: wrap; }
-  .still-grid { grid-template-columns: repeat(2, 1fr); }
-  .filmstrip { display: none; }
+  .char-band-full { height: 54%; }
+  .char-visual { height: 440px; }
+  .char-face { display: none; }   /* 모바일에선 흐린 얼굴 생략 */
+  .char-main { position: relative; right: auto; bottom: auto; height: 420px; max-width: 90%; margin: 0 auto; }
+  /* 썸네일: 가로 한 줄로 전부 표시, 화살표 숨김 */
+  .char-selector { flex-direction: row; justify-content: center; }
+  .char-arrow { display: none; }
+  .char-thumbs-window { height: auto; padding: 0; overflow: visible; }
+  .char-thumbs { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; transform: none !important; }
+
+  /* STILL CUT: 크림 배경이므로 제목 다크, 스틸 1열 */
+  .stillcut .section-title { color: var(--color-dark); }
+  .stillcut .section-eyebrow { color: var(--color-primary); }
+  .still-grid { grid-template-columns: 1fr; }
+
+  /* 히어로 캔버스 풀폭 */
+  .hero-inner { max-width: 100%; }
 }
-@media (max-width: 640px) {
+
+/* ============ 모바일: 햄버거 메뉴 + 크기 축소 ============ */
+@media (max-width: 600px) {
   .main-nav { display: none; }
   .main-nav.open {
     display: flex; flex-direction: column; position: absolute; top: 76px; left: 0; right: 0;
@@ -361,10 +383,12 @@ ul { list-style: none; }
   .menu-toggle { display: block; }
   .start-btn { display: none; }
   .hero-stage { margin-left: 0; }
-  .hero-badge { left: 0; top: -2%; width: 130px; }
-  .still-grid { grid-template-columns: 1fr; }
-  .footer-inner { flex-direction: column; text-align: center; }
-  .char-stage { height: 380px; }
-  .char-main { height: 360px; }
-  .thumb { width: 64px; height: 64px; }
+  .hero-badge { left: 0; top: 0; width: 150px; }
+  .char-visual { height: 360px; }
+  .char-main { height: 340px; }
+  .thumb { width: 68px; height: 68px; }
+  .footer-inner { flex-direction: column; text-align: center; gap: var(--space-md); }
+  .section-title { font-size: 1.5rem; }
+  .char-name { font-size: 1.8rem; }
+  .banner-title { font-size: 2rem; }
 }
