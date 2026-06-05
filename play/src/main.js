@@ -10,8 +10,15 @@ import { continueSlot } from "./state/saves.js";
 const app = document.getElementById("app");
 const onExit = () => { toast("챕터 1 — 다음 이야기는 곧 이어집니다 ♪", 2400); setTimeout(showTitle, 1400); };
 
-function showTitle() {
+// 화면 교체: 떠나는 화면의 정리 훅(_cleanup)을 호출해 이벤트 리스너 누수 방지
+function clearApp() {
+  app.querySelectorAll("*").forEach((el) => el._cleanup?.());
+  app._cleanup?.();
   app.innerHTML = "";
+}
+
+function showTitle() {
+  clearApp();
   app.appendChild(createTitle({
     onNew: showNickname,
     onContinue: () => { const s = continueSlot(); if (s == null) return toast("저장된 곡이 없어요"); startGame(app, { resumeSlot: s, onExit }); },
@@ -21,7 +28,7 @@ function showTitle() {
 }
 
 function showNickname() {
-  app.innerHTML = "";
+  clearApp();
   app.appendChild(createNickname({ onConfirm: (name) => startGame(app, { player: name, onExit }) }));
 }
 

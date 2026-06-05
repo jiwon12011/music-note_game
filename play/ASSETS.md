@@ -6,6 +6,16 @@
 > 표정 라벨은 *추정*이라 실제 의도와 다르면 수정하세요. 의상(slug)은 객관적으로 분류했습니다.
 > 엔진 매핑: Ink 태그 `# bg: train` → `img/bg/train.webp`, `# char: hanseoa casual` → `img/char/hanseoa/casual.webp`
 
+## UI (img/ui/)
+| 파일 | 용도 |
+|---|---|
+| logo.webp | 타이틀 로고 엠블럼(원형 음표) — 타이틀 화면 사용 중 |
+| keyvisual.webp | LP 위 6인 군상 키비주얼 — 추후 컬렉션/스플래시용(타이틀엔 미사용, 캐릭터 스탠딩으로 대체) |
+| badge.webp | 획득/뱃지용(미사용, 컬렉션 예정) |
+| filmstrip.webp | 필름스트립 장식(미사용, 컬렉션 예정) |
+
+타이틀 화면(`ui/title.js`)은 6인 **개별 스탠딩**을 양옆 3명씩 배치 + 배경 `bg/rooftop-night.webp` + 중앙 글래스 패널 구성.
+
 ## 배경 (img/bg/) — 18장
 | 파일 | 장소 | 기획서 | 시간대 |
 |---|---|---|---|

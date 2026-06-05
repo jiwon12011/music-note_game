@@ -10,6 +10,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="src/styles/game.css" />
+
+  <!-- 타이틀 LCP 가속: 배경 + 주역 2인 우선 로딩 -->
+  <link rel="preload" as="image" href="public/img/bg/rooftop-night.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="public/img/char/hanseoa/stage.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="public/img/char/kael/leather.webp" />
 </head>
 <body>
   <div id="app"></div>
