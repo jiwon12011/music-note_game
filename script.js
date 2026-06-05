@@ -108,4 +108,42 @@
   if (charPrev) charPrev.addEventListener("click", () => { if (offset > 0) { offset--; updateCarousel(); } });
   if (charNext) charNext.addEventListener("click", () => { if (offset < maxOffset) { offset++; updateCarousel(); } });
   updateCarousel();
+
+  /* ---------- GSAP 모션 (로드된 경우에만, 미로드 시 그대로 동작) ---------- */
+  if (window.gsap) {
+    const g = window.gsap;
+    if (window.ScrollTrigger) g.registerPlugin(window.ScrollTrigger);
+
+    // 히어로 LP 살짝 줌인 등장 (로드 시)
+    g.from(".hero-lp", { scale: 0.95, y: 24, duration: 1.1, ease: "power3.out" });
+
+    if (window.ScrollTrigger) {
+      // 히어로 필름 패럴랙스
+      g.to(".filmstrip--hero", { yPercent: 14, ease: "none",
+        scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: true } });
+      // 캐릭터 메인 등장
+      g.from(".char-main", { y: 50, duration: 0.9, ease: "power3.out",
+        scrollTrigger: { trigger: ".characters", start: "top 65%" } });
+      // 썸네일 스태거 등장
+      g.from(".char-thumbs .thumb", { y: 16, stagger: 0.07, duration: 0.5, ease: "power2.out",
+        scrollTrigger: { trigger: ".char-selector", start: "top 82%" } });
+      // 스틸 스태거 등장
+      g.from(".still", { y: 40, stagger: 0.1, duration: 0.6, ease: "power3.out",
+        scrollTrigger: { trigger: ".still-grid", start: "top 80%" } });
+    }
+
+    // 호버 (GSAP 인라인이 CSS transform 위로 덮음) — 버튼/스틸/썸네일
+    const hov = (el, over, out) => { el.addEventListener("mouseenter", over); el.addEventListener("mouseleave", out); };
+    document.querySelectorAll(".btn").forEach((b) =>
+      hov(b, () => g.to(b, { scale: 1.05, duration: 0.22, ease: "power2.out" }),
+             () => g.to(b, { scale: 1, duration: 0.22, ease: "power2.out" })));
+    document.querySelectorAll(".still").forEach((s) => {
+      const img = s.querySelector("img");
+      hov(s, () => { g.to(s, { y: -6, duration: 0.3, ease: "power2.out" }); g.to(img, { scale: 1.08, duration: 0.6, ease: "power2.out" }); },
+             () => { g.to(s, { y: 0, duration: 0.3 }); g.to(img, { scale: 1, duration: 0.6 }); });
+    });
+    document.querySelectorAll(".thumb").forEach((t) =>
+      hov(t, () => g.to(t, { y: -4, scale: 1.05, duration: 0.22, ease: "power2.out" }),
+             () => g.to(t, { y: 0, scale: 1, duration: 0.22, ease: "power2.out" })));
+  }
 })();
