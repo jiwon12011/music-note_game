@@ -15,7 +15,14 @@ const page = await browser.newPage({ viewport: { width, height: 900 }, deviceSca
 await page.goto(url, { waitUntil: "networkidle" });
 // 스크롤 등장 애니메이션을 강제로 보이게 (캡처용)
 await page.addStyleTag({ content: ".reveal{opacity:1 !important;transform:none !important;}" });
-await page.waitForTimeout(700);
+// GSAP ScrollTrigger 발동을 위해 끝까지 스크롤 후 복귀
+await page.evaluate(async () => {
+  const h = document.body.scrollHeight;
+  for (let y = 0; y <= h; y += 400) { window.scrollTo(0, y); await new Promise((r) => setTimeout(r, 25)); }
+  window.scrollTo(0, 0);
+  await new Promise((r) => setTimeout(r, 250));
+});
+await page.waitForTimeout(500);
 await page.screenshot({ path: out, fullPage: full });
 await browser.close();
 console.log("saved", out);
