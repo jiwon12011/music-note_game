@@ -5,3 +5,7 @@ Thumbs.db
 
 # 개발용 렌더 스크린샷 (도구 스크립트는 유지)
 tools/*.png
+
+# 고해상도 원본 (assets/*.webp 변환본만 커밋)
+/image *.png
+/lp_with_characters_fixed.png

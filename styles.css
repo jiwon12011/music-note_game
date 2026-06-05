@@ -66,7 +66,7 @@ ul { list-style: none; }
   border-bottom: 1px solid transparent;
   transition: background var(--dur), border-color var(--dur), box-shadow var(--dur);
 }
-.site-header.scrolled { background: rgba(250,241,236,.95); border-color: var(--color-border); box-shadow: 0 6px 22px rgba(120,80,70,.08); }
+.site-header.scrolled { background: rgba(250,241,236,.86); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-color: rgba(236,220,211,.6); box-shadow: 0 8px 24px rgba(120,80,70,.1); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; position: relative; }
 .logo { display: flex; align-items: center; }
 .logo-img { width: 52px; height: 52px; object-fit: contain; }
@@ -109,16 +109,15 @@ ul { list-style: none; }
 /* LP+캐릭터(투명)는 배경 위로 (z-index 높게), 배경보다 약간 크게 겹침 */
 /* 핑크 획(외곽선) + 글로우로 누끼 흰 테두리를 가림 (배지처럼) */
 .hero-lp {
-  position: relative; z-index: 2; width: 100%; height: auto;
-  /* 하단을 부드럽게 페이드 → 원본에서 잘린 다리/외곽선이 자연스럽게 사라지게 */
-  -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent 99%);
-  mask-image: linear-gradient(to bottom, #000 86%, transparent 99%);
+  position: relative; z-index: 2; width: 112%; max-width: 112%; height: auto;
+  /* 새 이미지가 더 와이드한 비율(1676×938)이라 같은 폭에서 작아 보임 → 12% 키우고 가운데로 보정
+     (전역 img{max-width:100%} 가 width를 막으므로 max-width도 함께 풀어줌) */
+  margin-left: -6%;
+  /* (다리 잘림 수정된 새 이미지 → 하단 페이드 마스크 제거) */
+  /* 크림 외곽선: 대각선 4겹이면 누끼 흰테 가림 충분 (8겹+글로우 → 4겹+캐스트로 래스터 비용 절반) */
   filter:
-    drop-shadow(1.2px 0 0 #FCEAED) drop-shadow(-1.2px 0 0 #FCEAED)
-    drop-shadow(0 1.2px 0 #FCEAED) drop-shadow(0 -1.2px 0 #FCEAED)
-    drop-shadow(1.2px 1.2px 0 #FCEAED) drop-shadow(-1.2px -1.2px 0 #FCEAED)
-    drop-shadow(1.2px -1.2px 0 #FCEAED) drop-shadow(-1.2px 1.2px 0 #FCEAED)
-    drop-shadow(0 0 5px rgba(252,234,237,.5))
+    drop-shadow(1.3px 1.3px 0 #FCEAED) drop-shadow(-1.3px -1.3px 0 #FCEAED)
+    drop-shadow(1.3px -1.3px 0 #FCEAED) drop-shadow(-1.3px 1.3px 0 #FCEAED)
     drop-shadow(0 16px 26px rgba(0,0,0,.18));
 }
 .hero-badge {
@@ -127,6 +126,25 @@ ul { list-style: none; }
   filter: drop-shadow(0 10px 18px rgba(0,0,0,.14));
   animation: bob 3s ease-in-out infinite;
 }
+/* 히어로 챕터 라벨 — 전체 섹션을 "에피소드"처럼 읽히게 (우하단 코너) */
+.hero-chapter {
+  position: absolute; z-index: 6; right: 3%; bottom: 8%;
+  display: inline-flex; align-items: baseline; gap: 8px;
+  padding: 8px 16px; border-radius: 999px;
+  background: rgba(250,241,236,.5); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,.45);
+  box-shadow: 0 6px 18px rgba(43,33,32,.18);
+  pointer-events: none; user-select: none;
+}
+.hero-chapter-num {
+  font-family: var(--font-display); font-weight: 800; font-size: 1.3rem;
+  color: var(--color-primary); line-height: 1;
+}
+.hero-chapter-label {
+  font-family: var(--font-display); font-weight: 700; font-size: .68rem;
+  letter-spacing: .24em; color: var(--color-dark);
+}
+
 /* 호버 시 LP 위로 둥실 떠오르는 음표 (JS가 생성) */
 .note-float {
   position: absolute; bottom: 32%; z-index: 6;
@@ -169,6 +187,8 @@ ul { list-style: none; }
 .story-note {
   position: absolute; z-index: 2; pointer-events: none; user-select: none;
   line-height: 1; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,.2);
+  /* 무한 보빙이 부모(스케일 레이어)를 더럽히지 않게 자체 합성 레이어로 격리 */
+  will-change: transform; transform: translateZ(0);
 }
 .story-zigzag {
   position: absolute; left: 0; top: -41px;
@@ -193,8 +213,8 @@ ul { list-style: none; }
 .about-panel .section-title { color: var(--color-cream); }
 .about-panel .section-eyebrow { color: var(--color-primary); }
 /* EX 기준: 리드/본문 모두 같은 스타일(24px medium), 리드 아래 34px·줄간 17px 비율 */
-.about-lead { font-size: 1.05rem; font-weight: 400; color: var(--color-cream); margin-bottom: 26px; }
-.about-body { font-size: 1.05rem; font-weight: 400; color: rgba(246,233,227,.78); line-height: 1.95; }
+.about-lead { font-size: 1.05rem; font-weight: 400; color: var(--color-cream); margin-bottom: 26px; line-height: 1.55; max-width: 38ch; }
+.about-body { font-size: 1.05rem; font-weight: 400; color: rgba(246,233,227,.78); line-height: 1.85; max-width: 52ch; }
 .about-photo {
   position: relative; z-index: 1;  /* 지그재그(2) 아래 → 브라운이 위에서 덮음 */
   /* 브라운 아래로 밀어넣어 대각선이 사진 왼쪽을 덮게 */
@@ -239,7 +259,19 @@ ul { list-style: none; }
   display: inline-block; margin: 8px 0 16px; padding: 4px 14px;
   background: var(--color-primary); color: #fff; border-radius: 999px; font-size: .85rem; font-weight: 700;
 }
-.char-desc { color: rgba(246,233,227,.8); max-width: 32ch; }
+/* 캐릭터마다 대사/설명 줄 수가 달라도 왼쪽 텍스트 위치가 안 흔들리게 2줄 공간 고정 예약 */
+.char-desc { color: rgba(246,233,227,.8); max-width: 32ch; min-height: 3.4em; }
+/* 시그니처 대사 — serif 이탤릭으로 톤 대비, 핑크 큰따옴표로 비주얼노벨 예열 */
+.char-quote {
+  position: relative; margin-top: 18px; padding-left: 20px; max-width: 30ch;
+  font-family: Georgia, 'Times New Roman', serif; font-style: italic;
+  font-size: 1.08rem; line-height: 1.5; color: var(--color-cream); min-height: 3em;
+}
+.char-quote::before {
+  content: "\201C"; position: absolute; left: -4px; top: -6px;
+  font-size: 1.8rem; line-height: 1; color: var(--color-primary); opacity: .9;
+}
+.char-quote::after { content: "\201D"; color: var(--color-primary); opacity: .9; margin-left: 2px; }
 
 /* 캐릭터 비주얼: 흐린 얼굴(왼쪽) + 메인 캐릭터(오른쪽) */
 .char-visual { position: relative; height: 560px; }
@@ -317,11 +349,29 @@ ul { list-style: none; }
   position: relative; z-index: 3;
 }
 .still {
+  position: relative;
   border-radius: var(--radius); overflow: hidden; border: 3px solid #fff;
   box-shadow: 0 16px 34px rgba(150,100,110,.16); aspect-ratio: 16/10;
 }
 .still img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease); }
 .still:hover img { transform: scale(1.06); }
+/* 호버 시 아래에서 떠오르는 글래스 챕터 패널 */
+.still-cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 16px 18px 14px;
+  background: linear-gradient(to top, rgba(43,33,32,.62), rgba(43,33,32,.18) 70%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: #fff; text-align: left;
+  transform: translateY(101%); opacity: 0;
+  transition: transform .42s var(--ease), opacity .42s var(--ease);
+}
+.still:hover .still-cap, .still:focus-within .still-cap { transform: translateY(0); opacity: 1; }
+.still-ch {
+  font-family: var(--font-display); font-size: .68rem; font-weight: 700;
+  letter-spacing: .16em; color: var(--color-primary);
+}
+.still-line { font-size: .82rem; line-height: 1.45; color: rgba(255,255,255,.94); }
 
 /* ============================================================
    BOTTOM BANNER
@@ -338,8 +388,8 @@ ul { list-style: none; }
   padding: var(--space-2xl) 0;
 }
 .banner-eyebrow { font-family: var(--font-display); letter-spacing: .22em; font-size: .8rem; opacity: .9; }
-.banner-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; margin: 8px 0 12px; text-shadow: 0 4px 20px rgba(0,0,0,.3); }
-.banner-desc { margin-bottom: var(--space-lg); max-width: 40ch; opacity: .92; }
+.banner-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; margin: 8px 0 12px; text-shadow: 0 2px 10px rgba(0,0,0,.22); }
+.banner-desc { margin-bottom: var(--space-lg); max-width: 40ch; opacity: .92; text-shadow: 0 1px 4px rgba(0,0,0,.18); }
 
 /* ============================================================
    FOOTER
@@ -357,6 +407,68 @@ ul { list-style: none; }
 .copyright { font-size: .8rem; opacity: .6; }
 
 /* ============================================================
+   오프닝 독백 모달 (VN 대사창)
+   ============================================================ */
+.hero-lp { cursor: pointer; }
+.vn-modal {
+  position: fixed; inset: 0; z-index: 2000;
+  opacity: 0; visibility: hidden;
+  transition: opacity .4s var(--ease), visibility .4s var(--ease);
+}
+.vn-modal.open { opacity: 1; visibility: visible; }
+.vn-bg {
+  position: absolute; inset: 0;
+  background: #1a1416 url("assets/scene-station.webp") center/cover no-repeat;
+}
+.vn-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(26,20,22,.5) 0%, rgba(26,20,22,.82) 78%);
+}
+.vn-close {
+  position: absolute; top: 22px; right: 26px; z-index: 3;
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.3); background: rgba(255,255,255,.12);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: #fff; font-size: 1.6rem; line-height: 1; cursor: pointer;
+  transition: background .25s, transform .25s;
+}
+.vn-close:hover { background: rgba(255,255,255,.22); transform: scale(1.06); }
+.vn-stage {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+  display: flex; justify-content: center; padding: 0 24px 7vh;
+}
+.vn-box {
+  position: relative; width: 100%; max-width: 780px;
+  padding: 30px 34px 34px; border-radius: 20px;
+  background: linear-gradient(180deg, rgba(43,33,32,.7), rgba(43,33,32,.82));
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(246,201,214,.35);
+  box-shadow: 0 20px 60px rgba(0,0,0,.42);
+  color: var(--color-cream);
+}
+.vn-speaker {
+  position: absolute; top: -16px; left: 30px; padding: 5px 18px; border-radius: 999px;
+  background: var(--color-primary); color: #fff; font-weight: 700; font-size: .85rem;
+  box-shadow: 0 6px 16px rgba(239,148,172,.45);
+}
+.vn-text { min-height: 3.4em; font-size: 1.25rem; line-height: 1.75; }
+.vn-text .cursor { color: var(--color-primary); animation: vnBlink 1s steps(1) infinite; }
+@keyframes vnBlink { 50% { opacity: 0; } }
+.vn-next {
+  position: absolute; right: 26px; bottom: 16px;
+  color: var(--color-primary); font-size: 1rem; opacity: .85;
+  animation: bob 1.2s ease-in-out infinite;
+}
+.vn-cta { margin-top: 22px; display: none; }
+.vn-modal.ended .vn-cta { display: inline-flex; }
+.vn-modal.ended .vn-next { display: none; }
+@media (max-width: 600px) {
+  .vn-text { font-size: 1.05rem; }
+  .vn-box { padding: 26px 22px 28px; }
+  .vn-stage { padding-bottom: 4vh; }
+}
+
+/* ============================================================
    스크롤 등장 애니메이션
    ============================================================ */
 .reveal { opacity: 0; transform: translateY(34px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
@@ -366,6 +478,40 @@ ul { list-style: none; }
 .reveal-left.visible { opacity: 1; transform: translateX(0); }
 
 @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+/* ============================================================
+   1920 기준 통째 스케일 (데스크탑) — JS가 scale 값/높이 보정
+   래퍼 자체 구조만 CSS로, 스케일 수치는 script.js applyScale()
+   ============================================================ */
+#scaleInner { transform-origin: top left; overflow-x: clip; }
+/* 스케일 켜진 상태: 헤더(고정 76px) 자리 확보 + 히어로 자체 패딩 제거(중복 방지) */
+body.is-scaled #scaleOuter { padding-top: 76px; overflow: hidden; box-sizing: content-box; }
+/* transform 은 레이아웃 높이를 안 줄이므로 outer 높이를 JS가 잡고 overflow:hidden 으로 클립.
+   ⚠ inner 에 will-change/layer 강제 금지: 거대 단일 레이어가 되면 내부 무한 애니메이션마다 전체 재래스터됨.
+   대신 정적 콘텐츠는 타일 캐시, 움직이는 요소(음표)만 각자 레이어로 합성되게 둔다. */
+body.is-scaled .hero { padding-top: 0; }
+/* vw·100vw 의존 정렬을 1920 기준 px 상수로 — 래퍼 안에선 실제 vw가 1920이 아니므로 고정 */
+body.is-scaled .about-panel,
+body.is-scaled .char-info { margin-left: -225px; }
+body.is-scaled .stillcut .section-head { margin-left: -225px; }
+body.is-scaled .about-photo { margin-right: -149px; }
+body.is-scaled .char-selector { margin-right: -149px; }
+body.is-scaled .banner-inner { margin-right: 235px; }
+body.is-scaled .char-band-full { width: 1920px; }
+/* 1920에서 clamp가 상한에 닿던 값들을 고정 (스케일이 비율을 맞춤) */
+body.is-scaled .section-title { font-size: 2.3rem; }
+body.is-scaled .banner-title { font-size: 3.2rem; }
+body.is-scaled .hero-badge { width: 380px; }
+
+/* ============================================================
+   모션 민감 사용자 존중 (prefers-reduced-motion)
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-left { opacity: 1 !important; transform: none !important; transition: none; }
+  .hero-badge, .vn-next, .vn-text .cursor { animation: none; }
+  .still img, .char-main, .thumb, .btn { transition: none; }
+  html { scroll-behavior: auto; }
+}
 
 /* ============================================================
    반응형

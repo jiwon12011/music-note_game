@@ -14,6 +14,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
+  <!-- LCP: 히어로 LP를 최우선으로 불러옴 -->
+  <link rel="preload" as="image" href="assets/hero-lp.webp" fetchpriority="high" />
 </head>
 <body>
   <!-- ============ HEADER ============ -->
@@ -36,15 +38,23 @@
     </div>
   </header>
 
+  <!-- 1920 기준 디자인을 뷰포트 폭에 맞춰 통째로 스케일하는 래퍼 -->
+  <div id="scaleOuter">
+  <div id="scaleInner">
+  <!-- 첫 페인트 전에 스케일 적용 → GSAP 로드를 기다리며 깜빡이는(FOUC) 것 방지
+       (높이 보정은 콘텐츠 파싱 후 script.js applyScale 가 정확히 잡음) -->
+  <script>(function(){var w=window.innerWidth,D=1920;if(w>900){var el=document.getElementById("scaleInner");el.style.width=D+"px";el.style.transformOrigin="top left";el.style.transform="scale("+(w/D)+")";document.body.classList.add("is-scaled");}})();</script>
+
   <main>
     <!-- ============ HERO ============ -->
     <section class="hero" id="home">
       <div class="container hero-inner">
         <div class="hero-stage reveal">
-          <img class="hero-bg-img" src="assets/scene-station.webp" alt="" aria-hidden="true" />
-          <img class="filmstrip filmstrip--hero" src="assets/filmstrip.webp" alt="" aria-hidden="true" />
-          <img class="hero-lp" src="assets/hero-lp.webp" alt="LP판 위의 등장인물들" width="1500" height="915" />
-          <img class="hero-badge" src="assets/badge-play.webp" alt="지금 재생하기 — Play the Story" />
+          <img class="hero-bg-img" src="assets/scene-station.webp" alt="" aria-hidden="true" width="1400" height="782" />
+          <img class="filmstrip filmstrip--hero" src="assets/filmstrip.webp" alt="" aria-hidden="true" width="813" height="1442" />
+          <img class="hero-lp" src="assets/hero-lp.webp" alt="LP판 위의 등장인물들" width="1676" height="938" fetchpriority="high" />
+          <img class="hero-badge" src="assets/badge-play.webp" alt="지금 재생하기 — Play the Story" width="469" height="248" />
+          <span class="hero-chapter"><span class="hero-chapter-num">01</span><span class="hero-chapter-label">PROLOGUE</span></span>
         </div>
       </div>
     </section>
@@ -71,7 +81,7 @@
           </p>
         </div>
         <div class="about-photo reveal">
-          <img src="assets/about-room.webp" alt="음악 프로덕션 작업실" width="1400" height="787" />
+          <img src="assets/about-room.webp" alt="음악 프로덕션 작업실" width="1400" height="787" loading="lazy" />
         </div>
       </div>
     </section>
@@ -94,6 +104,7 @@
             <h3 class="char-name" id="charName">한서아</h3>
             <p class="char-role" id="charRole">신인 가수</p>
             <p class="char-desc" id="charDesc">차가운 첫인상, 알면 알수록 따뜻한 노력파 신인 가수.</p>
+            <p class="char-quote" id="charQuote">저… 아직 안 끝났어요. 한 번만 더 할게요.</p>
           </div>
         </div>
 
@@ -104,9 +115,9 @@
         <div class="char-selector reveal">
           <button class="char-arrow" id="charPrev" aria-label="이전 캐릭터">&#9650;</button>
           <ul class="char-thumbs" id="charThumbs">
-            <li><button class="thumb" data-slot="-1"><img src="assets/char-choijunhyeok.webp" alt="" /></button></li>
-            <li><button class="thumb center active" data-slot="0"><img src="assets/char-hanseoa.webp" alt="한서아" /></button></li>
-            <li><button class="thumb" data-slot="1"><img src="assets/char-jeongian.webp" alt="" /></button></li>
+            <li><button class="thumb" data-slot="-1"><img src="assets/char-choijunhyeok.webp" alt="" loading="lazy" /></button></li>
+            <li><button class="thumb center active" data-slot="0"><img src="assets/char-hanseoa.webp" alt="한서아" loading="lazy" /></button></li>
+            <li><button class="thumb" data-slot="1"><img src="assets/char-jeongian.webp" alt="" loading="lazy" /></button></li>
           </ul>
           <button class="char-arrow" id="charNext" aria-label="다음 캐릭터">&#9660;</button>
         </div>
@@ -125,20 +136,38 @@
           </div>
         </div>
         <div class="still-grid reveal">
-          <figure class="still"><img src="assets/still-stage.webp" alt="한서아 데뷔 무대" loading="lazy" /></figure>
-          <figure class="still"><img src="assets/still-office.webp" alt="정이안의 사무실" loading="lazy" /></figure>
-          <figure class="still"><img src="assets/scene-rooftop.webp" alt="KAEL의 옥상" loading="lazy" /></figure>
-          <figure class="still"><img src="assets/scene-workroom.webp" alt="오다은의 작업실" loading="lazy" /></figure>
-          <figure class="still"><img src="assets/scene-rain.webp" alt="윤재호의 거리" loading="lazy" /></figure>
-          <figure class="still"><img src="assets/scene-study.webp" alt="최준혁의 서재" loading="lazy" /></figure>
+          <figure class="still">
+            <img src="assets/still-stage.webp" alt="한서아 데뷔 무대" loading="lazy" />
+            <figcaption class="still-cap"><span class="still-ch">Chapter 05</span><span class="still-line">한서아 데뷔 무대 — 조명 아래, 처음으로 눈이 마주쳤다</span></figcaption>
+          </figure>
+          <figure class="still">
+            <img src="assets/still-office.webp" alt="정이안의 사무실" loading="lazy" />
+            <figcaption class="still-cap"><span class="still-ch">Chapter 02</span><span class="still-line">정이안의 사무실 — 완벽한 그녀의 처음 보는 빈틈</span></figcaption>
+          </figure>
+          <figure class="still">
+            <img src="assets/scene-rooftop.webp" alt="KAEL의 옥상" loading="lazy" />
+            <figcaption class="still-cap"><span class="still-ch">Chapter 03</span><span class="still-line">KAEL의 옥상 — 그날 밤, 처음으로 진짜 얼굴을 봤다</span></figcaption>
+          </figure>
+          <figure class="still">
+            <img src="assets/scene-workroom.webp" alt="오다은의 작업실" loading="lazy" />
+            <figcaption class="still-cap"><span class="still-ch">Chapter 04</span><span class="still-line">오다은의 작업실 — 다 알고 있었다는 듯한 미소</span></figcaption>
+          </figure>
+          <figure class="still">
+            <img src="assets/scene-rain.webp" alt="윤재호의 거리" loading="lazy" />
+            <figcaption class="still-cap"><span class="still-ch">Chapter 06</span><span class="still-line">비 내리는 거리 — 말 대신 흘러나온 멜로디</span></figcaption>
+          </figure>
+          <figure class="still">
+            <img src="assets/scene-study.webp" alt="최준혁의 서재" loading="lazy" />
+            <figcaption class="still-cap"><span class="still-ch">Chapter 01</span><span class="still-line">최준혁의 서재 — 모든 이야기가 시작된 셰어하우스</span></figcaption>
+          </figure>
         </div>
       </div>
-      <img class="filmstrip filmstrip--still" src="assets/filmstrip-thin.webp" alt="" aria-hidden="true" />
+      <img class="filmstrip filmstrip--still" src="assets/filmstrip-thin.webp" alt="" aria-hidden="true" width="150" height="1300" loading="lazy" />
     </section>
 
     <!-- ============ BOTTOM BANNER ============ -->
     <section class="banner" id="news">
-      <img class="banner-bg" src="assets/banner-bottom.webp" alt="" aria-hidden="true" />
+      <img class="banner-bg" src="assets/banner-bottom.webp" alt="" aria-hidden="true" width="1600" height="439" loading="lazy" />
       <div class="container banner-inner reveal">
         <p class="banner-eyebrow">PLAYLIST : BETWEEN US</p>
         <h2 class="banner-title">우리 사이의 음표</h2>
@@ -162,8 +191,25 @@
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="script.js"></script>
+  </div><!-- /#scaleInner -->
+  </div><!-- /#scaleOuter -->
+
+  <!-- ============ 오프닝 독백 모달 (히어로 LP 클릭) ============ -->
+  <div class="vn-modal" id="vnModal" role="dialog" aria-modal="true" aria-label="오프닝 프롤로그" aria-hidden="true">
+    <div class="vn-bg" aria-hidden="true"></div>
+    <button class="vn-close" id="vnClose" aria-label="닫기">&times;</button>
+    <div class="vn-stage">
+      <div class="vn-box">
+        <span class="vn-speaker">나</span>
+        <p class="vn-text" id="vnText"></p>
+        <span class="vn-next" id="vnNext" aria-hidden="true">▼</span>
+        <a href="#home" class="btn btn-primary vn-cta" id="vnCta">이야기 시작하기 →</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

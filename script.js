@@ -4,6 +4,54 @@
 (function () {
   "use strict";
 
+  /* ---------- 모션 민감 사용자 존중 ---------- */
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* ---------- 1920 기준 통째 스케일 (데스크탑) ----------
+     디자인을 1920px 고정 폭으로 두고 transform: scale 로 뷰포트 폭에 맞춘다.
+     → 1440·1920 등 어떤 데스크탑 폭에서도 "1920을 그대로 축소한" 동일 비율.
+     transform 은 레이아웃 높이를 줄이지 않으므로 음수 margin 으로 문서 높이를 보정. */
+  const DESIGN_W = 1920;
+  const SCALE_MIN_W = 900; // 이 이하(태블릿/모바일)는 기존 반응형 유지
+  const scaleOuter = document.getElementById("scaleOuter");
+  const scaleInner = document.getElementById("scaleInner");
+  const applyScale = () => {
+    if (!scaleInner) return;
+    const w = window.innerWidth;
+    if (w > SCALE_MIN_W) {
+      document.body.classList.add("is-scaled");
+      // 1920 폭으로 레이아웃한 뒤 transform:scale 로 축소 (GPU 합성 → 스크롤 시 재페인트 없음).
+      // transform 은 레이아웃 높이를 안 줄이므로, 줄어든 시각 높이를 outer 에 직접 지정 + overflow:hidden 클립.
+      const s = w / DESIGN_W;
+      scaleInner.style.width = DESIGN_W + "px";
+      scaleInner.style.transform = "none"; // 스케일 없는 1920 레이아웃 높이 측정
+      const h = scaleInner.offsetHeight;
+      scaleInner.style.transform = "scale(" + s + ")";
+      if (scaleOuter) scaleOuter.style.height = h * s + "px";
+    } else {
+      document.body.classList.remove("is-scaled");
+      scaleInner.style.width = "";
+      scaleInner.style.transform = "";
+      if (scaleOuter) scaleOuter.style.height = "";
+    }
+    if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+  };
+  applyScale();
+  // 콘텐츠 높이가 바뀔 때(이미지 로드 등) margin 보정을 다시 — 무한 루프 방지 위해 rAF 디바운스
+  if (scaleInner && "ResizeObserver" in window) {
+    let roTick = false;
+    const ro = new ResizeObserver(() => {
+      if (roTick) return;
+      roTick = true;
+      requestAnimationFrame(() => { roTick = false; applyScale(); });
+    });
+    ro.observe(scaleInner);
+  }
+  // 창 폭이 바뀌면 스케일 값(s) 재계산 (inner 는 1920 고정폭이라 RO 가 못 잡음)
+  let scaleRT;
+  window.addEventListener("resize", () => { clearTimeout(scaleRT); scaleRT = setTimeout(applyScale, 120); });
+  window.addEventListener("load", applyScale);
+
   /* ---------- 헤더 스크롤 효과 ---------- */
   const header = document.getElementById("siteHeader");
   const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 20);
@@ -49,12 +97,12 @@
 
   /* ---------- 인터랙티브 캐릭터 전환 ---------- */
   const CHARACTERS = {
-    hanseoa:      { name: "한서아", role: "신인 가수",        color: "#f6c9d6", desc: "차가운 첫인상, 알면 알수록 따뜻한 노력파 신인 가수.", img: "assets/char-hanseoa.webp" },
-    jeongian:     { name: "정이안", role: "프로듀서",          color: "#c7d4ec", desc: "절대 무너지지 않을 것 같은 완벽주의 쿨녀 프로듀서.", img: "assets/char-jeongian.webp" },
-    odaeun:       { name: "오다은", role: "매니저",            color: "#f6dcb0", desc: "엉뚱해 보이지만 사실 다 알고 있는 눈치 100단 매니저.", img: "assets/char-odaeun.webp" },
-    kael:         { name: "KAEL",   role: "인기 가수",        color: "#ccd2da", desc: "관심 없는 척하지만 너만 신경 쓰는 도도한 인기 가수.", img: "assets/char-kael.webp" },
-    yunjaeho:     { name: "윤재호", role: "작곡가",            color: "#c3d9cc", desc: "말보다 음악으로 감정을 표현하는 조용한 작곡가.", img: "assets/char-yunjaeho.webp" },
-    choijunhyeok: { name: "최준혁", role: "셰어하우스 주인",   color: "#ecc7a6", desc: "모두에게 친절한 데에는 이유가 있던 셰어하우스 주인.", img: "assets/char-choijunhyeok.webp" },
+    hanseoa:      { name: "한서아", role: "신인 가수",        color: "#f6c9d6", desc: "차가운 첫인상, 알면 알수록 따뜻한 노력파 신인 가수.", quote: "저… 아직 안 끝났어요. 한 번만 더 할게요.", img: "assets/char-hanseoa.webp" },
+    jeongian:     { name: "정이안", role: "프로듀서",          color: "#c7d4ec", desc: "절대 무너지지 않을 것 같은 완벽주의 쿨녀 프로듀서.", quote: "감정은 됐고, 박자나 맞춰.", img: "assets/char-jeongian.webp" },
+    odaeun:       { name: "오다은", role: "매니저",            color: "#f6dcb0", desc: "엉뚱해 보이지만 사실 다 알고 있는 눈치 100단 매니저.", quote: "내가 모를 줄 알았지? 다 보여.", img: "assets/char-odaeun.webp" },
+    kael:         { name: "KAEL",   role: "인기 가수",        color: "#ccd2da", desc: "관심 없는 척하지만 너만 신경 쓰는 도도한 인기 가수.", quote: "왜 자꾸… 신경 쓰이게 해.", img: "assets/char-kael.webp" },
+    yunjaeho:     { name: "윤재호", role: "작곡가",            color: "#c3d9cc", desc: "말보다 음악으로 감정을 표현하는 조용한 작곡가.", quote: "…말보다, 그냥 한 번 들어봐요.", img: "assets/char-yunjaeho.webp" },
+    choijunhyeok: { name: "최준혁", role: "셰어하우스 주인",   color: "#ecc7a6", desc: "모두에게 친절한 데에는 이유가 있던 셰어하우스 주인.", quote: "다들 모르는 게, 하나 있어.", img: "assets/char-choijunhyeok.webp" },
   };
 
   // 캐러셀 순환 순서
@@ -66,6 +114,7 @@
   const charName = document.getElementById("charName");
   const charRole = document.getElementById("charRole");
   const charDesc = document.getElementById("charDesc");
+  const charQuote = document.getElementById("charQuote");
   const charPrev = document.getElementById("charPrev");
   const charNext = document.getElementById("charNext");
 
@@ -73,8 +122,18 @@
   const slot = {};
   document.querySelectorAll(".thumb[data-slot]").forEach((b) => { slot[b.dataset.slot] = b; });
 
-  // 이미지 미리 로드 (전환 시 깜빡임 방지)
-  Object.values(CHARACTERS).forEach((c) => { const i = new Image(); i.src = c.img; });
+  // 캐릭터 이미지 프리로드: 초기 로딩(히어로 LCP)과 대역폭 경쟁을 피하려고
+  // 캐릭터 섹션이 뷰포트에 가까워질 때 한 번에 미리 로드 (전환 시 깜빡임 방지)
+  const preloadChars = () => Object.values(CHARACTERS).forEach((c) => { const i = new Image(); i.src = c.img; });
+  const charsSection = document.querySelector(".characters");
+  if (charsSection && "IntersectionObserver" in window) {
+    const preIo = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) { preloadChars(); preIo.disconnect(); }
+    }, { rootMargin: "600px 0px" });
+    preIo.observe(charsSection);
+  } else {
+    preloadChars();
+  }
 
   const mod = (n, m) => ((n % m) + m) % m;
   let current = 0;
@@ -99,6 +158,7 @@
       charMain.src = data.img; charMain.alt = data.name;
       if (charFace) { charFace.src = data.img; charFace.style.opacity = ""; }
       charName.textContent = data.name; charRole.textContent = data.role; charDesc.textContent = data.desc;
+      if (charQuote) charQuote.textContent = data.quote;
       charMain.classList.remove("swapping");
     }, 200);
   };
@@ -182,8 +242,84 @@
     let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(layoutNotes, 200); });
   }
 
-  /* ---------- GSAP 모션 (로드된 경우에만, 미로드 시 그대로 동작) ---------- */
-  if (window.gsap) {
+  /* ---------- 오프닝 독백 모달 (히어로 LP 클릭) ---------- */
+  const vnHeroLp = document.querySelector(".hero-lp");
+  const vnModal = document.getElementById("vnModal");
+  if (vnHeroLp && vnModal) {
+    const vnText = document.getElementById("vnText");
+    const vnClose = document.getElementById("vnClose");
+    const vnCta = document.getElementById("vnCta");
+    const LINES = [
+      "서울행 기차. 창밖 풍경이 빠르게 흘러간다.",
+      "이어폰 속 누군가의 노래처럼, 내 심장도 빠르게 뛴다.",
+      "음악을 만드는 사람들과 한집에서 산다니… 잘할 수 있을까.",
+      "각자의 미완성된 곡처럼, 나도 아직 완성되지 않았다.",
+      "그래도 — 이제, 첫 곡을 재생할 시간이야.",
+    ];
+    const CURSOR = '<span class="cursor">▍</span>';
+    let li = 0, typing = false, typeTimer = null, lastFocus = null;
+
+    const typeLine = (text) => {
+      clearTimeout(typeTimer);
+      if (reduceMotion) { vnText.textContent = text; typing = false; return; }
+      typing = true; let i = 0;
+      const step = () => {
+        i++;
+        vnText.innerHTML = text.slice(0, i) + (i < text.length ? CURSOR : "");
+        if (i < text.length) { typeTimer = setTimeout(step, 38); } else { typing = false; }
+      };
+      step();
+    };
+    const showLine = (idx) => { li = idx; typeLine(LINES[idx]); };
+    const advance = () => {
+      if (vnModal.classList.contains("ended")) return;
+      if (typing) { clearTimeout(typeTimer); typing = false; vnText.textContent = LINES[li]; }
+      else if (li + 1 < LINES.length) { showLine(li + 1); }
+      else { vnModal.classList.add("ended"); }   // 마지막 줄 다음 → CTA 노출
+    };
+    const openVn = () => {
+      lastFocus = document.activeElement;
+      vnModal.classList.remove("ended");
+      vnModal.setAttribute("aria-hidden", "false");
+      vnModal.classList.add("open");
+      document.body.style.overflow = "hidden";
+      showLine(0);
+      vnClose.focus();
+    };
+    const closeVn = () => {
+      clearTimeout(typeTimer); typing = false;
+      vnModal.classList.remove("open");
+      vnModal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+      if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true });
+    };
+
+    vnHeroLp.setAttribute("role", "button");
+    vnHeroLp.setAttribute("tabindex", "0");
+    vnHeroLp.setAttribute("aria-label", "오프닝 보기 — 이야기 재생하기");
+    vnHeroLp.addEventListener("click", openVn);
+    vnHeroLp.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openVn(); }
+    });
+
+    // 대사창/배경 클릭으로 진행 (닫기·CTA 클릭은 제외)
+    vnModal.addEventListener("click", (e) => {
+      if (e.target === vnClose || e.target === vnCta) return;
+      advance();
+    });
+    vnClose.addEventListener("click", (e) => { e.stopPropagation(); closeVn(); });
+    vnCta.addEventListener("click", () => { closeVn(); });   // href="#home" 네이티브 앵커로 상단 이동 + 닫기
+    document.addEventListener("keydown", (e) => {
+      if (!vnModal.classList.contains("open")) return;
+      if (e.key === "Escape") { closeVn(); }
+      else if (e.key === " " || e.key === "Enter") { e.preventDefault(); advance(); }
+    });
+  }
+
+  /* ---------- GSAP 모션 (로드된 경우에만, 미로드 시 그대로 동작) ----------
+     prefers-reduced-motion 사용자는 모든 GSAP 연출을 건너뛴다.
+     (콘텐츠는 CSS 기본 상태/IntersectionObserver 로 정적 표시되어 그대로 보임) */
+  if (window.gsap && !reduceMotion) {
     const g = window.gsap;
     if (window.ScrollTrigger) g.registerPlugin(window.ScrollTrigger);
 
@@ -270,7 +406,7 @@
       // (배경 흐린 얼굴은 지금처럼 유지 / 등장 후 인라인 정리해 캐릭터 전환 정상)
       if (charMain) charMain.style.transition = "none";  // GSAP 모션 ↔ CSS transition 충돌 방지
       g.timeline({
-        scrollTrigger: { trigger: ".characters", start: "top 65%" },
+        scrollTrigger: { trigger: ".characters", start: "top 65%", once: true },
         onComplete() { g.set(".char-main", { clearProps: "all" }); if (charMain) charMain.style.transition = ""; },
       })
         .from(".char-main", { x: -280, skewX: 16, rotation: -13, scale: 0.8, autoAlpha: 0,
@@ -279,12 +415,12 @@
         .to(".char-main", { rotation: 0, duration: 0.75, ease: "elastic.out(1, 0.45)" });  // 탄성 정착
       // 썸네일 스태거 등장
       g.from(".char-thumbs .thumb", { y: 16, stagger: 0.07, duration: 0.5, ease: "power2.out",
-        scrollTrigger: { trigger: ".char-selector", start: "top 82%" } });
+        scrollTrigger: { trigger: ".char-selector", start: "top 82%", once: true } });
       // 스틸 스태거 등장 — 3D 카드 플립 인 (왼쪽 축으로 펼쳐지듯)
       g.set(".still-grid", { perspective: 900 });
       g.from(".still", { autoAlpha: 0, rotationY: -58, y: 16, transformOrigin: "left center",
         stagger: { each: 0.09, from: "start" }, duration: 0.75, ease: "power3.out",
-        scrollTrigger: { trigger: ".still-grid", start: "top 80%" } });
+        scrollTrigger: { trigger: ".still-grid", start: "top 80%", once: true } });
     }
 
     // 호버 (GSAP 인라인이 CSS transform 위로 덮음) — 버튼/스틸/썸네일
