@@ -43,7 +43,7 @@
   <div id="scaleInner">
   <!-- 첫 페인트 전에 스케일 적용 → GSAP 로드를 기다리며 깜빡이는(FOUC) 것 방지
        (높이 보정은 콘텐츠 파싱 후 script.js applyScale 가 정확히 잡음) -->
-  <script>(function(){var w=window.innerWidth,D=1920;if(w>900){var el=document.getElementById("scaleInner");el.style.width=D+"px";el.style.transformOrigin="top left";el.style.transform="scale("+(w/D)+")";document.body.classList.add("is-scaled");}})();</script>
+  <script>(function(){var w=window.innerWidth,D=1920;if(w>900){var s=w/D,el=document.getElementById("scaleInner");el.style.width=D+"px";el.style.transformOrigin="top left";el.style.transform="scale("+s+")";var h=document.getElementById("siteHeader");if(h){h.style.transformOrigin="top left";h.style.width=D+"px";h.style.right="auto";h.style.transform="scale("+s+")";}var o=document.getElementById("scaleOuter");if(o)o.style.paddingTop=(76*s)+"px";document.body.classList.add("is-scaled");}})();</script>
 
   <main>
     <!-- ============ HERO ============ -->

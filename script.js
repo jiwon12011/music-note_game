@@ -15,6 +15,8 @@
   const SCALE_MIN_W = 900; // 이 이하(태블릿/모바일)는 기존 반응형 유지
   const scaleOuter = document.getElementById("scaleOuter");
   const scaleInner = document.getElementById("scaleInner");
+  const scaleHeader = document.getElementById("siteHeader");
+  const HEADER_H = 76; // CSS .site-header height
   const applyScale = () => {
     if (!scaleInner) return;
     const w = window.innerWidth;
@@ -28,11 +30,21 @@
       const h = scaleInner.offsetHeight;
       scaleInner.style.transform = "scale(" + s + ")";
       if (scaleOuter) scaleOuter.style.height = h * s + "px";
+      // 헤더도 같은 1920 기준으로 스케일 → 본문과 동일 비율(좁은 화면에서 헤더만 커보이던 문제 해결)
+      if (scaleHeader) {
+        scaleHeader.style.transformOrigin = "top left";
+        scaleHeader.style.width = DESIGN_W + "px";
+        scaleHeader.style.right = "auto";
+        scaleHeader.style.transform = "scale(" + s + ")";
+      }
+      // 헤더 시각 높이(76*s)에 맞춰 본문 상단 여백 보정
+      if (scaleOuter) scaleOuter.style.paddingTop = HEADER_H * s + "px";
     } else {
       document.body.classList.remove("is-scaled");
       scaleInner.style.width = "";
       scaleInner.style.transform = "";
-      if (scaleOuter) scaleOuter.style.height = "";
+      if (scaleOuter) { scaleOuter.style.height = ""; scaleOuter.style.paddingTop = ""; }
+      if (scaleHeader) { scaleHeader.style.transform = ""; scaleHeader.style.width = ""; scaleHeader.style.right = ""; scaleHeader.style.transformOrigin = ""; }
     }
     if (window.ScrollTrigger) window.ScrollTrigger.refresh();
   };
