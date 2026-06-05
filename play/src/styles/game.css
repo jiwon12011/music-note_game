@@ -1,0 +1,161 @@
+/* ============================================================
+   플레이리스트 : 우리 사이의 음표 — 게임 공통 스타일
+   랜딩의 디자인 토큰을 이어받음 (크림/핑크 글래스)
+   ============================================================ */
+:root {
+  --c-primary: #ef94ac;
+  --c-primary-dark: #e57a96;
+  --c-cream: #faf1ec;
+  --c-dark: #382c29;
+  --c-dark-2: #2b2120;
+  --c-on-dark: #f6e9e3;
+  --font-body: 'Noto Sans KR', sans-serif;
+  --font-display: 'Poppins', 'Noto Sans KR', sans-serif;
+  --radius: 18px;
+  --radius-lg: 22px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-body);
+  color: var(--c-on-dark);
+  background: #1a1416;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+#app { position: fixed; inset: 0; }
+img { display: block; max-width: 100%; }
+button { font-family: inherit; cursor: pointer; }
+
+/* 화면 전환 (페이드) */
+.screen {
+  position: absolute; inset: 0;
+  opacity: 0; visibility: hidden;
+  transition: opacity .5s var(--ease), visibility .5s var(--ease);
+}
+.screen.active { opacity: 1; visibility: visible; }
+
+/* ============================================================
+   타이틀 화면
+   ============================================================ */
+.title {
+  position: absolute; inset: 0;
+  display: grid; place-items: center;
+  overflow: hidden;
+}
+/* 배경 + 어둡게 */
+.title-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+  transform: scale(1.06);
+  animation: titleDrift 24s ease-in-out infinite alternate;
+}
+.title-bg::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(26,20,22,.45) 0%, rgba(26,20,22,.62) 55%, rgba(26,20,22,.8) 100%);
+}
+@keyframes titleDrift { from { transform: scale(1.06) translateY(0); } to { transform: scale(1.12) translateY(-2%); } }
+
+/* 떠다니는 음표 (장식) */
+.title-notes { position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden; }
+.title-note {
+  position: absolute; color: var(--c-primary); opacity: .5;
+  text-shadow: 0 2px 12px rgba(239,148,172,.5);
+  animation: noteRise linear infinite;
+}
+@keyframes noteRise {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  15% { opacity: .55; }
+  100% { transform: translateY(-120px) rotate(18deg); opacity: 0; }
+}
+
+/* 콘텐츠 */
+.title-inner {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 54px; padding: 40px;
+  width: min(100%, 480px);
+}
+.title-logo { display: flex; flex-direction: column; align-items: center; gap: 18px; animation: logoFloat 4s ease-in-out infinite; }
+.title-logo-disc {
+  width: 116px; height: 116px; border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 50% 40%, rgba(239,148,172,.32), rgba(239,148,172,.12));
+  border: 3px solid var(--c-primary);
+  box-shadow: 0 0 0 16px rgba(239,148,172,.07), 0 18px 40px rgba(0,0,0,.4);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  font-size: 3rem; color: var(--c-primary);
+  position: relative;
+}
+.title-logo-disc::after { /* LP 중앙 홀 */
+  content: ""; position: absolute; width: 14px; height: 14px; border-radius: 50%;
+  background: rgba(250,241,236,.85); box-shadow: 0 0 0 6px rgba(43,33,32,.35);
+}
+.title-wordmark {
+  font-family: var(--font-display); font-weight: 900;
+  font-size: clamp(2.4rem, 7vw, 3.4rem); letter-spacing: .06em;
+  color: var(--c-cream); text-shadow: 0 4px 18px rgba(0,0,0,.45);
+  text-align: center; line-height: 1;
+}
+.title-sub {
+  font-family: var(--font-display); font-weight: 600;
+  font-size: .82rem; letter-spacing: .34em; text-transform: uppercase;
+  color: rgba(246,233,227,.78); text-align: center;
+}
+.title-kr { font-size: .98rem; letter-spacing: .12em; color: rgba(246,233,227,.6); margin-top: 4px; }
+@keyframes logoFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+/* 메뉴 패널 (글래스) */
+.title-menu {
+  width: 100%;
+  background: linear-gradient(180deg, rgba(56,44,41,.55), rgba(43,33,32,.66));
+  border: 1.5px solid rgba(239,148,172,.4);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 50px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.14);
+}
+.title-item {
+  display: flex; align-items: center; gap: 14px;
+  width: 100%; padding: 17px 26px;
+  background: transparent; border: none;
+  border-bottom: 1px solid rgba(239,148,172,.14);
+  color: var(--c-on-dark);
+  font-family: var(--font-display); font-weight: 600; font-size: 1.04rem;
+  text-align: left; position: relative; overflow: hidden;
+  transition: background .24s var(--ease), color .24s var(--ease), padding-left .24s var(--ease);
+}
+.title-item:last-child { border-bottom: none; }
+.title-item::before {
+  content: ""; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
+  background: var(--c-primary); transform: scaleY(0); transform-origin: top;
+  transition: transform .24s var(--ease);
+}
+.title-item .ico { color: var(--c-primary); font-size: .95rem; width: 22px; flex-shrink: 0; }
+.title-item:hover:not(:disabled) { background: rgba(239,148,172,.13); color: #fff; padding-left: 30px; }
+.title-item:hover:not(:disabled)::before { transform: scaleY(1); }
+.title-item:disabled { opacity: .4; cursor: not-allowed; }
+.title-item small { margin-left: auto; font-weight: 500; font-size: .74rem; color: rgba(246,233,227,.6); }
+
+.title-footer { position: absolute; bottom: 18px; z-index: 2; font-size: .72rem; letter-spacing: .1em; color: rgba(246,233,227,.45); }
+
+/* 토스트 (준비 중 알림 등) */
+.toast {
+  position: fixed; left: 50%; bottom: 64px; transform: translateX(-50%) translateY(16px);
+  z-index: 3000; padding: 12px 22px; border-radius: 999px;
+  background: rgba(43,33,32,.85); color: var(--c-on-dark);
+  border: 1px solid rgba(239,148,172,.4); backdrop-filter: blur(10px);
+  font-size: .9rem; box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  opacity: 0; transition: opacity .3s var(--ease), transform .3s var(--ease); pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 600px) {
+  .title-inner { gap: 38px; }
+  .title-logo-disc { width: 92px; height: 92px; font-size: 2.4rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .title-bg, .title-logo, .title-note { animation: none; }
+  .screen { transition: none; }
+}
