@@ -353,7 +353,8 @@
     const heroLp = document.querySelector(".hero-lp");
     const heroStage = document.querySelector(".hero-stage");
     if (heroLp && heroStage) {
-      const GLYPHS = ["♪", "♫", "♬", "♩", "♭", "𝅘𝅥𝅮"];
+      // 폰트에 없는 astral 문자(𝅘𝅥𝅮)는 두부(□)로 깨져서 제외 — BMP 음표만 사용
+      const GLYPHS = ["♪", "♫", "♬", "♩", "♭", "♮"];
       // 다양한 파스텔 음표 색 (크림/핑크 테마와 어울리게)
       const COLORS = ["#ef94ac", "#c79be6", "#7ec8c0", "#f4b25c", "#8fb4f0", "#f07ba0", "#9bd17a", "#ff9e7a"];
       const rand = (min, max) => min + Math.random() * (max - min);
