@@ -25,10 +25,8 @@
       <nav class="main-nav" id="mainNav">
         <a href="#home" class="nav-link active">HOME</a>
         <a href="#about" class="nav-link">ABOUT</a>
-        <a href="#characters" class="nav-link">FEATURES</a>
         <a href="#characters" class="nav-link">CHARACTERS</a>
         <a href="#stillcut" class="nav-link">GALLERY</a>
-        <a href="#news" class="nav-link">NEWS</a>
       </nav>
       <div class="header-actions">
         <a href="proposal.html" class="btn btn-outline proposal-btn">제안서 보기</a>
@@ -59,7 +57,7 @@
     <section class="about" id="about">
       <div class="container about-inner">
         <div class="about-panel reveal">
-          <div class="section-head">
+          <div class="section-head reveal-left">
             <span class="section-num">02</span>
             <div>
               <span class="section-eyebrow">ABOUT</span>
@@ -85,7 +83,7 @@
       </div>
       <div class="container char-inner">
         <div class="char-info reveal">
-          <div class="section-head">
+          <div class="section-head reveal-left">
             <span class="section-num">03</span>
             <div>
               <span class="section-eyebrow">CHARACTERS</span>
@@ -105,16 +103,11 @@
 
         <div class="char-selector reveal">
           <button class="char-arrow" id="charPrev" aria-label="이전 캐릭터">&#9650;</button>
-          <div class="char-thumbs-window">
-            <ul class="char-thumbs" id="charThumbs">
-              <li><button class="thumb active" data-key="hanseoa"><img src="assets/char-hanseoa.webp" alt="한서아" /></button></li>
-              <li><button class="thumb" data-key="jeongian"><img src="assets/char-jeongian.webp" alt="정이안" /></button></li>
-              <li><button class="thumb" data-key="odaeun"><img src="assets/char-odaeun.webp" alt="오다은" /></button></li>
-              <li><button class="thumb" data-key="kael"><img src="assets/char-kael.webp" alt="KAEL" /></button></li>
-              <li><button class="thumb" data-key="yunjaeho"><img src="assets/char-yunjaeho.webp" alt="윤재호" /></button></li>
-              <li><button class="thumb" data-key="choijunhyeok"><img src="assets/char-choijunhyeok.webp" alt="최준혁" /></button></li>
-            </ul>
-          </div>
+          <ul class="char-thumbs" id="charThumbs">
+            <li><button class="thumb" data-slot="-1"><img src="assets/char-choijunhyeok.webp" alt="" /></button></li>
+            <li><button class="thumb center active" data-slot="0"><img src="assets/char-hanseoa.webp" alt="한서아" /></button></li>
+            <li><button class="thumb" data-slot="1"><img src="assets/char-jeongian.webp" alt="" /></button></li>
+          </ul>
           <button class="char-arrow" id="charNext" aria-label="다음 캐릭터">&#9660;</button>
         </div>
       </div>
@@ -124,7 +117,7 @@
     <!-- ============ STILL CUT (04) ============ -->
     <section class="stillcut" id="stillcut">
       <div class="container">
-        <div class="section-head reveal">
+        <div class="section-head reveal-left">
           <span class="section-num">04</span>
           <div>
             <span class="section-eyebrow">STILL CUT</span>

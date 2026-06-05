@@ -67,7 +67,7 @@ ul { list-style: none; }
   transition: background var(--dur), border-color var(--dur), box-shadow var(--dur);
 }
 .site-header.scrolled { background: rgba(250,241,236,.95); border-color: var(--color-border); box-shadow: 0 6px 22px rgba(120,80,70,.08); }
-.header-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; }
+.header-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; position: relative; }
 .logo { display: flex; align-items: center; }
 .logo-img { width: 52px; height: 52px; object-fit: contain; }
 .logo-note {
@@ -75,7 +75,8 @@ ul { list-style: none; }
   background: var(--color-dark); color: var(--color-cream);
   border: 2px solid var(--color-primary); border-radius: 50%; font-size: 1.2rem;
 }
-.main-nav { display: flex; gap: clamp(12px, 2vw, 32px); }
+/* 네비 중앙 정렬 (로고·버튼과 무관하게 헤더 정중앙) */
+.main-nav { display: flex; gap: clamp(12px, 2vw, 32px); position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 .nav-link {
   font-family: var(--font-display); font-size: .82rem; font-weight: 600; letter-spacing: .08em;
   color: var(--color-text-soft); position: relative; padding: 6px 0; transition: color var(--dur);
@@ -106,12 +107,29 @@ ul { list-style: none; }
   box-shadow: 0 30px 50px rgba(160,110,120,.22);
 }
 /* LP+캐릭터(투명)는 배경 위로 (z-index 높게), 배경보다 약간 크게 겹침 */
-.hero-lp { position: relative; z-index: 2; width: 100%; height: auto; filter: drop-shadow(0 16px 26px rgba(0,0,0,.18)); }
+/* 핑크 획(외곽선) + 글로우로 누끼 흰 테두리를 가림 (배지처럼) */
+.hero-lp {
+  position: relative; z-index: 2; width: 100%; height: auto;
+  filter:
+    drop-shadow(1.2px 0 0 #FCEAED) drop-shadow(-1.2px 0 0 #FCEAED)
+    drop-shadow(0 1.2px 0 #FCEAED) drop-shadow(0 -1.2px 0 #FCEAED)
+    drop-shadow(1.2px 1.2px 0 #FCEAED) drop-shadow(-1.2px -1.2px 0 #FCEAED)
+    drop-shadow(1.2px -1.2px 0 #FCEAED) drop-shadow(-1.2px 1.2px 0 #FCEAED)
+    drop-shadow(0 0 5px rgba(252,234,237,.5))
+    drop-shadow(0 16px 26px rgba(0,0,0,.18));
+}
 .hero-badge {
   position: absolute; z-index: 5; top: 51px; left: -10%; width: clamp(245px, 26vw, 380px);
   transform: rotate(-4deg);
   filter: drop-shadow(0 10px 18px rgba(0,0,0,.14));
   animation: bob 3s ease-in-out infinite;
+}
+/* 호버 시 LP 위로 둥실 떠오르는 음표 (JS가 생성) */
+.note-float {
+  position: absolute; bottom: 32%; z-index: 6;
+  color: var(--color-primary); line-height: 1; font-weight: 700;
+  text-shadow: 0 2px 10px rgba(239,148,172,.55);
+  pointer-events: none; user-select: none; will-change: transform, opacity;
 }
 
 /* 필름 스트립 장식 (오른쪽 대각선) — 얇고 가파르게, 코너에서 시작 */
@@ -144,6 +162,11 @@ ul { list-style: none; }
    STORY 래퍼 — 왼쪽 고동색 지그재그(번개) 이미지
    ============================================================ */
 .story { position: relative; background: var(--color-cream); }
+/* 브라운 지그재그 위 장식 음표 (JS가 생성) — 지그재그(2) 위, 텍스트(3) 아래 */
+.story-note {
+  position: absolute; z-index: 2; pointer-events: none; user-select: none;
+  line-height: 1; font-weight: 700; text-shadow: 0 2px 6px rgba(0,0,0,.2);
+}
 .story-zigzag {
   position: absolute; left: 0; top: -41px;
   height: 147%; width: auto; max-width: 64%;
@@ -172,7 +195,7 @@ ul { list-style: none; }
 .about-photo {
   position: relative; z-index: 1;  /* 지그재그(2) 아래 → 브라운이 위에서 덮음 */
   /* 브라운 아래로 밀어넣어 대각선이 사진 왼쪽을 덮게 */
-  margin-left: calc(-1 * var(--space-3xl) - 70px);
+  margin-left: calc(-1 * var(--space-3xl) - 42px);
   /* 오른쪽 끝을 히어로 배경 이미지 우측과 정렬 (히어로 기하 역산) */
   margin-right: calc(598px - 45vw + 0.45 * max(0px, 100vw - 1660px));
   border-radius: var(--radius-lg);
@@ -219,7 +242,7 @@ ul { list-style: none; }
 .char-visual { position: relative; height: 560px; }
 /* 흐린 큰 얼굴 — 밴드 안 왼쪽 (밴드 overflow:hidden 로 세로 클리핑) */
 .char-face {
-  position: absolute; left: 25%; top: 4%; width: 41%; height: 92%;
+  position: absolute; left: 26%; top: 0%; width: 43%; height: 100%;
   overflow: hidden; opacity: 0.3; z-index: 0;
   mask-image: linear-gradient(90deg, #000 64%, transparent);
 }
@@ -253,24 +276,30 @@ ul { list-style: none; }
 }
 .char-arrow:hover { background: #fff; transform: scale(1.06); }
 .char-arrow:disabled { opacity: .3; cursor: default; transform: none; }
-/* 3개(84)+간격(12)x2 = 276; 3번째가 안 잘리게 +여유, 4번째(288~)는 안 보이게 */
-.char-thumbs-window { height: 286px; padding: 0 14px; overflow: hidden; }
-.char-thumbs { display: flex; flex-direction: column; gap: 12px; transition: transform var(--dur) var(--ease); }
+/* 3-슬롯 캐러셀: 위/아래 미리보기(작고 흐림) + 가운데 현재(크고 선명) */
+.char-thumbs { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 0 14px; }
 .thumb {
-  width: 84px; height: 84px; padding: 0; border-radius: 12px; cursor: pointer; overflow: hidden;
-  border: 3px solid #fff; background: #fff;
+  width: 64px; height: 64px; padding: 0; border-radius: 12px; cursor: pointer; overflow: hidden;
+  border: 3px solid #fff; background: #fff; opacity: .5;
   box-shadow: 0 3px 8px rgba(150,100,110,.15);
-  transition: border-color var(--dur), transform var(--dur);
+  transition: width var(--dur) var(--ease), height var(--dur) var(--ease),
+              opacity var(--dur) var(--ease), border-color var(--dur), transform var(--dur);
 }
-.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-.thumb:hover { transform: translateY(-2px); }
-.thumb.active { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(239,148,172,.45); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; transition: opacity var(--dur); }
+.thumb:hover { opacity: .85; transform: translateY(-2px); }
+/* 가운데(현재) 슬롯 — 크게·선명·핑크 보더 */
+.thumb.center {
+  width: 96px; height: 96px; opacity: 1; cursor: default; border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(239,148,172,.45), 0 6px 16px rgba(150,100,110,.22);
+}
+.thumb.center:hover { transform: none; }
 
 /* ============================================================
    STILL CUT (04)
    ============================================================ */
-/* overflow visible: 필름 아래 끝이 다음 섹션(배너)으로 내려가 가려지게 */
-.stillcut { position: relative; background: var(--color-cream); padding: var(--space-3xl) 0; }
+/* overflow visible: 필름 아래 끝이 다음 섹션(배너)으로 내려가 가려지게
+   padding-top 축소: 제목을 브라운이 넓은 위쪽으로 올려 경계 닿음 방지 */
+.stillcut { position: relative; background: var(--color-cream); padding: var(--space-md) 0 var(--space-3xl); }
 /* 04 헤딩: 02/03과 같은 왼쪽 시작점(1660) + 지그재그 위로(z-index 3) */
 .stillcut .section-head {
   position: relative; z-index: 3;
@@ -295,7 +324,7 @@ ul { list-style: none; }
    BOTTOM BANNER
    ============================================================ */
 .banner { position: relative; z-index: 2; min-height: 380px; display: flex; align-items: center; overflow: hidden; }
-.banner-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.banner-bg { position: absolute; inset: 0; width: 100%; height: 138%; object-fit: cover; z-index: 0; }
 /* 얼굴이 왼쪽 → 텍스트는 오른쪽, 그라데이션도 오른쪽을 어둡게 */
 .banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 28%, rgba(40,30,40,.18) 52%, rgba(40,30,40,.55)); z-index: 1; }
 .banner-inner {
@@ -312,7 +341,7 @@ ul { list-style: none; }
 /* ============================================================
    FOOTER
    ============================================================ */
-.site-footer { background: var(--color-dark-2); color: var(--color-on-dark); padding: var(--space-2xl) 0; border-top: 3px solid var(--color-primary); }
+.site-footer { background: var(--color-dark-2); color: var(--color-on-dark); padding: var(--space-2xl) 0; }
 .footer-inner { display: flex; align-items: center; gap: var(--space-lg); flex-wrap: wrap; justify-content: space-between; }
 .footer-brand { display: flex; align-items: center; gap: 12px; }
 .footer-logo { width: 44px; height: 42px; object-fit: contain; }
@@ -329,6 +358,9 @@ ul { list-style: none; }
    ============================================================ */
 .reveal { opacity: 0; transform: translateY(34px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
 .reveal.visible { opacity: 1; transform: translateY(0); }
+/* 왼쪽 섹션 타이틀: 왼쪽에서 슬라이드 등장 */
+.reveal-left { opacity: 0; transform: translateX(-56px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+.reveal-left.visible { opacity: 1; transform: translateX(0); }
 
 @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
@@ -345,7 +377,7 @@ ul { list-style: none; }
   .banner-inner { margin-left: 0; margin-right: 0; max-width: none; }
 
   /* 데스크탑 전용 지그재그·필름 제거 → 섹션 자체에 브라운 배경 */
-  .story-zigzag, .filmstrip { display: none; }
+  .story-zigzag, .filmstrip, .story-note { display: none; }
 
   /* ABOUT: 텍스트(브라운) 위, 사진 아래 1열 */
   .about { background: var(--color-dark); padding: var(--space-2xl) 0; }
@@ -360,11 +392,10 @@ ul { list-style: none; }
   .char-visual { height: 440px; }
   .char-face { display: none; }   /* 모바일에선 흐린 얼굴 생략 */
   .char-main { position: relative; right: auto; bottom: auto; height: 420px; max-width: 90%; margin: 0 auto; }
-  /* 썸네일: 가로 한 줄로 전부 표시, 화살표 숨김 */
-  .char-selector { flex-direction: row; justify-content: center; }
-  .char-arrow { display: none; }
-  .char-thumbs-window { height: auto; padding: 0; overflow: visible; }
-  .char-thumbs { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; transform: none !important; }
+  /* 썸네일: 3-슬롯을 가로 한 줄로 (화살표 ◀ 미리보기·현재·미리보기 ▶) */
+  .char-selector { flex-direction: row; justify-content: center; align-items: center; }
+  .char-arrow { width: 26px; height: 40px; }
+  .char-thumbs { flex-direction: row; align-items: center; padding: 0; gap: 10px; }
 
   /* STILL CUT: 크림 배경이므로 제목 다크, 스틸 1열 */
   .stillcut .section-title { color: var(--color-dark); }
@@ -380,6 +411,7 @@ ul { list-style: none; }
   .main-nav { display: none; }
   .main-nav.open {
     display: flex; flex-direction: column; position: absolute; top: 76px; left: 0; right: 0;
+    transform: none;  /* 데스크탑 중앙정렬 transform 해제 */
     background: rgba(250,241,236,.98); padding: var(--space-lg); gap: var(--space-md);
     box-shadow: 0 12px 24px rgba(120,80,70,.12); border-bottom: 1px solid var(--color-border);
   }
