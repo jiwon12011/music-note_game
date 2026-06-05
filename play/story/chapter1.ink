@@ -53,9 +53,8 @@ VAR aff_choijunhyeok = 0
 
 === fridge ===
 # scene: 냉장고 앞
-# track: t03
 # bg: kitchen
-# char: choijunhyeok sweater center
+# cg: cg-01
 늦은 밤. 물을 마시러 나왔다가, 냉장고 앞에서 다시 최준혁과 마주쳤다.
 # speaker: choijunhyeok
 안 자고 뭐 해요?

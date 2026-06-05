@@ -2,7 +2,7 @@
 import { Story } from "../../vendor/ink.mjs";
 import { charName, charColor, CHARS } from "../engine/charMeta.js";
 import { settings } from "../state/settings.js";
-import { profile } from "../state/profile.js";
+import { profile, trackByCg } from "../state/profile.js";
 import { save, loadInto } from "../state/saves.js";
 import { openSaveLoad } from "./saveload.js";
 import { openSettings } from "./settings.js";
@@ -28,6 +28,7 @@ export async function startGame(app, opts = {}) {
   root.innerHTML = `
     <div class="scene-bg"></div>
     <img class="scene-char enter" alt="" hidden />
+    <div class="scene-cg"></div>
     <div class="aff-popup"><span class="who"></span> <span class="heart">♥</span> <span class="delta"></span></div>
     <button class="vn-menu-btn" title="메뉴 (ESC)">☰</button>
     <div class="scene-stage"><div class="vn-box">
@@ -40,15 +41,21 @@ export async function startGame(app, opts = {}) {
   app.appendChild(root);
 
   const $ = (s) => root.querySelector(s);
-  const bgEl = $(".scene-bg"), charEl = $(".scene-char");
+  const bgEl = $(".scene-bg"), charEl = $(".scene-char"), cgEl = $(".scene-cg");
   const speakerEl = $(".vn-speaker"), textEl = $(".vn-text"), nextEl = $(".vn-next");
   const choicesEl = $(".vn-choices"), cardEl = $(".chapter-card"), affEl = $(".aff-popup");
 
   let mode = "line", typing = false, typeTimer = null, curText = "", pending = null, suppressAff = false;
-  const view = { bg: "", char: null, speaker: null, line: "", scene: "" };
+  const view = { bg: "", char: null, speaker: null, line: "", scene: "", cg: null };
 
   /* 비주얼 */
-  const setBg = (k) => { if (k && k !== view.bg) { view.bg = k; bgEl.style.backgroundImage = `url('${ASSET}/bg/${k}.webp')`; } };
+  const clearCg = () => { if (view.cg) { view.cg = null; cgEl.classList.remove("show"); } };
+  const showCg = (id) => {
+    view.cg = id; charEl.hidden = true; // CG가 화면을 덮음
+    cgEl.style.backgroundImage = `url('${ASSET}/cg/${id}.webp')`; cgEl.classList.add("show");
+    const tr = trackByCg(id); if (tr) profile.unlockTrack(tr.id); // 컬렉션 해금
+  };
+  const setBg = (k) => { if (k && k !== view.bg) { view.bg = k; bgEl.style.backgroundImage = `url('${ASSET}/bg/${k}.webp')`; clearCg(); } };
   const showChar = (k, o, p = "center") => {
     view.char = { key: k, outfit: o, pos: p };
     charEl.hidden = false; charEl.style.opacity = ""; charEl.className = `scene-char pos-${p} enter`;
@@ -63,6 +70,7 @@ export async function startGame(app, opts = {}) {
     if (t.bg) setBg(t.bg);
     if (t.hide) hideChar();
     if (t.char) { const [k, o, p] = t.char.split(/\s+/); showChar(k, o, p || "center"); }
+    if (t.cg) showCg(t.cg); // CG 는 bg/char 다음 (화면 덮음)
     setSpeaker(t.speaker || null);
   };
 
@@ -116,11 +124,12 @@ export async function startGame(app, opts = {}) {
   };
 
   /* 메뉴(ESC) */
-  const getPreview = () => ({ player: story.variablesState["player"], scene: view.scene, bg: view.bg, char: view.char, speaker: view.speaker, line: view.line });
+  const getPreview = () => ({ player: story.variablesState["player"], scene: view.scene, bg: view.bg, char: view.char, speaker: view.speaker, line: view.line, cg: view.cg });
   const restoreView = (pv) => {
     if (!pv) return;
     if (pv.bg) setBg(pv.bg);
     if (pv.char) showChar(pv.char.key, pv.char.outfit, pv.char.pos);
+    if (pv.cg) showCg(pv.cg);
     setSpeaker(pv.speaker || null);
     textEl.textContent = pv.line || ""; view.line = pv.line || ""; view.scene = pv.scene || "";
   };

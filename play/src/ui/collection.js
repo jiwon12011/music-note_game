@@ -11,10 +11,11 @@ export function openCollection() {
   const rows = TRACK_CATALOG.map((t, i) => {
     const on = unlocked.has(t.id);
     const no = String(i + 1).padStart(2, "0");
+    const img = t.cg ? `${ASSET}/cg/${t.cg}.webp` : `${ASSET}/bg/${t.bg}.webp`;
     return on
-      ? `<button class="track unlocked" data-bg="${t.bg}" data-name="${t.name}">
+      ? `<button class="track unlocked" data-img="${img}" data-name="${t.name}">
            <span class="track-no">${no}</span>
-           <img class="track-thumb" src="${ASSET}/bg/${t.bg}.webp" alt="" loading="lazy" />
+           <img class="track-thumb" src="${img}" alt="" loading="lazy" />
            <span class="track-name">${t.name}</span></button>`
       : `<div class="track locked">
            <span class="track-no">${no}</span>
@@ -30,16 +31,16 @@ export function openCollection() {
   const { close, el } = openOverlay(panel);
   panel.querySelector('[data-act="close"]').addEventListener("click", close);
   panel.querySelectorAll(".track.unlocked").forEach((t) => {
-    t.addEventListener("click", () => showLightbox(t.dataset.bg, t.dataset.name));
+    t.addEventListener("click", () => showLightbox(t.dataset.img, t.dataset.name));
   });
 }
 
-function showLightbox(bg, name) {
+function showLightbox(img, name) {
   const lb = document.createElement("div");
   lb.className = "overlay open";
   lb.style.zIndex = 2300;
   lb.innerHTML = `<div style="max-width:90vw;text-align:center">
-    <img src="${ASSET}/bg/${bg}.webp" style="max-width:90vw;max-height:74vh;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.6)" />
+    <img src="${img}" style="max-width:90vw;max-height:74vh;border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.6)" />
     <p style="margin-top:16px;color:var(--c-cream);font-family:var(--font-display);font-weight:700;font-size:1.1rem">♪ ${name}</p></div>`;
   document.body.appendChild(lb);
   lb.addEventListener("click", () => lb.remove());

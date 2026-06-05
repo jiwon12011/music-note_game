@@ -18,10 +18,13 @@ export const profile = {
   all() { return read(); },
 };
 
-// 트랙 마스터 카탈로그 — Ink `# track: <id> <name>` 로 해금. 썸네일은 그 씬의 배경 재활용.
+// 트랙 마스터 카탈로그 — Ink `# track: <id>` 로 해금. 썸네일은 CG(이벤트 일러)가 있으면 그걸, 없으면 배경.
 export const TRACK_CATALOG = [
   { id: "t01", name: "상경, 첫 곡", bg: "train" },
   { id: "t02", name: "셰어하우스의 밤", bg: "house-ext-night" },
-  { id: "t03", name: "냉장고 앞에서", bg: "kitchen" },
+  { id: "t03", name: "냉장고 앞에서", bg: "kitchen", cg: "cg-01" },
   { id: "t04", name: "차가운 첫인상", bg: "living-day" },
 ];
+
+// `# cg: <id>` 로 해금된 CG → 매칭되는 트랙 찾기
+export function trackByCg(cgId) { return TRACK_CATALOG.find((t) => t.cg === cgId); }
