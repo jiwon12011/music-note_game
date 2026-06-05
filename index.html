@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="플레이리스트: 우리 사이의 음표 — 음악 프로덕션과 셰어하우스를 배경으로 한 청춘 로맨스 비주얼노벨" />
+  <meta property="og:title" content="플레이리스트 : 우리 사이의 음표" />
+  <meta property="og:description" content="Playlist : Between Us — 각자의 미완성된 곡처럼, 서로의 감정도 조금씩 완성되어 간다." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/hero-lp.webp" />
+  <title>플레이리스트 : 우리 사이의 음표 | Playlist : Between Us</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- ============ HEADER ============ -->
+  <header class="site-header" id="siteHeader">
+    <div class="container header-inner">
+      <a href="#home" class="logo" aria-label="PLAYLIST 홈">
+        <img class="logo-img" src="assets/logo.webp" alt="PLAYLIST 로고" width="102" height="98" />
+      </a>
+      <nav class="main-nav" id="mainNav">
+        <a href="#home" class="nav-link active">HOME</a>
+        <a href="#about" class="nav-link">ABOUT</a>
+        <a href="#characters" class="nav-link">FEATURES</a>
+        <a href="#characters" class="nav-link">CHARACTERS</a>
+        <a href="#stillcut" class="nav-link">GALLERY</a>
+        <a href="#news" class="nav-link">NEWS</a>
+      </nav>
+      <div class="header-actions">
+        <a href="#about" class="btn btn-primary start-btn">바로 시작하기</a>
+        <button class="icon-btn menu-toggle" id="menuToggle" aria-label="메뉴">≡</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home">
+      <div class="container hero-inner">
+        <div class="hero-stage reveal">
+          <img class="hero-bg-img" src="assets/scene-station.webp" alt="" aria-hidden="true" />
+          <img class="filmstrip filmstrip--hero" src="assets/filmstrip.webp" alt="" aria-hidden="true" />
+          <img class="hero-lp" src="assets/hero-lp.webp" alt="LP판 위의 등장인물들" width="1500" height="915" />
+          <img class="hero-badge" src="assets/badge-play.webp" alt="지금 재생하기 — Play the Story" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT (02) ============ -->
+    <section class="about" id="about">
+      <div class="container about-inner">
+        <div class="about-panel reveal">
+          <div class="section-head">
+            <span class="section-num">02</span>
+            <div>
+              <span class="section-eyebrow">ABOUT</span>
+              <h2 class="section-title">한줄 소개</h2>
+            </div>
+          </div>
+          <p class="about-lead">음악을 만드는 사람들과 함께 살게 된 주인공</p>
+          <p class="about-body">
+            각자의 미완성된 곡처럼,<br />
+            서로의 감정도 조금씩 완성되어 간다.
+          </p>
+        </div>
+        <div class="about-photo reveal">
+          <img src="assets/about-room.webp" alt="음악 프로덕션 작업실" width="1400" height="787" />
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CHARACTERS (03) ============ -->
+    <section class="characters" id="characters">
+      <img class="char-zigzag" src="assets/zigzag.webp" alt="" aria-hidden="true" />
+      <div class="container char-inner">
+        <div class="char-info reveal">
+          <div class="section-head">
+            <span class="section-num">03</span>
+            <div>
+              <span class="section-eyebrow">CHARACTERS</span>
+              <h2 class="section-title">캐릭터 소개</h2>
+            </div>
+          </div>
+          <div class="char-detail">
+            <h3 class="char-name" id="charName">한서아</h3>
+            <p class="char-role" id="charRole">신인 가수</p>
+            <p class="char-desc" id="charDesc">차가운 첫인상, 알면 알수록 따뜻한 노력파 신인 가수.</p>
+          </div>
+        </div>
+
+        <div class="char-stage reveal" id="charStage" style="--char-color:#f6c9d6">
+          <div class="char-box">
+            <div class="char-face"><img id="charFace" src="assets/char-hanseoa.webp" alt="" aria-hidden="true" /></div>
+          </div>
+          <img class="char-main" id="charMain" src="assets/char-hanseoa.webp" alt="한서아" />
+        </div>
+
+        <ul class="char-thumbs reveal" id="charThumbs">
+          <li><button class="thumb active" data-key="hanseoa"><img src="assets/char-hanseoa.webp" alt="한서아" /></button></li>
+          <li><button class="thumb" data-key="jeongian"><img src="assets/char-jeongian.webp" alt="정이안" /></button></li>
+          <li><button class="thumb" data-key="odaeun"><img src="assets/char-odaeun.webp" alt="오다은" /></button></li>
+          <li><button class="thumb" data-key="kael"><img src="assets/char-kael.webp" alt="KAEL" /></button></li>
+          <li><button class="thumb" data-key="yunjaeho"><img src="assets/char-yunjaeho.webp" alt="윤재호" /></button></li>
+          <li><button class="thumb" data-key="choijunhyeok"><img src="assets/char-choijunhyeok.webp" alt="최준혁" /></button></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ STILL CUT (04) ============ -->
+    <section class="stillcut" id="stillcut">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-num">04</span>
+          <div>
+            <span class="section-eyebrow">STILL CUT</span>
+            <h2 class="section-title">스틸컷 미리보기</h2>
+          </div>
+        </div>
+        <div class="still-grid reveal">
+          <figure class="still"><img src="assets/still-stage.webp" alt="한서아 데뷔 무대" loading="lazy" /></figure>
+          <figure class="still"><img src="assets/still-office.webp" alt="정이안의 사무실" loading="lazy" /></figure>
+          <figure class="still"><img src="assets/scene-rooftop.webp" alt="KAEL의 옥상" loading="lazy" /></figure>
+          <figure class="still"><img src="assets/scene-workroom.webp" alt="오다은의 작업실" loading="lazy" /></figure>
+          <figure class="still"><img src="assets/scene-rain.webp" alt="윤재호의 거리" loading="lazy" /></figure>
+          <figure class="still"><img src="assets/scene-study.webp" alt="최준혁의 서재" loading="lazy" /></figure>
+        </div>
+      </div>
+      <img class="filmstrip filmstrip--still" src="assets/filmstrip.webp" alt="" aria-hidden="true" />
+    </section>
+
+    <!-- ============ BOTTOM BANNER ============ -->
+    <section class="banner" id="news">
+      <img class="banner-bg" src="assets/banner-bottom.webp" alt="" aria-hidden="true" />
+      <div class="container banner-inner reveal">
+        <p class="banner-eyebrow">PLAYLIST : BETWEEN US</p>
+        <h2 class="banner-title">우리 사이의 음표</h2>
+        <p class="banner-desc">각자의 미완성된 곡처럼, 서로의 감정도 조금씩 완성되어 간다.</p>
+        <a href="#about" class="btn btn-primary">바로 시작하기 →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="logo small"><span class="logo-note">♫</span>
+        <span class="logo-text"><strong>PLAYLIST</strong><small>BETWEEN US</small></span>
+      </div>
+      <nav class="footer-links">
+        <a href="#">이용약관</a><a href="#">개인정보처리방침</a><a href="#">문의하기</a>
+      </nav>
+      <p class="copyright">© 2024 Playlist : Between Us. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
