@@ -46,7 +46,7 @@ export async function startGame(app, opts = {}) {
   const speakerEl = $(".vn-speaker"), textEl = $(".vn-text"), nextEl = $(".vn-next");
   const choicesEl = $(".vn-choices"), cardEl = $(".chapter-card"), affEl = $(".aff-popup");
 
-  let mode = "line", typing = false, typeTimer = null, curText = "", pending = null, suppressAff = false;
+  let mode = "line", typing = false, typeTimer = null, curText = "", pending = null, suppressAff = false, cardTimer = null;
   const view = { bg: "", char: null, speaker: null, line: "", scene: "", cg: null };
 
   /* 비주얼 */
@@ -110,7 +110,14 @@ export async function startGame(app, opts = {}) {
     choices.forEach((c) => { const b = document.createElement("button"); b.className = "vn-choice"; b.textContent = c.text;
       b.addEventListener("click", (e) => { e.stopPropagation(); story.ChooseChoiceIndex(c.index); choicesEl.hidden = true; next(); }); choicesEl.appendChild(b); });
   };
-  const showCard = (val) => { const [no, ...t] = val.split(/\s+/); cardEl.querySelector(".ch-no").textContent = "CHAPTER " + no; cardEl.querySelector(".ch-title").textContent = t.join(" "); cardEl.classList.add("show"); speakerEl.hidden = true; textEl.textContent = ""; nextEl.hidden = true; };
+  const showCard = (val) => {
+    const [no, ...t] = val.split(/\s+/);
+    cardEl.querySelector(".ch-no").textContent = "CHAPTER " + no;
+    cardEl.querySelector(".ch-title").textContent = t.join(" ");
+    cardEl.classList.add("show"); speakerEl.hidden = true; textEl.textContent = ""; nextEl.hidden = true;
+    clearTimeout(cardTimer);
+    cardTimer = setTimeout(() => { if (mode === "chapter") advance(); }, 1500); // 1.5초 후 자동 진행 (클릭 시 즉시)
+  };
   const next = () => {
     choicesEl.hidden = true;
     if (story.canContinue) {
@@ -126,7 +133,7 @@ export async function startGame(app, opts = {}) {
   const advance = () => {
     if (mode === "choice") return;
     if (typing) return finishTyping();
-    if (mode === "chapter") { cardEl.classList.remove("show"); const p = pending; pending = null; applyTags(p.t); mode = "line"; type(p.text); return; }
+    if (mode === "chapter") { clearTimeout(cardTimer); cardEl.classList.remove("show"); const p = pending; pending = null; applyTags(p.t); mode = "line"; type(p.text); return; }
     next();
   };
 
