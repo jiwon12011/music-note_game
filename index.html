@@ -50,6 +50,10 @@
       </div>
     </section>
 
+    <!-- ============ STORY (ABOUT + CHARACTERS) — 왼쪽 고동색 지그재그 ============ -->
+    <div class="story">
+      <img class="story-zigzag" src="assets/zigzag.webp" alt="" aria-hidden="true" />
+
     <!-- ============ ABOUT (02) ============ -->
     <section class="about" id="about">
       <div class="container about-inner">
@@ -75,7 +79,9 @@
 
     <!-- ============ CHARACTERS (03) ============ -->
     <section class="characters" id="characters">
-      <img class="char-zigzag" src="assets/zigzag.webp" alt="" aria-hidden="true" />
+      <div class="char-band-full" aria-hidden="true">
+        <div class="char-face"><img id="charFace" src="assets/char-hanseoa.webp" alt="" aria-hidden="true" /></div>
+      </div>
       <div class="container char-inner">
         <div class="char-info reveal">
           <div class="section-head">
@@ -92,23 +98,27 @@
           </div>
         </div>
 
-        <div class="char-stage reveal" id="charStage" style="--char-color:#f6c9d6">
-          <div class="char-box">
-            <div class="char-face"><img id="charFace" src="assets/char-hanseoa.webp" alt="" aria-hidden="true" /></div>
-          </div>
+        <div class="char-visual reveal" id="charStage">
           <img class="char-main" id="charMain" src="assets/char-hanseoa.webp" alt="한서아" />
         </div>
 
-        <ul class="char-thumbs reveal" id="charThumbs">
-          <li><button class="thumb active" data-key="hanseoa"><img src="assets/char-hanseoa.webp" alt="한서아" /></button></li>
-          <li><button class="thumb" data-key="jeongian"><img src="assets/char-jeongian.webp" alt="정이안" /></button></li>
-          <li><button class="thumb" data-key="odaeun"><img src="assets/char-odaeun.webp" alt="오다은" /></button></li>
-          <li><button class="thumb" data-key="kael"><img src="assets/char-kael.webp" alt="KAEL" /></button></li>
-          <li><button class="thumb" data-key="yunjaeho"><img src="assets/char-yunjaeho.webp" alt="윤재호" /></button></li>
-          <li><button class="thumb" data-key="choijunhyeok"><img src="assets/char-choijunhyeok.webp" alt="최준혁" /></button></li>
-        </ul>
+        <div class="char-selector reveal">
+          <button class="char-arrow" id="charPrev" aria-label="이전 캐릭터">&#9650;</button>
+          <div class="char-thumbs-window">
+            <ul class="char-thumbs" id="charThumbs">
+              <li><button class="thumb active" data-key="hanseoa"><img src="assets/char-hanseoa.webp" alt="한서아" /></button></li>
+              <li><button class="thumb" data-key="jeongian"><img src="assets/char-jeongian.webp" alt="정이안" /></button></li>
+              <li><button class="thumb" data-key="odaeun"><img src="assets/char-odaeun.webp" alt="오다은" /></button></li>
+              <li><button class="thumb" data-key="kael"><img src="assets/char-kael.webp" alt="KAEL" /></button></li>
+              <li><button class="thumb" data-key="yunjaeho"><img src="assets/char-yunjaeho.webp" alt="윤재호" /></button></li>
+              <li><button class="thumb" data-key="choijunhyeok"><img src="assets/char-choijunhyeok.webp" alt="최준혁" /></button></li>
+            </ul>
+          </div>
+          <button class="char-arrow" id="charNext" aria-label="다음 캐릭터">&#9660;</button>
+        </div>
       </div>
     </section>
+    </div><!-- /.story -->
 
     <!-- ============ STILL CUT (04) ============ -->
     <section class="stillcut" id="stillcut">
@@ -117,7 +127,7 @@
           <span class="section-num">04</span>
           <div>
             <span class="section-eyebrow">STILL CUT</span>
-            <h2 class="section-title">스틸컷 미리보기</h2>
+            <h2 class="section-title">스틸컷</h2>
           </div>
         </div>
         <div class="still-grid reveal">
@@ -129,7 +139,7 @@
           <figure class="still"><img src="assets/scene-study.webp" alt="최준혁의 서재" loading="lazy" /></figure>
         </div>
       </div>
-      <img class="filmstrip filmstrip--still" src="assets/filmstrip.webp" alt="" aria-hidden="true" />
+      <img class="filmstrip filmstrip--still" src="assets/filmstrip-thin.webp" alt="" aria-hidden="true" />
     </section>
 
     <!-- ============ BOTTOM BANNER ============ -->
@@ -147,13 +157,14 @@
   <!-- ============ FOOTER ============ -->
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div class="logo small"><span class="logo-note">♫</span>
+      <div class="footer-brand">
+        <img class="footer-logo" src="assets/logo.webp" alt="PLAYLIST 로고" width="44" height="42" />
         <span class="logo-text"><strong>PLAYLIST</strong><small>BETWEEN US</small></span>
       </div>
       <nav class="footer-links">
         <a href="#">이용약관</a><a href="#">개인정보처리방침</a><a href="#">문의하기</a>
       </nav>
-      <p class="copyright">© 2024 Playlist : Between Us. All rights reserved.</p>
+      <p class="copyright">© 2026 Playlist : Between Us. All rights reserved.</p>
     </div>
   </footer>
 
