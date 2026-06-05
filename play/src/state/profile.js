@@ -24,6 +24,7 @@ export const TRACK_CATALOG = [
   { id: "t02", name: "셰어하우스의 밤", bg: "house-ext-night" },
   { id: "t03", name: "냉장고 앞에서", bg: "kitchen", cg: "cg-01" },
   { id: "t04", name: "차가운 첫인상", bg: "living-day" },
+  { id: "t05", name: "데뷔 무대", bg: "stage", cg: "cg-08" },
 ];
 
 // `# cg: <id>` 로 해금된 CG → 매칭되는 트랙 찾기

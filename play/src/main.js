@@ -8,7 +8,7 @@ import { toast } from "./ui/toast.js";
 import { continueSlot } from "./state/saves.js";
 
 const app = document.getElementById("app");
-const onExit = () => { toast("챕터 1 — 다음 이야기는 곧 이어집니다 ♪", 2400); setTimeout(showTitle, 1400); };
+const onExit = () => { toast("이야기를 끝까지 함께해 주셔서 고마워요 ♪", 2400); setTimeout(showTitle, 1400); };
 
 // 화면 교체: 떠나는 화면의 정리 훅(_cleanup)을 호출해 이벤트 리스너 누수 방지
 function clearApp() {

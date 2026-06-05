@@ -78,6 +78,7 @@ export async function startGame(app, opts = {}) {
     if (t.hide) hideChar();
     if (t.char) { const [k, o, p] = t.char.split(/\s+/); showChar(k, o, p || "center"); }
     if (t.cg) showCg(t.cg); // CG 는 bg/char 다음 (화면 덮음)
+    if (t.ending) profile.markEnding(t.ending); // 본 엔딩 영구 기록
     setSpeaker(t.speaker || null);
   };
 

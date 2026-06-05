@@ -10,6 +10,7 @@ VAR aff_kael = 0
 VAR aff_yunjaeho = 0
 VAR aff_choijunhyeok = 0
 VAR last_lead = ""
+VAR ending_lead = ""
 
 -> opening
 
@@ -298,7 +299,7 @@ VAR last_lead = ""
     ~ lead = "choijunhyeok"
     ~ lv = aff_choijunhyeok
 }
-{ lv < 40:
+{ lv < 14:
     # bg: rooftop-night
     아직, 누구의 마음도 또렷하게 향하지 않았다. 그게 더 마음에 걸렸다.
     -> ch3_choi
@@ -364,6 +365,372 @@ VAR last_lead = ""
 # bg: room-night
 폭풍 같던 며칠이 지나갔다.
 이제, 외면할 수 없을 것 같다 — 누군가를, 좋아하고 있다는 걸.
+-> ch4_start
+
+
+// ======================= CHAPTER 4 — 심화 =======================
+=== ch4_start ===
+# chapter: 04 심화
+# scene: 스캔들 여파
+# bg: backstage
+# char: kael white center
+스캔들은 가라앉았다. 그런데 KAEL은, 유독 나한테만 가시가 돋아 있다.
+# speaker: kael
+왜 자꾸 챙겨. 동정이야?
+* [“동정 아니에요. 그냥, 두고 볼 수가 없어서.”]
+    ~ aff_kael += 15
+    # speaker: kael
+    …하. 그런 말, 함부로 하지 마. 진심으로 들리니까.
+* [“신경 쓰이면, 안 챙길게요.” 한 발 물러선다]
+    ~ aff_kael += 8
+    # speaker: kael
+    …아니. 됐어. 그냥… 있어.
+- -> ch4_jeongian
+
+=== ch4_jeongian ===
+# scene: 정이안의 균열
+# bg: office
+# char: jeongian messy center
+서류를 두 번이나 틀렸다. 늘 완벽하던 정이안이.
+# speaker: jeongian
+…이상하네요. 당신 앞에서만, 자꾸 흐트러져요.
+* [“가끔은 흐트러져도 돼요. 제가 볼게요.”]
+    ~ aff_jeongian += 15
+    # speaker: jeongian
+    …그 말, 책임질 수 있어요? 나, 한번 기대면 잘 못 놓는데.
+* [“제가 다시 정리할게요.” 서류를 챙긴다]
+    ~ aff_jeongian += 8
+    # speaker: jeongian
+    …고마워요. 역시, 일은 당신이 편하네요.
+- -> ch4_hanseoa
+
+=== ch4_hanseoa ===
+# scene: 데뷔 준비
+# bg: practice
+# char: hanseoa stage center
+리허설 내내 완벽하던 한서아가, 끝나고 조용히 나를 붙잡았다.
+# speaker: hanseoa
+…저기. 부탁이, 하나 있는데.
+# speaker: hanseoa
+무대 날… 객석 어딘가에, 있어 줄래요? 아는 얼굴 하나는, 있었으면 해서.
+* [“그럼요. 제일 크게 박수칠게요.”]
+    ~ aff_hanseoa += 15
+    # speaker: hanseoa
+    …처음이에요. 누구한테 이런 거 부탁하는 거.
+* [“무대 뒤에서라도, 꼭 지켜볼게요.”]
+    ~ aff_hanseoa += 8
+    # speaker: hanseoa
+    …응. 그거면, 충분해요.
+- -> ch4_yunjaeho
+
+=== ch4_yunjaeho ===
+# scene: 윤재호의 새 트랙
+# bg: studio-night
+# char: yunjaeho green center
+# speaker: yunjaeho
+복구는 끝내 안 됐어요. 그래서… 새로 썼어요.
+윤재호가, 처음으로 먼저 헤드폰을 내밀었다.
+# speaker: yunjaeho
+이 곡, {player}한테 제일 먼저 들려주고 싶었어요.
+* [말없이 끝까지 듣고, 가만히 눈을 맞춘다]
+    ~ aff_yunjaeho += 15
+    # speaker: yunjaeho
+    …당신이 들으니까, 이제야 완성된 것 같아요.
+* [“좋아요. 진짜, 좋아요.” 감탄한다]
+    ~ aff_yunjaeho += 8
+    # speaker: yunjaeho
+    …다행이다. 당신 취향, 좀 신경 썼거든요.
+- -> ch4_odaeun
+
+=== ch4_odaeun ===
+# scene: 오다은의 진짜 얼굴
+# bg: rooftop-night
+# char: odaeun cardigan center
+늘 4차원이던 오다은이, 옥상에서 진지한 얼굴로 기다리고 있었다.
+# speaker: odaeun
+나 사실… 너 처음 왔을 때, 좀 걱정했어. 여기 사람들, 다 상처 하나씩 안고 살거든.
+# speaker: odaeun
+근데 너 오고 나서, 다들 조금씩 밝아졌어. 너는… 그거 알아?
+* [“다은 씨가 제일 먼저 웃어줘서예요.”]
+    ~ aff_odaeun += 15
+    # speaker: odaeun
+    …야. 그렇게 말하면, 나 진짜 착각한다?
+* [“다들 원래 좋은 사람들인걸요.”]
+    ~ aff_odaeun += 8
+    # speaker: odaeun
+    …그래. 너도, 꽤 좋은 애야.
+- -> ch4_choi
+
+=== ch4_choi ===
+# scene: 최준혁의 과거
+# bg: living-night
+# char: choijunhyeok intense center
+# speaker: choijunhyeok
+이 셰어하우스… 왜 시작했는지, 말한 적 없죠.
+처음 보는, 가라앉은 얼굴이었다.
+# speaker: choijunhyeok
+혼자인 사람들이, 혼자가 아니게. 그게 다였어요. …나부터가, 혼자였으니까.
+* [“이제, 준혁 씨 옆엔 제가 있잖아요.”]
+    ~ aff_choijunhyeok += 15
+    # speaker: choijunhyeok
+    …그 말, 오늘 처음으로, 믿고 싶어지네요.
+* [조용히 그의 손 위에, 내 손을 포갠다]
+    ~ aff_choijunhyeok += 15
+    ~ aff_odaeun += 3
+    # speaker: choijunhyeok
+    …{player} 씨. 나, 흔들려요. 당신 때문에.
+- -> ch4_end
+
+=== ch4_end ===
+# hide: all
+# bg: room-night
 # speaker:
-( 챕터 3 까지 플레이하셨습니다 · 다음 이야기는 준비 중 ♪ )
+방에 돌아와 불을 끄고 누웠다.
+여섯 사람의 얼굴이 차례로 떠오르고 — 그 중 한 사람에서, 자꾸 멈춘다.
+이제 인정할 수밖에 없다. 나는, 누군가를 좋아하고 있다.
+-> ch5_start
+
+
+// ======================= CHAPTER 5 — 엔딩 =======================
+=== ch5_start ===
+# chapter: 05 엔딩
+# scene: 한서아 데뷔 무대
+# bg: stage
+# cg: cg-08
+# track: t05
+드디어, 한서아의 데뷔 무대.
+조명이 쏟아지고 첫 음이 터지는 순간 — 객석도, 무대 뒤도, 모두 숨을 멈췄다.
+여섯 사람이 각자의 자리에서, 같은 무대를 바라보고 있었다.
+그리고 나는, 그 사람들 사이에서 — 내 마음이 어디로 향하는지 분명히 알았다.
+-> ch5_party
+
+=== ch5_party ===
+# scene: 데뷔 후 파티
+# bg: living-night
+무대가 끝나고, 셰어하우스는 오랜만에 웃음으로 가득 찼다.
+밤이 깊고, 하나둘 자리를 비운 새벽.
+# speaker:
+그날 밤, 당신의 발길이 향한 곳은 —
+* [한서아에게]
+    ~ aff_hanseoa += 28
+    ~ ending_lead = "hanseoa"
+* [정이안에게]
+    ~ aff_jeongian += 28
+    ~ ending_lead = "jeongian"
+* [오다은에게]
+    ~ aff_odaeun += 28
+    ~ ending_lead = "odaeun"
+* [KAEL에게]
+    ~ aff_kael += 28
+    ~ ending_lead = "kael"
+* [윤재호에게]
+    ~ aff_yunjaeho += 28
+    ~ ending_lead = "yunjaeho"
+* [최준혁에게]
+    ~ aff_choijunhyeok += 28
+    ~ ending_lead = "choijunhyeok"
+- -> ch5_branch
+
+// ---- 엔딩 분기: 선택한 사람의 ♥로 해피(52+)/노멀(30+)/솔로 ----
+=== ch5_branch ===
+{ ending_lead == "hanseoa": -> route_hanseoa }
+{ ending_lead == "jeongian": -> route_jeongian }
+{ ending_lead == "odaeun": -> route_odaeun }
+{ ending_lead == "kael": -> route_kael }
+{ ending_lead == "yunjaeho": -> route_yunjaeho }
+{ ending_lead == "choijunhyeok": -> route_choijunhyeok }
+-> end_solo
+
+=== route_hanseoa ===
+{ aff_hanseoa >= 52: -> end_hanseoa_happy }
+{ aff_hanseoa >= 30: -> end_hanseoa_normal }
+-> end_solo
+=== route_jeongian ===
+{ aff_jeongian >= 52: -> end_jeongian_happy }
+{ aff_jeongian >= 30: -> end_jeongian_normal }
+-> end_solo
+=== route_odaeun ===
+{ aff_odaeun >= 52: -> end_odaeun_happy }
+{ aff_odaeun >= 30: -> end_odaeun_normal }
+-> end_solo
+=== route_kael ===
+{ aff_kael >= 52: -> end_kael_happy }
+{ aff_kael >= 30: -> end_kael_normal }
+-> end_solo
+=== route_yunjaeho ===
+{ aff_yunjaeho >= 52: -> end_yunjaeho_happy }
+{ aff_yunjaeho >= 30: -> end_yunjaeho_normal }
+-> end_solo
+=== route_choijunhyeok ===
+{ aff_choijunhyeok >= 52: -> end_choijunhyeok_happy }
+{ aff_choijunhyeok >= 30: -> end_choijunhyeok_normal }
+-> end_solo
+
+// ---------------- 한서아 ----------------
+=== end_hanseoa_happy ===
+# scene: 해피엔딩 · 한서아
+# bg: backstage
+# cg: cg-09-s1
+# ending: hanseoa happy
+무대를 막 내려온 한서아가, 숨도 고르기 전에 나를 향해 달려왔다.
+# speaker: hanseoa
+무대 위에서, 딱 한 사람만 보였어요. …당신이었어요.
+# speaker: hanseoa
+이 노래, 사실 당신 생각하면서 불렀어요. 받아줄래요?
+그 손을 잡았다. 데뷔보다 환한 얼굴이, 거기 있었다.
+-> credits
+=== end_hanseoa_normal ===
+# scene: 노멀엔딩 · 한서아
+# bg: backstage
+# cg: cg-09-n1
+# ending: hanseoa normal
+# speaker: hanseoa
+…고마워요. 와줘서.
+무언가 더 말할 듯, 그녀는 입을 다물었다.
+# speaker: hanseoa
+아직… 데뷔한 지 얼마 안 됐으니까요. 지금은, 노래에만 집중할래요.
+대답 대신 남은 건, 길고 옅은 여운이었다.
+-> credits
+
+// ---------------- 정이안 ----------------
+=== end_jeongian_happy ===
+# scene: 해피엔딩 · 정이안
+# bg: studio-night
+# cg: cg-09-s2
+# ending: jeongian happy
+앨범을 끝낸 새벽, 정이안이 처음으로 책상에 엎드렸다. 무너지듯이.
+# speaker: jeongian
+나, 원래 이런 사람 아닌데. …당신 앞에서만, 자꾸 약해져요.
+먼저 그의 손을 잡았다. 차갑던 그 손이, 조심스레 마주 쥐어 왔다.
+# speaker: jeongian
+…{player}. 이름, 불러도 돼요? 이제, 일 말고.
+-> credits
+=== end_jeongian_normal ===
+# scene: 노멀엔딩 · 정이안
+# bg: studio-night
+# cg: cg-09-n2
+# ending: jeongian normal
+# speaker: jeongian
+…고마워요. 덕분에, 앨범 잘 끝냈어요.
+그러고는, 한 걸음 물러섰다.
+# speaker: jeongian
+일이랑 감정, 섞고 싶지 않아요. …그래도, 당신을 보는 눈은 달라졌네요.
+그 눈빛만이, 못다 한 말을 대신했다.
+-> credits
+
+// ---------------- 오다은 ----------------
+=== end_odaeun_happy ===
+# scene: 해피엔딩 · 오다은
+# bg: rooftop-night
+# cg: cg-09-s3
+# ending: odaeun happy
+# speaker: odaeun
+나 사실, 너 마음 다 알고 있었어. 처음부터.
+오다은이 장난기 없는 얼굴로 웃었다.
+* [“나도. 다은 씨 마음, 다 알았어요.”]
+    ~ aff_odaeun += 2
+- # speaker: odaeun
+    …야, 반칙이다. 그건 내가 하려던 말인데.
+새벽 옥상에서, 우리는 한참을 그냥 웃었다.
+-> credits
+=== end_odaeun_normal ===
+# scene: 노멀엔딩 · 오다은
+# bg: rooftop-night
+# cg: cg-09-n3
+# ending: odaeun normal
+서로 다 알면서도, 아무도 먼저 말을 꺼내지 않았다.
+# speaker: odaeun
+…됐어. 말 안 해도, 우리 사이엔 다 통하잖아?
+그냥 웃고 말았다. 그 웃음이, 어떤 고백보다 길게 남았다.
+-> credits
+
+// ---------------- KAEL ----------------
+=== end_kael_happy ===
+# scene: 해피엔딩 · KAEL
+# bg: stage
+# cg: cg-09-s4
+# ending: kael happy
+KAEL이 예고 없이 신곡을 발표했다. 듣는 순간, 알았다 — 내 얘기였다.
+무대를 내려온 그가, 귓가에 낮게 속삭였다.
+# speaker: kael
+이거, 너 얘기야. …끝까지 모른 척하면, 진짜 화낼 거야.
+관심 없는 척하던 그 눈이, 처음으로 똑바로 나를 향했다.
+-> credits
+=== end_kael_normal ===
+# scene: 노멀엔딩 · KAEL
+# bg: stage
+# cg: cg-09-n4
+# ending: kael normal
+신곡은 분명, 누군가를 향한 노래였다. 그게 나라는 걸, 나만 알았다.
+# speaker: kael
+…노래는 노래고. 굳이 말로 해야 알아?
+끝내 직접은 말하지 못한 그 마음을, 가사 속에서만 읽었다.
+-> credits
+
+// ---------------- 윤재호 ----------------
+=== end_yunjaeho_happy ===
+# scene: 해피엔딩 · 윤재호
+# bg: studio-night
+# cg: cg-09-s5
+# ending: yunjaeho happy
+밤샘 작업이 끝난 새벽. 윤재호가 헤드폰을 내려놓고, 나를 마주 봤다.
+# speaker: yunjaeho
+…옆에 있어줘서, 고마워요. 말로는 늘 모자라서.
+그가 먼저, 조심스럽게 나를 안았다. 노래보다 따뜻한 침묵이었다.
+-> credits
+=== end_yunjaeho_normal ===
+# scene: 노멀엔딩 · 윤재호
+# bg: studio-night
+# cg: cg-09-n5
+# ending: yunjaeho normal
+# speaker: yunjaeho
+…고마워요. 진심으로.
+그 말 이상은, 끝내 나오지 않았다.
+하지만 그날 이후, 그는 새 곡을 쓸 때마다 제일 먼저 나를 찾았다.
+-> credits
+
+// ---------------- 최준혁 ----------------
+=== end_choijunhyeok_happy ===
+# scene: 해피엔딩 · 최준혁
+# bg: rooftop-night
+# cg: cg-09-s6
+# ending: choijunhyeok happy
+# speaker: choijunhyeok
+사실은… 꽤 오래, 기다렸어요. 당신이 먼저 알아줄 때까지.
+모두에게 친절하던 그가, 처음으로 한 사람만을 바라봤다.
+* [“나도, 준혁 씨를 알고 싶었어요.” 먼저 다가간다]
+    ~ aff_choijunhyeok += 2
+- # speaker: choijunhyeok
+    …그 말, 평생 못 잊을 것 같네요.
+새벽 옥상 위, 두 사람의 그림자가 처음으로 겹쳐졌다.
+-> credits
+=== end_choijunhyeok_normal ===
+# scene: 노멀엔딩 · 최준혁
+# bg: rooftop-night
+# cg: cg-09-n6
+# ending: choijunhyeok normal
+# speaker: choijunhyeok
+…놀랐죠? 나도, 이런 말 할 줄 몰랐어요.
+반전 같던 고백 앞에서, 나는 아직 마음을 다 정리하지 못했다.
+그렇게 우리는, 조금 어색한 일상으로 다시 돌아갔다. 다만, 예전과는 달랐다.
+-> credits
+
+// ---------------- 솔로(여운) ----------------
+=== end_solo ===
+# scene: 엔딩 · 미완성
+# bg: room-night
+# ending: solo
+누구의 손도, 끝내 잡지 못한 밤이었다.
+어쩌면 아직, 내 노래가 완성되지 않은 것뿐일지도 모른다.
+다음 계절엔, 조금 더 솔직해질 수 있을까.
+-> credits
+
+// ---------------- 공통 크레딧 ----------------
+=== credits ===
+# hide: all
+# bg: room-night
+# speaker:
+— 당신의 플레이리스트가 완성됐습니다 —
+음악이 좋아서 시작한 6개월. 그 끝에 남은 건, 한 사람과 — 그리고 여러 곡이었다.
+( 플레이해주셔서 고마워요 ♪  ·  컬렉션에서 모은 트랙을 다시 들어보세요 )
 -> END
