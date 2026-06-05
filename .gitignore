@@ -9,3 +9,6 @@ tools/*.png
 # 고해상도 원본 (assets/*.webp 변환본만 커밋)
 /image *.png
 /lp_with_characters_fixed.png
+
+# 게임 캐릭터/배경 원본 PNG (~530MB) — play/public/img/*.webp 변환본만 커밋
+/무제 폴더/

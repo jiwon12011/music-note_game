@@ -1,0 +1,93 @@
+# 게임 에셋 매니페스트
+
+원본 고해상도 PNG(`무제 폴더/`)는 git에 올리지 않고(용량), **`play/public/img/`의 webp 변환본만** 사용·커밋한다.
+캐릭터 height 1300 / 배경 width 1600, webp q82.
+
+> 표정 라벨은 *추정*이라 실제 의도와 다르면 수정하세요. 의상(slug)은 객관적으로 분류했습니다.
+> 엔진 매핑: Ink 태그 `# bg: train` → `img/bg/train.webp`, `# char: hanseoa casual` → `img/char/hanseoa/casual.webp`
+
+## 배경 (img/bg/) — 18장
+| 파일 | 장소 | 기획서 | 시간대 |
+|---|---|---|---|
+| train | 기차 안 | BG-01 | 낮 |
+| house-ext-day / house-ext-night | 셰어하우스 외관 | BG-02 | 낮/밤 |
+| living-day / living-night | 셰어하우스 거실 | BG-03 | 낮/밤 |
+| kitchen | 부엌/냉장고 앞 | BG-04 | 밤 |
+| room-day / room-night | 주인공 방 | BG-05 | 낮/밤 |
+| office | 프로덕션 사무실 | BG-06 | 낮 |
+| studio-day / studio-night | 녹음 스튜디오 | BG-07 | 낮/밤 |
+| corridor | 연습실 복도 | BG-08 | 낮 |
+| practice | 연습실 내부 | BG-09 | 낮 |
+| meeting | 회의실 | BG-10 | 낮 |
+| stage | 공연장 무대 | BG-11 | 조명 |
+| backstage | 공연장 백스테이지 | BG-12 | 밤 |
+| rooftop-dusk / rooftop-night | 셰어하우스 옥상 | BG-13 | 석양/밤 |
+
+## 캐릭터 스탠딩 (img/char/<name>/)
+
+### hanseoa 한서아 — 신인 가수
+| slug | 의상 | 추정 표정/용도 |
+|---|---|---|
+| stage | 핑크 스테이지 의상(마이크) | 데뷔 무대, 자신감 |
+| casual | 블랙 캐주얼 | 차가운 첫인상 (기본) |
+| gothic | 블랙 고딕 드레스 | 시크/차가움 |
+| dress-pink | 핑크 드레스 | 부드러운/수줍 |
+| dress-white | 화이트 드레스 | 감성/울컥 |
+| hoodie | 화이트 후디 | 편안/피곤 |
+| offshoulder | 블랙 오프숄더 | 살짝 미소/teasing |
+| knit | 화이트 니트 | 지침/소프트 |
+
+### jeongian 정이안 — 프로듀서
+| slug | 의상 | 추정 표정/용도 |
+|---|---|---|
+| suit | 블랙 슈트 | 냉정 (기본) |
+| shirt | 화이트 셔츠+태블릿 | 집중 |
+| vest | 베스트+타이 | 자신감/집중 |
+| knit | 화이트 니트 | 부드러운 |
+| cardigan | 크림 가디건 | 부드러운/소프트 |
+| messy | 흐트러진 셔츠(머리 짚음) | 무너짐/당황 |
+
+### odaeun 오다은 — 매니저
+| slug | 의상 | 추정 표정/용도 |
+|---|---|---|
+| hoodie | 크림 후디(손가락 입) | 눈치보기 (기본) |
+| varsity | 바시티 자켓 | 4차원 웃음/발랄 |
+| denim | 데님(손 흔듦) | 반가움 |
+| cardigan | 가디건+태블릿 | 진지/관찰 |
+| jacket | 블랙 자켓 | 걱정/진지 |
+| soft | 화이트 후디 | 부드러운/걱정 |
+
+### kael KAEL — 인기 가수
+| slug | 의상 | 추정 표정/용도 |
+|---|---|---|
+| hoodie-gray | 그레이 후디 | 무관심 (기본/일상) |
+| leather | 레더 자켓(브이) | 무대/관심 숨김 |
+| stage | 스터드 자켓 | 무대용 |
+| hoodie-black | 블랙 후디 | 무관심 |
+| shirt | 블랙 셔츠 | 무관심 |
+| navy | 네이비 자켓 | 귓속말/관심 숨김 |
+| white | 화이트 | 신경질 |
+| casual | 네이비 캐주얼 | 소프트 |
+
+### yunjaeho 윤재호 — 작곡가
+| slug | 의상 | 추정 표정/용도 |
+|---|---|---|
+| work | 블랙 자켓+악보 | 집중/작업 (기본) |
+| work2 | 악보 읽는 | 집중 |
+| sweater | 네이비 스웨터 | 조용한 미소 |
+| tired | 머리 짚음 | 지침 |
+| green | 그린 자켓(손 가슴) | 고마움 |
+| coat | 브라운 코트 | 새벽 감성 |
+
+### choijunhyeok 최준혁 — 셰어하우스 주인
+| slug | 의상 | 추정 표정/용도 |
+|---|---|---|
+| sweater | 브라운 스웨터+머그 | 친절한 미소 (기본) |
+| coat | 브라운 코트 | 친절/외출 |
+| knit | 크림 니트 | 부드러운 |
+| suit | 네이비 슈트 | 선 긋기/포멀 |
+| jacket | 그레이 자켓 | 선 긋기 |
+| vest | 베스트+블루셔츠 | 포멀/친절 |
+| intense | 블랙 셔츠(진지) | 새벽 진지/반전 고백 |
+| black | 블랙 티 | 진지 |
+| surprised | 그레이 후디(당황) | 당황/반전 |
