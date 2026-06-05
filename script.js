@@ -328,6 +328,18 @@
     });
   }
 
+  /* ---------- 히어로 배지 "지금 재생하기" → 게임으로 ---------- */
+  const heroBadge = document.querySelector(".hero-badge");
+  if (heroBadge) {
+    heroBadge.style.cursor = "pointer";
+    heroBadge.setAttribute("role", "link");
+    heroBadge.setAttribute("tabindex", "0");
+    heroBadge.setAttribute("aria-label", "지금 재생하기 — 게임 시작");
+    const goPlay = () => { window.location.href = "play/index.html"; };
+    heroBadge.addEventListener("click", (e) => { e.stopPropagation(); goPlay(); });
+    heroBadge.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); goPlay(); } });
+  }
+
   /* ---------- GSAP 모션 (로드된 경우에만, 미로드 시 그대로 동작) ----------
      prefers-reduced-motion 사용자는 모든 GSAP 연출을 건너뛴다.
      (콘텐츠는 CSS 기본 상태/IntersectionObserver 로 정적 표시되어 그대로 보임) */

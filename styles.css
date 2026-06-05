@@ -490,7 +490,7 @@ body.is-scaled #scaleOuter { padding-top: 76px; overflow: hidden; box-sizing: co
 /* transform 은 레이아웃 높이를 안 줄이므로 outer 높이를 JS가 잡고 overflow:hidden 으로 클립.
    ⚠ inner 에 will-change/layer 강제 금지: 거대 단일 레이어가 되면 내부 무한 애니메이션마다 전체 재래스터됨.
    대신 정적 콘텐츠는 타일 캐시, 움직이는 요소(음표)만 각자 레이어로 합성되게 둔다. */
-body.is-scaled .hero { padding-top: 0; }
+body.is-scaled .hero { padding-top: 64px; } /* 헤더 아래 숨통 — 히어로가 헤더에 바짝 붙지 않게 */
 /* vw·100vw 의존 정렬을 1920 기준 px 상수로 — 래퍼 안에선 실제 vw가 1920이 아니므로 고정 */
 body.is-scaled .about-panel,
 body.is-scaled .char-info { margin-left: -225px; }
