@@ -127,63 +127,94 @@ ul { list-style: none; }
 .filmstrip { position: absolute; pointer-events: none; opacity: .95; z-index: 4; }
 /* 히어로 필름은 무대 안에서 배경(0)과 LP(2) 사이 (z-index 1) → LP가 항상 위 */
 .filmstrip--hero { top: -24%; right: -15%; height: 158%; width: auto; z-index: 1; }
-.filmstrip--still { bottom: -10%; right: -6%; height: 120%; width: auto; transform: scaleX(-1); }
+/* STILL CUT 필름: 얇은 스트립을 대각선(\)으로 회전; 스틸 뒤(z-index 0), 아래로 길게 내려 배너에 가려짐 */
+.filmstrip--still { bottom: -50%; right: 5%; height: 150%; width: auto; z-index: 0; transform: rotate(42deg); transform-origin: center; }
 
 /* ============================================================
    섹션 공통
    ============================================================ */
-.section-head { display: flex; align-items: center; gap: 14px; margin-bottom: var(--space-lg); }
+.section-head { display: flex; align-items: center; gap: 16px; margin-bottom: var(--space-lg); }
+.section-head > div { display: flex; flex-direction: column; gap: 2px; }
+/* 번호 배지: 기울어진(평행사변형) 연분홍 박스 + 마룬 숫자 */
 .section-num {
-  font-family: var(--font-display); font-size: 1.3rem; font-weight: 800;
-  width: 50px; height: 50px; flex-shrink: 0; display: grid; place-items: center;
-  background: var(--color-primary); color: #fff; border-radius: 14px;
+  position: relative; isolation: isolate;
+  font-family: var(--font-display); font-size: 1.4rem; font-weight: 800;
+  width: 58px; height: 54px; flex-shrink: 0; display: grid; place-items: center;
+  color: #7a2020;
 }
-.section-eyebrow { font-family: var(--font-display); font-size: .78rem; letter-spacing: .2em; color: var(--color-primary); }
-.section-title { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 900; color: var(--color-dark); }
+.section-num::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: #f3c9c5; border-radius: 13px; transform: skewX(-11deg);
+}
+.section-eyebrow { font-family: var(--font-display); font-size: .8rem; font-weight: 600; letter-spacing: .22em; line-height: 1.3; color: var(--color-primary); }
+.section-title { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 900; line-height: 1.05; color: var(--color-dark); }
 
 /* ============================================================
-   ABOUT (02) — 각진 다크 패널 + 작업실 사진
+   STORY 래퍼 — 왼쪽 고동색 지그재그(번개) 이미지
    ============================================================ */
-.about { position: relative; background: var(--color-cream); padding: 0 0 var(--space-3xl); }
-.about-inner { display: grid; grid-template-columns: 0.85fr 1.15fr; align-items: stretch; gap: 0; }
+.story { position: relative; background: var(--color-cream); }
+.story-zigzag {
+  position: absolute; left: 0; top: -41px;
+  height: 147%; width: auto; max-width: 64%;
+  z-index: 2; pointer-events: none;  /* 방 사진(1) 위, 텍스트(3) 아래 */
+}
+
+/* ============================================================
+   ABOUT (02) — 지그재그 위 텍스트 + 작업실 사진
+   ============================================================ */
+/* .about는 스택 컨텍스트를 만들지 않음 → 사진(1) < 지그재그(2) < 텍스트(3) 정렬 */
+.about { position: relative; background: transparent; padding: var(--space-xl) 0 var(--space-3xl); }
+.about-inner { display: grid; grid-template-columns: 0.8fr 1.2fr; align-items: center; gap: var(--space-xl); }
 .about-panel {
-  background: var(--color-dark); color: var(--color-on-dark);
-  padding: var(--space-2xl) var(--space-2xl) var(--space-2xl) var(--space-lg);
-  margin-left: calc(-1 * max(0px, (100vw - var(--container)) / 2));
-  padding-left: max(var(--space-lg), (100vw - var(--container)) / 2 + var(--space-lg));
-  clip-path: polygon(0 0, 100% 0, 86% 50%, 100% 100%, 0 100%);
-  display: flex; flex-direction: column; justify-content: center;
+  position: relative; z-index: 3;
+  color: var(--color-on-dark);
+  padding: var(--space-lg) 0;
+  /* 컨테이너 가운데 정렬을 상쇄해 뷰포트 왼쪽(~48px)에서 시작 */
+  margin-left: calc(5px - max(0px, (100vw - var(--container)) / 2) + max(0px, (100vw - 1660px) / 2));
+  display: flex; flex-direction: column; justify-content: flex-start;
 }
 .about-panel .section-title { color: var(--color-cream); }
 .about-panel .section-eyebrow { color: var(--color-primary); }
-.about-lead { font-size: 1.15rem; font-weight: 700; color: var(--color-cream); margin-bottom: var(--space-md); }
-.about-body { color: rgba(246,233,227,.82); }
-.about-photo { position: relative; }
+/* EX 기준: 리드/본문 모두 같은 스타일(24px medium), 리드 아래 34px·줄간 17px 비율 */
+.about-lead { font-size: 1.05rem; font-weight: 400; color: var(--color-cream); margin-bottom: 26px; }
+.about-body { font-size: 1.05rem; font-weight: 400; color: rgba(246,233,227,.78); line-height: 1.95; }
+.about-photo {
+  position: relative; z-index: 1;  /* 지그재그(2) 아래 → 브라운이 위에서 덮음 */
+  /* 브라운 아래로 밀어넣어 대각선이 사진 왼쪽을 덮게 */
+  margin-left: calc(-1 * var(--space-3xl) - 70px);
+  /* 오른쪽 끝을 히어로 배경 이미지 우측과 정렬 (히어로 기하 역산) */
+  margin-right: calc(598px - 45vw + 0.45 * max(0px, 100vw - 1660px));
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 22px 44px rgba(120,80,70,.2);
+}
 .about-photo img {
-  width: 100%; height: 100%; object-fit: cover; min-height: 360px;
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0 100%);
+  width: 100%; height: 100%; object-fit: cover; min-height: 460px;
+  display: block;
 }
 
 /* ============================================================
-   CHARACTERS (03) — 다크 + 핑크 밴드 + 인터랙티브 캐릭터
+   CHARACTERS (03) — 풀너비 핑크 밴드 + 흐린 얼굴 + 메인 캐릭터 + 썸네일 캐러셀
+   레이어: 밴드(1) < 지그재그(2) < 콘텐츠(3)
    ============================================================ */
-.characters { position: relative; background: var(--color-dark); padding: var(--space-3xl) 0; overflow: hidden; }
-.characters::before {
-  content: ""; position: absolute; inset: 0;
-  background: linear-gradient(160deg, #41332f 0%, #2b2120 100%); z-index: 0;
-}
-/* 다크 지그재그(번개) 장식 — 왼쪽 */
-.char-zigzag {
-  position: absolute; left: -2%; top: 50%; transform: translateY(-50%);
-  height: 132%; width: auto; z-index: 1; pointer-events: none; opacity: .96;
+.characters { position: relative; background: transparent; padding: var(--space-2xl) 0 var(--space-3xl); overflow: visible; }
+/* 풀너비 핑크 밴드 (뷰포트 전체 폭, 세로 중앙) — 지그재그 아래 */
+.char-band-full {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 100vw; height: 62%; min-height: 320px;
+  background: var(--color-pink-band); z-index: 1;
+  overflow: hidden;   /* 흐린 얼굴이 밴드 밖으로 안 나가게 */
+  transition: background .5s var(--ease);  /* 캐릭터마다 색 전환 */
 }
 .char-inner {
-  position: relative; z-index: 2;
-  display: grid; grid-template-columns: 1fr 1.15fr 100px; gap: var(--space-xl);
-  align-items: center; min-height: 540px;
+  position: relative; z-index: 3;  /* 지그재그(2) 위 */
+  display: grid; grid-template-columns: 0.85fr 1.5fr auto; gap: var(--space-lg);
+  align-items: center; min-height: 560px;
 }
-.char-info { color: var(--color-on-dark); }
+.char-info {
+  color: var(--color-on-dark);
+  margin-left: calc(5px - max(0px, (100vw - var(--container)) / 2) + max(0px, (100vw - 1660px) / 2));
+}
 .char-info .section-title { color: var(--color-cream); }
 .char-detail { margin-top: var(--space-xl); }
 .char-name { font-size: 2.2rem; font-weight: 900; color: var(--color-cream); }
@@ -193,52 +224,74 @@ ul { list-style: none; }
 }
 .char-desc { color: rgba(246,233,227,.8); max-width: 32ch; }
 
-/* 캐릭터 무대: 색상 박스 + 얼굴 포인트 + 전신 */
-.char-stage { position: relative; height: 540px; display: flex; align-items: flex-end; justify-content: center; }
-.char-box {
-  position: absolute; inset: 5% -18% 5% -6%;
-  background: var(--char-color, var(--color-pink-band));
-  border-radius: 22px; overflow: hidden; z-index: 0;
-  box-shadow: 0 24px 50px rgba(0,0,0,.3);
-  transition: background .45s var(--ease);
-}
-/* 박스 안의 큰 얼굴 (은은한 포인트) */
+/* 캐릭터 비주얼: 흐린 얼굴(왼쪽) + 메인 캐릭터(오른쪽) */
+.char-visual { position: relative; height: 560px; }
+/* 흐린 큰 얼굴 — 밴드 안 왼쪽 (밴드 overflow:hidden 로 세로 클리핑) */
 .char-face {
-  position: absolute; left: 2%; top: 8%; width: 46%; height: 86%;
-  overflow: hidden; opacity: .28; z-index: 0;
-  -webkit-mask-image: linear-gradient(90deg, #000 60%, transparent);
-  mask-image: linear-gradient(90deg, #000 60%, transparent);
+  position: absolute; left: 25%; top: 4%; width: 41%; height: 92%;
+  overflow: hidden; opacity: 0.3; z-index: 0;
+  mask-image: linear-gradient(90deg, #000 64%, transparent);
 }
+/* 얼굴(이미지 상단)으로 크롭 — object-position 으로 얼굴이 보이게 */
 .char-face img {
-  width: 235%; max-width: none; display: block;
-  transform: translate(-30%, -3%);
-  transition: opacity var(--dur) var(--ease);
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%;
+  display: block; transition: opacity var(--dur) var(--ease);
 }
+/* 메인 캐릭터 — 더 오른쪽으로, 밴드 위로 솟음 */
 .char-main {
-  position: relative; z-index: 1; height: 560px; width: auto; max-width: 100%;
+  position: absolute; right: 0; bottom: 0; z-index: 1;
+  height: 620px; width: auto; max-width: 74%;
   object-fit: contain; object-position: bottom;
-  filter: drop-shadow(0 24px 40px rgba(0,0,0,.4));
+  filter: drop-shadow(0 24px 40px rgba(0,0,0,.28));
   transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
 }
 .char-main.swapping { opacity: 0; transform: translateY(14px); }
 
-.char-thumbs { display: flex; flex-direction: column; gap: 12px; position: relative; z-index: 3; }
+/* 썸네일 선택기 — 한 번에 3개 + 위/아래 화살표 (밴드 안) */
+.char-selector {
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  /* 오른쪽 끝을 위(ABOUT) 사진 = 히어로 배경 우측과 정렬 */
+  margin-right: calc(598px - 45vw + 0.45 * max(0px, 100vw - 1660px));
+}
+.char-arrow {
+  width: 44px; height: 26px; border: none; cursor: pointer;
+  background: rgba(255,255,255,.9); color: var(--color-primary);
+  border-radius: 8px; font-size: .62rem; line-height: 1;
+  box-shadow: 0 4px 10px rgba(150,100,110,.2);
+  transition: background var(--dur), transform var(--dur), opacity var(--dur);
+}
+.char-arrow:hover { background: #fff; transform: scale(1.06); }
+.char-arrow:disabled { opacity: .3; cursor: default; transform: none; }
+/* 3개(84)+간격(12)x2 = 276; 3번째가 안 잘리게 +여유, 4번째(288~)는 안 보이게 */
+.char-thumbs-window { height: 286px; padding: 0 14px; overflow: hidden; }
+.char-thumbs { display: flex; flex-direction: column; gap: 12px; transition: transform var(--dur) var(--ease); }
 .thumb {
-  width: 88px; height: 88px; padding: 0; border-radius: 14px; cursor: pointer; overflow: hidden;
-  border: 2px solid rgba(255,255,255,.25); background: var(--color-pink-band);
+  width: 84px; height: 84px; padding: 0; border-radius: 12px; cursor: pointer; overflow: hidden;
+  border: 3px solid #fff; background: #fff;
+  box-shadow: 0 3px 8px rgba(150,100,110,.15);
   transition: border-color var(--dur), transform var(--dur);
 }
 .thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
-.thumb:hover { transform: translateY(-3px); }
+.thumb:hover { transform: translateY(-2px); }
 .thumb.active { border-color: var(--color-primary); box-shadow: 0 0 0 3px rgba(239,148,172,.45); }
 
 /* ============================================================
    STILL CUT (04)
    ============================================================ */
-.stillcut { position: relative; background: var(--color-cream); padding: var(--space-3xl) 0; overflow: hidden; }
+/* overflow visible: 필름 아래 끝이 다음 섹션(배너)으로 내려가 가려지게 */
+.stillcut { position: relative; background: var(--color-cream); padding: var(--space-3xl) 0; }
+/* 04 헤딩: 02/03과 같은 왼쪽 시작점(1660) + 지그재그 위로(z-index 3) */
+.stillcut .section-head {
+  position: relative; z-index: 3;
+  margin-left: calc(5px - max(0px, (100vw - var(--container)) / 2) + max(0px, (100vw - 1660px) / 2));
+}
+/* "스틸컷"만 → 브라운 위에 다 들어가므로 크림색으로 깔끔하게 */
+.stillcut .section-eyebrow { color: #d35d6e; }
+.stillcut .section-title { color: var(--color-cream); }
+/* 스틸 2열 × 3행 = 6개, #40처럼 크게 (지그재그·필름 위) */
 .still-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-md); margin-top: var(--space-xl);
-  position: relative; z-index: 1;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-lg); margin-top: var(--space-xl);
+  position: relative; z-index: 3;
 }
 .still {
   border-radius: var(--radius); overflow: hidden; border: 3px solid #fff;
@@ -250,10 +303,17 @@ ul { list-style: none; }
 /* ============================================================
    BOTTOM BANNER
    ============================================================ */
-.banner { position: relative; min-height: 380px; display: flex; align-items: center; overflow: hidden; }
+.banner { position: relative; z-index: 2; min-height: 380px; display: flex; align-items: center; overflow: hidden; }
 .banner-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-.banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(40,30,40,.55), rgba(40,30,40,.15) 60%, transparent); z-index: 1; }
-.banner-inner { position: relative; z-index: 2; color: #fff; text-align: left; padding: var(--space-2xl) var(--space-lg); }
+/* 얼굴이 왼쪽 → 텍스트는 오른쪽, 그라데이션도 오른쪽을 어둡게 */
+.banner::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 28%, rgba(40,30,40,.18) 52%, rgba(40,30,40,.55)); z-index: 1; }
+.banner-inner {
+  position: relative; z-index: 2; color: #fff; text-align: left;
+  max-width: 540px; margin-left: auto;
+  /* 텍스트 우측 끝을 히어로 배경/방 사진과 같은 우측 정렬선에 맞춤 */
+  margin-right: calc(5vw + 0.45 * max(0px, 100vw - 1660px) + 22px);
+  padding: var(--space-2xl) 0;
+}
 .banner-eyebrow { font-family: var(--font-display); letter-spacing: .22em; font-size: .8rem; opacity: .9; }
 .banner-title { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 900; margin: 8px 0 12px; text-shadow: 0 4px 20px rgba(0,0,0,.3); }
 .banner-desc { margin-bottom: var(--space-lg); max-width: 40ch; opacity: .92; }
@@ -261,10 +321,10 @@ ul { list-style: none; }
 /* ============================================================
    FOOTER
    ============================================================ */
-.site-footer { background: var(--color-dark-2); color: var(--color-on-dark); padding: var(--space-xl) 0; }
+.site-footer { background: var(--color-dark-2); color: var(--color-on-dark); padding: var(--space-2xl) 0; border-top: 3px solid var(--color-primary); }
 .footer-inner { display: flex; align-items: center; gap: var(--space-lg); flex-wrap: wrap; justify-content: space-between; }
-.logo.small { display: flex; align-items: center; gap: 10px; }
-.logo.small .logo-note { background: var(--color-primary); border-color: transparent; }
+.footer-brand { display: flex; align-items: center; gap: 12px; }
+.footer-logo { width: 44px; height: 42px; object-fit: contain; }
 .logo-text { display: flex; flex-direction: column; line-height: 1.05; }
 .logo-text strong { font-family: var(--font-display); letter-spacing: .14em; color: var(--color-cream); }
 .logo-text small { font-size: .62rem; letter-spacing: .26em; color: var(--color-text-soft); }
@@ -284,26 +344,48 @@ ul { list-style: none; }
 /* ============================================================
    반응형
    ============================================================ */
-@media (max-width: 980px) {
-  .about-inner { grid-template-columns: 1fr; }
-  .about-panel {
-    margin-left: 0; padding-left: var(--space-lg);
-    clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%);
-  }
-  .about-photo img { clip-path: none; border-radius: 0; min-height: 280px; }
-  .char-inner { grid-template-columns: 1fr; min-height: auto; gap: var(--space-lg); text-align: center; }
-  .char-detail { margin-top: var(--space-md); }
+/* ============ 태블릿/모바일: 데스크탑 전용 장식 정리 + 세로 스택 ============ */
+@media (max-width: 900px) {
+  /* 좌측 당김·우측 정렬 공식 전부 해제 (모바일은 일반 패딩) */
+  .about-panel, .char-info { margin-left: 0; }
+  .stillcut .section-head { margin-left: 0; }
+  .about-photo { margin-left: 0; margin-right: 0; }
+  .char-selector { margin-right: 0; }
+  .banner-inner { margin-left: 0; margin-right: 0; max-width: none; }
+
+  /* 데스크탑 전용 지그재그·필름 제거 → 섹션 자체에 브라운 배경 */
+  .story-zigzag, .filmstrip { display: none; }
+
+  /* ABOUT: 텍스트(브라운) 위, 사진 아래 1열 */
+  .about { background: var(--color-dark); padding: var(--space-2xl) 0; }
+  .about-inner { grid-template-columns: 1fr; gap: var(--space-lg); align-items: stretch; }
+  .about-photo img { min-height: 220px; }
+
+  /* CHARACTERS: 브라운 배경, 1열 스택 (헤딩 → 캐릭터 → 썸네일) */
+  .characters { background: var(--color-dark); padding: var(--space-2xl) 0; }
+  .char-inner { grid-template-columns: 1fr; min-height: auto; gap: var(--space-md); text-align: center; }
   .char-desc { margin: 0 auto; }
-  .char-stage { height: 460px; }
-  .char-main { height: 440px; }
-  .char-box { inset: 4% 4% 4% 4%; }
-  .char-face { width: 50%; opacity: .24; }
-  .char-zigzag { display: none; }
-  .char-thumbs { flex-direction: row; justify-content: center; flex-wrap: wrap; }
-  .still-grid { grid-template-columns: repeat(2, 1fr); }
-  .filmstrip { display: none; }
+  .char-band-full { height: 54%; }
+  .char-visual { height: 440px; }
+  .char-face { display: none; }   /* 모바일에선 흐린 얼굴 생략 */
+  .char-main { position: relative; right: auto; bottom: auto; height: 420px; max-width: 90%; margin: 0 auto; }
+  /* 썸네일: 가로 한 줄로 전부 표시, 화살표 숨김 */
+  .char-selector { flex-direction: row; justify-content: center; }
+  .char-arrow { display: none; }
+  .char-thumbs-window { height: auto; padding: 0; overflow: visible; }
+  .char-thumbs { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; transform: none !important; }
+
+  /* STILL CUT: 크림 배경이므로 제목 다크, 스틸 1열 */
+  .stillcut .section-title { color: var(--color-dark); }
+  .stillcut .section-eyebrow { color: var(--color-primary); }
+  .still-grid { grid-template-columns: 1fr; }
+
+  /* 히어로 캔버스 풀폭 */
+  .hero-inner { max-width: 100%; }
 }
-@media (max-width: 640px) {
+
+/* ============ 모바일: 햄버거 메뉴 + 크기 축소 ============ */
+@media (max-width: 600px) {
   .main-nav { display: none; }
   .main-nav.open {
     display: flex; flex-direction: column; position: absolute; top: 76px; left: 0; right: 0;
@@ -314,10 +396,12 @@ ul { list-style: none; }
   .start-btn { display: none; }
   .proposal-btn { padding: 10px 16px; font-size: .82rem; }
   .hero-stage { margin-left: 0; }
-  .hero-badge { left: 0; top: -2%; width: 130px; }
-  .still-grid { grid-template-columns: 1fr; }
-  .footer-inner { flex-direction: column; text-align: center; }
-  .char-stage { height: 380px; }
-  .char-main { height: 360px; }
-  .thumb { width: 64px; height: 64px; }
+  .hero-badge { left: 0; top: 0; width: 150px; }
+  .char-visual { height: 360px; }
+  .char-main { height: 340px; }
+  .thumb { width: 68px; height: 68px; }
+  .footer-inner { flex-direction: column; text-align: center; gap: var(--space-md); }
+  .section-title { font-size: 1.5rem; }
+  .char-name { font-size: 1.8rem; }
+  .banner-title { font-size: 2rem; }
 }

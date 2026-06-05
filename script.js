@@ -58,6 +58,7 @@
   };
 
   const charStage = document.getElementById("charStage");
+  const charBand = document.querySelector(".char-band-full");
   const charMain = document.getElementById("charMain");
   const charFace = document.getElementById("charFace");
   const charName = document.getElementById("charName");
@@ -76,7 +77,7 @@
       thumbs.forEach((b) => b.classList.remove("active"));
       btn.classList.add("active");
 
-      if (charStage) charStage.style.setProperty("--char-color", data.color);
+      if (charBand) charBand.style.background = data.color;  /* 핑크 띠 색 캐릭터마다 */
       charMain.classList.add("swapping");
       if (charFace) charFace.style.opacity = "0";
       setTimeout(() => {
@@ -90,4 +91,21 @@
       }, 200);
     });
   });
+
+  /* ---------- 썸네일 캐러셀 (한 번에 3개 + 위/아래 화살표) ---------- */
+  const thumbsList = document.getElementById("charThumbs");
+  const charPrev = document.getElementById("charPrev");
+  const charNext = document.getElementById("charNext");
+  const STEP = 96;     // 썸네일 84 + 간격 12
+  const VISIBLE = 3;
+  const maxOffset = Math.max(0, thumbs.length - VISIBLE);
+  let offset = 0;
+  const updateCarousel = () => {
+    if (thumbsList) thumbsList.style.transform = "translateY(" + (-offset * STEP) + "px)";
+    if (charPrev) charPrev.disabled = offset <= 0;
+    if (charNext) charNext.disabled = offset >= maxOffset;
+  };
+  if (charPrev) charPrev.addEventListener("click", () => { if (offset > 0) { offset--; updateCarousel(); } });
+  if (charNext) charNext.addEventListener("click", () => { if (offset < maxOffset) { offset++; updateCarousel(); } });
+  updateCarousel();
 })();
