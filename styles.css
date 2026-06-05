@@ -110,6 +110,9 @@ ul { list-style: none; }
 /* 핑크 획(외곽선) + 글로우로 누끼 흰 테두리를 가림 (배지처럼) */
 .hero-lp {
   position: relative; z-index: 2; width: 100%; height: auto;
+  /* 하단을 부드럽게 페이드 → 원본에서 잘린 다리/외곽선이 자연스럽게 사라지게 */
+  -webkit-mask-image: linear-gradient(to bottom, #000 86%, transparent 99%);
+  mask-image: linear-gradient(to bottom, #000 86%, transparent 99%);
   filter:
     drop-shadow(1.2px 0 0 #FCEAED) drop-shadow(-1.2px 0 0 #FCEAED)
     drop-shadow(0 1.2px 0 #FCEAED) drop-shadow(0 -1.2px 0 #FCEAED)

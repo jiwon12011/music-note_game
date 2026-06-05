@@ -123,27 +123,63 @@
 
   render(false);  // 초기 슬롯 셋업 (디테일은 HTML 기본값 유지)
 
-  /* ---------- 브라운 지그재그(필름) 위 장식 음표 (정적·은은하게) ---------- */
+  /* ---------- 브라운 지그재그(필름) 위 장식 음표 ---------- */
+  /* 좌측 브라운 영역에 배치하되, 텍스트 박스를 실측해 겹치는 자리는 피함 */
   const story = document.querySelector(".story");
+  const storyNotes = [];
   if (story) {
-    const DGLYPHS = ["♪", "♫", "♬", "♩", "♭"];
-    const DCOLORS = ["#ef94ac", "#c79be6", "#7ec8c0", "#f4b25c", "#8fb4f0", "#f07ba0", "#9bd17a"];
+    const DGLYPHS = ["♪", "♫", "♬", "♩", "♭", "♪", "♫"];
+    const DCOLORS = ["#ef94ac", "#c79be6", "#7ec8c0", "#f4b25c", "#8fb4f0", "#f07ba0", "#9bd17a", "#ff9e7a"];
     const rnd = (a, b) => a + Math.random() * (b - a);
     const pk = (a) => a[Math.floor(Math.random() * a.length)];
-    for (let i = 0; i < 9; i++) {
-      const top = 5 + i * 10.5;                         // 위→아래 고르게 분포
-      const leftMax = Math.max(3, 10 - top * 0.07);     // 아래로 갈수록 브라운이 좁아져 더 왼쪽으로
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const COUNT = 11;
+    for (let i = 0; i < COUNT; i++) {
+      const accent = i % 4 === 1;                         // 4개당 1개는 큼직한 강조 음표
+      const op = rnd(0.36, 0.6);
+      const rot = rnd(-22, 22);
+      const size = accent ? rnd(38, 50) : rnd(18, 32);
       const n = document.createElement("span");
       n.className = "story-note";
       n.textContent = pk(DGLYPHS);
-      n.style.top = (top + rnd(-2, 2)) + "%";
-      n.style.left = rnd(1.5, leftMax) + "%";
-      n.style.fontSize = rnd(20, 46) + "px";
+      n.style.fontSize = size + "px";
       n.style.color = pk(DCOLORS);
-      n.style.opacity = rnd(0.3, 0.6);
-      n.style.transform = "rotate(" + rnd(-22, 22) + "deg)";
+      n.style.opacity = op;                               // GSAP 미로드 시 정적 표시용
+      n.style.transform = "rotate(" + rot + "deg)";       // GSAP 미로드 시 회전 유지용
       story.appendChild(n);
+      storyNotes.push({ el: n, op: op, rot: rot, accent: accent, size: size });
     }
+
+    // 텍스트와 안 겹치게 배치 (이미지 로드/리사이즈로 레이아웃이 바뀌면 재배치)
+    const layoutNotes = () => {
+      const s = story.getBoundingClientRect();
+      const pad = 12;
+      const textEls = story.querySelectorAll(
+        ".section-num, .section-eyebrow, .section-title, .about-lead, .about-body, .char-name, .char-role, .char-desc"
+      );
+      const blocks = [...textEls].map((el) => {
+        const r = el.getBoundingClientRect();
+        return { l: r.left - s.left - pad, t: r.top - s.top - pad, r: r.right - s.left + pad, b: r.bottom - s.top + pad };
+      });
+      const hit = (x, y, sz) => blocks.some((b) => x < b.r && x + sz > b.l && y < b.b && y + sz > b.t);
+      storyNotes.forEach((o, i) => {
+        const band = 5 + i * (86 / (COUNT - 1));          // 위→아래 고르게 분포 시드
+        let placed = false;
+        for (let t = 0; t < 28 && !placed; t++) {
+          const top = clamp(band + rnd(-7, 7), 3, 95);
+          const leftMax = clamp(13 - top * 0.08, 4, 13);  // 아래로 갈수록 브라운이 좁아짐
+          const left = rnd(1, leftMax);
+          if (!hit((left / 100) * s.width, (top / 100) * s.height, o.size * 1.15)) {
+            o.el.style.top = top + "%"; o.el.style.left = left + "%"; o.el.style.display = "";
+            placed = true;
+          }
+        }
+        if (!placed) o.el.style.display = "none";          // 빈자리 없으면 숨김(겹치느니 생략)
+      });
+    };
+    layoutNotes();
+    window.addEventListener("load", layoutNotes);          // 이미지 로드 후 정확한 위치로
+    let rT; window.addEventListener("resize", () => { clearTimeout(rT); rT = setTimeout(layoutNotes, 200); });
   }
 
   /* ---------- GSAP 모션 (로드된 경우에만, 미로드 시 그대로 동작) ---------- */
@@ -151,9 +187,31 @@
     const g = window.gsap;
     if (window.ScrollTrigger) g.registerPlugin(window.ScrollTrigger);
 
-    // 히어로 LP: 멋진 등장(아래에서 줌인+살짝 회전) — 등장 후 정지(무한 보빙 제거: 스크롤 버벅임 방지)
-    g.from(".hero-lp", { scale: 0.82, y: 64, autoAlpha: 0, rotation: 1.5, duration: 1.3, ease: "expo.out",
+    // 히어로 LP 등장: 아래에서 떠오르며 줌인 + 살짝 기울었다 탄성있게 제자리로
+    // (등장 후 transform 정리 → 스크롤은 매끄럽게 유지)
+    g.from(".hero-lp", { autoAlpha: 0, y: 92, scale: 0.78, rotation: -5,
+      duration: 1.4, ease: "back.out(1.5)",
       onComplete() { g.set(".hero-lp", { clearProps: "transform" }); } });
+
+    // 브라운 위 음표: 스크롤 진입 시 하나씩 팝 등장 + 각자 살짝 둥실
+    if (storyNotes.length) {
+      const els = storyNotes.map((o) => o.el);
+      if (window.ScrollTrigger) {
+        storyNotes.forEach((o) => g.set(o.el, { autoAlpha: 0, scale: 0.3, rotation: o.rot, transformOrigin: "50% 50%" }));
+        g.to(els, {
+          autoAlpha: (i) => storyNotes[i].op, scale: 1, duration: 0.55, ease: "back.out(1.9)",
+          stagger: { each: 0.13, from: "start" },
+          scrollTrigger: { trigger: ".story", start: "top 72%" },
+        });
+      } else {
+        storyNotes.forEach((o) => g.set(o.el, { rotation: o.rot, transformOrigin: "50% 50%" }));
+      }
+      // 살짝 둥실 (가벼운 무한 보빙 — 작은 텍스트라 스크롤 부담 없음)
+      storyNotes.forEach((o, i) => {
+        g.to(o.el, { y: "+=" + (o.accent ? 10 : 6), duration: 2 + (i % 5) * 0.35,
+          ease: "sine.inOut", yoyo: true, repeat: -1, delay: 0.2 + i * 0.12 });
+      });
+    }
 
     // 히어로 LP 호버: 위로 음표(♪♫♬) 하나씩 둥실 떠오름
     const heroLp = document.querySelector(".hero-lp");
@@ -187,28 +245,45 @@
                 onComplete() { span.remove(); } });
             } });
       };
+      let wobble = null;
       heroLp.addEventListener("mouseenter", () => {
-        if (noteTimer) return;
-        spawnNote();
-        noteTimer = setInterval(spawnNote, 320);
+        // 음표 떠오르기
+        if (!noteTimer) { spawnNote(); noteTimer = setInterval(spawnNote, 320); }
+        // 살짝 흔들흔들 (작은 진폭 좌우 회전 — will-change로 필터 레이어 캐싱해 매끄럽게)
+        if (wobble) wobble.kill();
+        heroLp.style.willChange = "transform";
+        g.set(heroLp, { transformOrigin: "50% 58%" });
+        wobble = g.fromTo(heroLp, { rotation: -0.6 },
+          { rotation: 0.6, duration: 0.7, ease: "sine.inOut", yoyo: true, repeat: -1 });
       });
       heroLp.addEventListener("mouseleave", () => {
         clearInterval(noteTimer); noteTimer = null;
+        if (wobble) { wobble.kill(); wobble = null; }
+        g.to(heroLp, { rotation: 0, duration: 0.4, ease: "power2.out",
+          onComplete() { heroLp.style.willChange = ""; } });
       });
     }
 
     if (window.ScrollTrigger) {
       // (히어로 필름 패럴랙스 제거 — 필름은 고정)
-      // 캐릭터 메인 등장
-      g.from(".char-main", { y: 50, duration: 0.9, ease: "power3.out",
-        scrollTrigger: { trigger: ".characters", start: "top 65%" } });
+      // 캐릭터 메인 등장: 왼쪽에서 휘리릭 슈욱(skew 잔상) → 탄성 정착 — 화려하게
+      // (배경 흐린 얼굴은 지금처럼 유지 / 등장 후 인라인 정리해 캐릭터 전환 정상)
+      if (charMain) charMain.style.transition = "none";  // GSAP 모션 ↔ CSS transition 충돌 방지
+      g.timeline({
+        scrollTrigger: { trigger: ".characters", start: "top 65%" },
+        onComplete() { g.set(".char-main", { clearProps: "all" }); if (charMain) charMain.style.transition = ""; },
+      })
+        .from(".char-main", { x: -280, skewX: 16, rotation: -13, scale: 0.8, autoAlpha: 0,
+          transformOrigin: "50% 100%", duration: 0.8, ease: "power4.out" })
+        .to(".char-main", { rotation: 3.5, duration: 0.15, ease: "sine.out" })   // 살짝 오버슈트
+        .to(".char-main", { rotation: 0, duration: 0.75, ease: "elastic.out(1, 0.45)" });  // 탄성 정착
       // 썸네일 스태거 등장
       g.from(".char-thumbs .thumb", { y: 16, stagger: 0.07, duration: 0.5, ease: "power2.out",
         scrollTrigger: { trigger: ".char-selector", start: "top 82%" } });
-      // 스틸 스태거 등장 — 살짝 회전하며 팝업 (back.out 으로 탄성)
-      g.from(".still", { autoAlpha: 0, scale: 0.82, rotation: -3, y: 24,
-        transformOrigin: "50% 100%", stagger: { each: 0.1, from: "start" },
-        duration: 0.7, ease: "back.out(1.7)",
+      // 스틸 스태거 등장 — 3D 카드 플립 인 (왼쪽 축으로 펼쳐지듯)
+      g.set(".still-grid", { perspective: 900 });
+      g.from(".still", { autoAlpha: 0, rotationY: -58, y: 16, transformOrigin: "left center",
+        stagger: { each: 0.09, from: "start" }, duration: 0.75, ease: "power3.out",
         scrollTrigger: { trigger: ".still-grid", start: "top 80%" } });
     }
 
