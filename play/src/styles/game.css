@@ -140,6 +140,82 @@ button { font-family: inherit; cursor: pointer; }
 
 .title-footer { position: absolute; bottom: 18px; z-index: 2; font-size: .72rem; letter-spacing: .1em; color: rgba(246,233,227,.45); }
 
+/* ============================================================
+   공통 오버레이 (메뉴/설정/세이브/컬렉션)
+   ============================================================ */
+.overlay {
+  position: fixed; inset: 0; z-index: 2200; display: grid; place-items: center; padding: 24px;
+  background: rgba(26,20,22,.8); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  opacity: 0; visibility: hidden; transition: opacity .35s var(--ease), visibility .35s var(--ease);
+}
+.overlay.open { opacity: 1; visibility: visible; }
+.panel {
+  width: min(100%, 560px); max-height: 86vh; overflow-y: auto;
+  padding: 32px 30px; border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(56,44,41,.72), rgba(43,33,32,.84));
+  border: 1.5px solid rgba(239,148,172,.42);
+  box-shadow: 0 26px 64px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.14);
+}
+.panel-title { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; color: var(--c-cream); letter-spacing: .06em; text-align: center; margin-bottom: 24px; }
+.panel-actions { display: flex; gap: 12px; margin-top: 26px; }
+.btn {
+  flex: 1; padding: 13px 20px; border-radius: 999px; border: none; cursor: pointer;
+  font-family: var(--font-display); font-weight: 700; font-size: .95rem;
+  background: var(--c-primary); color: #fff; box-shadow: 0 8px 20px rgba(239,148,172,.4);
+  transition: background .2s var(--ease), transform .2s var(--ease);
+}
+.btn:hover { background: var(--c-primary-dark); transform: translateY(-2px); }
+.btn-ghost { background: rgba(250,241,236,.08); color: var(--c-on-dark); border: 1.5px solid rgba(239,148,172,.4); box-shadow: none; }
+.btn-ghost:hover { background: rgba(239,148,172,.16); }
+
+/* 메뉴(ESC) 항목 */
+.menu-list { display: flex; flex-direction: column; gap: 2px; }
+.menu-item {
+  width: 100%; padding: 15px 20px; border: none; border-radius: 12px; background: transparent;
+  color: var(--c-on-dark); font-family: var(--font-display); font-weight: 600; font-size: 1rem; text-align: left;
+  transition: background .2s var(--ease), padding-left .2s var(--ease);
+}
+.menu-item:hover { background: rgba(239,148,172,.15); padding-left: 26px; color: #fff; }
+.menu-item:disabled { opacity: .4; }
+
+/* 설정 */
+.set-group { margin-bottom: 22px; }
+.set-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.set-label { color: var(--c-on-dark); font-weight: 600; font-size: .98rem; }
+.set-val { font-family: var(--font-display); font-weight: 700; color: var(--c-primary); font-size: .9rem; }
+.set-slider { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 3px; background: rgba(239,148,172,.22); outline: none; }
+.set-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg,#ef94ac,#e57a96); border: 2px solid rgba(255,255,255,.35); box-shadow: 0 3px 10px rgba(239,148,172,.45); cursor: pointer; }
+.set-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: linear-gradient(135deg,#ef94ac,#e57a96); border: 2px solid rgba(255,255,255,.35); cursor: pointer; }
+
+/* 세이브 슬롯 */
+.slot-list { display: flex; flex-direction: column; gap: 12px; }
+.slot {
+  display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: 14px;
+  background: rgba(250,241,236,.06); border: 1.5px solid rgba(239,148,172,.25);
+  cursor: pointer; text-align: left; width: 100%; transition: border-color .2s var(--ease), background .2s var(--ease);
+}
+.slot:hover { border-color: var(--c-primary); background: rgba(239,148,172,.1); }
+.slot-thumb { width: 96px; height: 60px; border-radius: 8px; object-fit: cover; background: #2b2120; flex-shrink: 0; }
+.slot-meta { flex: 1; min-width: 0; }
+.slot-title { font-family: var(--font-display); font-weight: 700; color: var(--c-cream); font-size: .95rem; }
+.slot-sub { font-size: .8rem; color: rgba(246,233,227,.6); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.slot-empty { color: rgba(246,233,227,.45); font-size: .9rem; }
+
+/* 컬렉션(내 플레이리스트) 트랙 */
+.track-list { display: flex; flex-direction: column; gap: 10px; }
+.track {
+  display: flex; gap: 14px; align-items: center; padding: 10px 14px; border-radius: 12px;
+  background: rgba(250,241,236,.06); border: 1px solid rgba(239,148,172,.18);
+}
+.track.unlocked { cursor: pointer; }
+.track.unlocked:hover { border-color: var(--c-primary); background: rgba(239,148,172,.1); }
+.track-thumb { width: 64px; height: 40px; border-radius: 6px; object-fit: cover; background: #2b2120; flex-shrink: 0; }
+.track-thumb.lock { display: grid; place-items: center; color: rgba(246,233,227,.4); font-size: 1.1rem; }
+.track-no { font-family: var(--font-display); color: var(--c-primary); font-weight: 700; width: 28px; }
+.track-name { color: var(--c-cream); font-weight: 600; font-size: .95rem; }
+.track.locked .track-name { color: rgba(246,233,227,.4); }
+.coll-count { text-align: center; color: rgba(246,233,227,.6); font-size: .82rem; margin-bottom: 18px; }
+
 /* 토스트 (준비 중 알림 등) */
 .toast {
   position: fixed; left: 50%; bottom: 64px; transform: translateX(-50%) translateY(16px);
@@ -244,6 +320,15 @@ button { font-family: inherit; cursor: pointer; }
 }
 @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 .vn-next[hidden] { display: none; }
+.vn-menu-btn {
+  position: absolute; top: 18px; right: 20px; z-index: 4;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: rgba(43,33,32,.55); border: 1px solid rgba(239,148,172,.4);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  color: var(--c-cream); font-size: 1.1rem; cursor: pointer;
+  transition: background .2s var(--ease), transform .2s var(--ease);
+}
+.vn-menu-btn:hover { background: rgba(239,148,172,.3); transform: scale(1.06); }
 
 /* 선택지 */
 .vn-choices { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }

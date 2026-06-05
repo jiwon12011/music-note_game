@@ -15,6 +15,7 @@ VAR aff_choijunhyeok = 0
 === opening ===
 # chapter: 01 상경
 # scene: 상경 기차
+# track: t01
 # bg: train
 서울행 기차. 창밖 풍경이 빠르게 흘러간다.
 이어폰 속 누군가의 노래처럼, 내 심장도 빠르게 뛴다.
@@ -29,6 +30,7 @@ VAR aff_choijunhyeok = 0
 
 === arrival ===
 # scene: 셰어하우스 도착
+# track: t02
 # bg: house-ext-night
 # char: choijunhyeok sweater center
 # speaker: choijunhyeok
@@ -51,6 +53,7 @@ VAR aff_choijunhyeok = 0
 
 === fridge ===
 # scene: 냉장고 앞
+# track: t03
 # bg: kitchen
 # char: choijunhyeok sweater center
 늦은 밤. 물을 마시러 나왔다가, 냉장고 앞에서 다시 최준혁과 마주쳤다.
@@ -73,6 +76,7 @@ VAR aff_choijunhyeok = 0
 
 === morning ===
 # scene: 첫 아침
+# track: t04
 # bg: living-day
 # hide: choijunhyeok
 # char: hanseoa casual center
