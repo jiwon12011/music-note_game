@@ -64,7 +64,7 @@ ul { list-style: none; }
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 76px;
   background: rgba(250,241,236,.7); backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
-  transition: background var(--dur), border-color var(--dur), box-shadow var(--dur), backdrop-filter var(--dur), -webkit-backdrop-filter var(--dur);
+  transition: background var(--dur), border-color var(--dur), box-shadow var(--dur);
 }
 .site-header.scrolled { background: rgba(250,241,236,.86); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-color: rgba(236,220,211,.6); box-shadow: 0 8px 24px rgba(120,80,70,.1); }
 .header-inner { display: flex; align-items: center; justify-content: space-between; height: 100%; position: relative; }
@@ -261,7 +261,7 @@ ul { list-style: none; }
   background: var(--color-primary); color: #fff; border-radius: 999px; font-size: .85rem; font-weight: 700;
 }
 /* 캐릭터마다 대사/설명 줄 수가 달라도 왼쪽 텍스트 위치가 안 흔들리게 2줄 공간 고정 예약 */
-.char-desc { color: rgba(246,233,227,.8); max-width: 32ch; min-height: 3.4em; }
+.char-desc { color: rgba(246,233,227,.92); max-width: 32ch; min-height: 3.4em; }
 /* 시그니처 대사 — serif 이탤릭으로 톤 대비, 핑크 큰따옴표로 비주얼노벨 예열 */
 .char-quote {
   position: relative; margin-top: 18px; padding-left: 20px; max-width: 30ch;
