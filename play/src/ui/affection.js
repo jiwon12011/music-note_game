@@ -16,7 +16,7 @@ export function openAffection(story) {
     </div>`;
   }).join("");
   panel.innerHTML = `<h2 class="panel-title">호감도</h2>
-    <p class="coll-count">♥ 70 이상이면 해피엔딩 · 그 외엔 노멀엔딩으로 이어져요</p>
+    <p class="coll-count">가장 마음을 많이 준 사람의 루트로 이어져요 · 깊어질수록 해피엔딩에 가까워져요</p>
     <div class="aff-list">${rows}</div>
     <div class="panel-actions"><button class="btn" data-act="close">닫기</button></div>`;
   const { close } = openOverlay(panel);

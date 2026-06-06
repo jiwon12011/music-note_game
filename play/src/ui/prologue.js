@@ -51,14 +51,18 @@ export function playPrologue(app, { onDone }) {
     }
   }
 
+  let bgTimer = null;
   const setBg = (key) => {
     if (key === curBg) return;
-    bgB.style.backgroundImage = `url('${ASSET}/bg/${key}.webp')`;
-    bgB.classList.add("show");
-    // 다음 배경이 페이드인된 뒤 메인으로 승격 (간단히: 둘 다 같은 이미지로 두고 처리)
-    bgA.style.backgroundImage = bgB.style.backgroundImage;
-    setTimeout(() => bgB.classList.remove("show"), 900);
     curBg = key;
+    // 진짜 크로스페이드: bgA(현재) 위로 bgB(다음)를 부드럽게 페이드인 → 끝난 뒤 bgA에 승격
+    bgB.style.backgroundImage = `url('${ASSET}/bg/${key}.webp')`;
+    requestAnimationFrame(() => bgB.classList.add("show"));
+    clearTimeout(bgTimer);
+    bgTimer = setTimeout(() => {
+      bgA.style.backgroundImage = bgB.style.backgroundImage;
+      bgB.classList.remove("show");
+    }, reduce ? 0 : 1200);
   };
 
   let idx = 0, typing = false, typeTimer = null, holdTimer = null, finished = false;
@@ -132,7 +136,7 @@ export function playPrologue(app, { onDone }) {
   const onClick = (e) => { if (e.target.closest(".pro-skip")) return; advance(); };
 
   const cleanup = () => {
-    clearTimeout(typeTimer); clearTimeout(holdTimer);
+    clearTimeout(typeTimer); clearTimeout(holdTimer); clearTimeout(bgTimer);
     document.removeEventListener("keydown", onKey);
   };
   screen._cleanup = cleanup;

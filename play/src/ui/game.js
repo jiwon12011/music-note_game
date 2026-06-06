@@ -2,12 +2,15 @@
 import { Story } from "../../vendor/ink.mjs";
 import { charName, charColor, CHARS } from "../engine/charMeta.js";
 import { settings } from "../state/settings.js";
-import { profile, trackByCg } from "../state/profile.js";
+import { profile, trackByCg, TRACK_CATALOG } from "../state/profile.js";
 import { save, loadInto } from "../state/saves.js";
 import { openSaveLoad } from "./saveload.js";
 import { openSettings } from "./settings.js";
+import { openCollection } from "./collection.js";
 import { openAffection } from "./affection.js";
 import { openOverlay } from "./overlay.js";
+
+const ENDINGS_TOTAL = 12; // 해피 6 + 노멀 6 (솔로 제외)
 
 const ASSET = "public/img";
 const STORY_URL = "public/story/chapter1.json";
@@ -30,6 +33,8 @@ export async function startGame(app, opts = {}) {
     <div class="scene-bg"></div>
     <img class="scene-char enter" alt="" hidden />
     <div class="scene-cg"></div>
+    <div class="vn-note" aria-hidden="true"></div>
+    <div class="vn-popup" aria-hidden="true"></div>
     <div class="aff-popup"><span class="who"></span> <span class="heart">♥</span> <span class="delta"></span></div>
     <button class="vn-menu-btn" title="메뉴 (ESC)">☰</button>
     <div class="scene-stage"><div class="vn-box">
@@ -45,8 +50,23 @@ export async function startGame(app, opts = {}) {
   const bgEl = $(".scene-bg"), charEl = $(".scene-char"), cgEl = $(".scene-cg");
   const speakerEl = $(".vn-speaker"), textEl = $(".vn-text"), nextEl = $(".vn-next");
   const choicesEl = $(".vn-choices"), cardEl = $(".chapter-card"), affEl = $(".aff-popup");
+  const noteEl = $(".vn-note"), popupEl = $(".vn-popup");
 
   let mode = "line", typing = false, typeTimer = null, curText = "", pending = null, suppressAff = false, cardTimer = null;
+  let lastEnding = null, noteTimer = null, popupTimer = null;
+
+  /* 호칭 자막(# note) — 대사창 위 별도 감성 레이어 */
+  const showNote = (text) => {
+    clearTimeout(noteTimer); noteEl.textContent = text;
+    noteEl.classList.remove("show"); void noteEl.offsetWidth; noteEl.classList.add("show");
+    noteTimer = setTimeout(() => noteEl.classList.remove("show"), 2800);
+  };
+  /* 분기 알림(# popup) — 글래스 토스트, 3초 자동/클릭 시 즉시 */
+  const showPopup = (text) => {
+    clearTimeout(popupTimer); popupEl.textContent = text;
+    popupEl.classList.add("show");
+    popupTimer = setTimeout(() => popupEl.classList.remove("show"), 3200);
+  };
   const view = { bg: "", char: null, speaker: null, line: "", scene: "", cg: null };
 
   /* 비주얼 */
@@ -78,7 +98,9 @@ export async function startGame(app, opts = {}) {
     if (t.hide) hideChar();
     if (t.char) { const [k, o, p] = t.char.split(/\s+/); showChar(k, o, p || "center"); }
     if (t.cg) showCg(t.cg); // CG 는 bg/char 다음 (화면 덮음)
-    if (t.ending) profile.markEnding(t.ending); // 본 엔딩 영구 기록
+    if (t.ending) { profile.markEnding(t.ending); lastEnding = t.ending; } // 본 엔딩 기록 + 크레딧용
+    if (t.note) showNote(t.note);   // 호칭 자막 등 감성 레이어
+    if (t.popup) showPopup(t.popup); // 챕터3 분기 알림 등
     setSpeaker(t.speaker || null);
   };
 
@@ -129,7 +151,38 @@ export async function startGame(app, opts = {}) {
       if (!text) return next();
       mode = "line"; type(text);
     } else if (story.currentChoices.length) { renderChoices(story.currentChoices); }
-    else { mode = "ended"; onExit && onExit(); }
+    else { mode = "ended"; if (lastEnding) showCredits(lastEnding); else onExit && onExit(); }
+  };
+
+  /* 엔딩 크레딧 화면 — 수집 현황 + 재플레이 유도 */
+  const showCredits = (endingId) => {
+    const p = profile.all();
+    const seen = p.endings.filter((e) => e !== "solo").length;
+    const tracks = p.tracks.length, trackTotal = TRACK_CATALOG.length;
+    const isSolo = endingId === "solo";
+    const [key, kind] = endingId.split(" ");
+    const kindKr = kind === "happy" ? "해피 엔딩" : kind === "normal" ? "노멀 엔딩" : "";
+    const cre = document.createElement("div");
+    cre.className = "credits-screen";
+    cre.innerHTML = `
+      <div class="credits-inner">
+        <p class="credits-eyebrow">PLAYLIST · BETWEEN US</p>
+        <h2 class="credits-title">${isSolo ? "미완성 플레이리스트" : `${charName(key)} · ${kindKr}`}</h2>
+        <p class="credits-sub">${isSolo ? "아직 비어 있는 한 곡이 있어요." : "당신의 플레이리스트에, 한 곡이 더해졌습니다."}</p>
+        <div class="credits-stats">
+          <div class="cstat"><span class="cnum">${seen}<small>/${ENDINGS_TOTAL}</small></span><span class="clbl">엔딩</span></div>
+          <div class="cstat"><span class="cnum">${tracks}<small>/${trackTotal}</small></span><span class="clbl">트랙</span></div>
+        </div>
+        <p class="credits-nudge">${seen >= ENDINGS_TOTAL ? "모든 엔딩을 모았어요 — 당신의 플레이리스트가 완성됐습니다 ♪" : "아직 듣지 못한 곡이 있어요. 다시 재생해볼까요?"}</p>
+        <div class="credits-actions">
+          <button class="credits-btn primary" data-a="coll"><span>♬</span> 컬렉션 보기</button>
+          <button class="credits-btn" data-a="title"><span>▶</span> 타이틀로</button>
+        </div>
+      </div>`;
+    root.appendChild(cre);
+    requestAnimationFrame(() => cre.classList.add("show"));
+    cre.querySelector('[data-a="coll"]').addEventListener("click", () => openCollection());
+    cre.querySelector('[data-a="title"]').addEventListener("click", () => { onExit && onExit(); });
   };
   const advance = () => {
     if (mode === "choice") return;
@@ -179,8 +232,9 @@ export async function startGame(app, opts = {}) {
   /* 시작 또는 이어하기 */
   if (resumeSlot != null) {
     suppressAff = true; const slot = loadInto(story, resumeSlot); suppressAff = false;
+    if (!slot) { next(); return { root, story }; } // 비호환/손상 세이브 → 처음부터
     for (const k of Object.keys(CHARS)) prevAff[k] = story.variablesState[`aff_${k}`] ?? 0;
-    if (slot) restoreView(slot.preview);
+    restoreView(slot.preview);
     if (story.currentChoices.length) renderChoices(story.currentChoices);
     else { mode = "line"; nextEl.hidden = false; }
   } else {
