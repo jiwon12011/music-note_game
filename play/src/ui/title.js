@@ -28,6 +28,7 @@ export function createTitle({ onNew, onContinue, onCollection, onSettings }) {
   ).join("");
 
   screen.innerHTML = `
+    <a class="title-home" href="../index.html" aria-label="웹사이트로 돌아가기"><span>←</span> 웹사이트</a>
     <div class="title-stage" aria-hidden="true">
       <div class="title-bg" style="background-image:url('${ASSET}/bg/station.webp')"></div>
       <div class="title-grooves"></div>

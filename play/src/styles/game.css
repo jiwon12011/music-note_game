@@ -195,6 +195,22 @@ button { font-family: inherit; cursor: pointer; }
 
 .title-footer { position: absolute; bottom: 16px; z-index: 8; font-size: .7rem; letter-spacing: .1em; color: rgba(246,233,227,.4); }
 
+/* 웹사이트(랜딩)로 돌아가기 — 타이틀 좌상단 글래스 백 버튼 */
+.title-home {
+  position: absolute; top: 22px; left: 24px; z-index: 9;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 9px 16px; border-radius: 999px; text-decoration: none;
+  background: rgba(20,14,16,.5); border: 1px solid rgba(246,233,227,.26);
+  color: rgba(246,233,227,.85); font-family: var(--font-display); font-weight: 600;
+  font-size: .82rem; letter-spacing: .02em;
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  transition: background .24s var(--ease), color .24s var(--ease), border-color .24s var(--ease), transform .24s var(--ease);
+}
+.title-home span { font-size: 1rem; line-height: 1; transition: transform .24s var(--ease); }
+.title-home:hover { background: rgba(239,148,172,.22); color: #fff; border-color: var(--c-primary); }
+.title-home:hover span { transform: translateX(-3px); }
+@media (max-width: 600px) { .title-home { top: 16px; left: 14px; padding: 8px 13px; font-size: .76rem; } }
+
 /* ============================================================
    공통 오버레이 (메뉴/설정/세이브/컬렉션)
    ============================================================ */
