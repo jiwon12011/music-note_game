@@ -359,13 +359,109 @@
     const g = window.gsap;
     if (window.ScrollTrigger) g.registerPlugin(window.ScrollTrigger);
 
-    // 히어로 LP 등장: 아래에서 떠오르며 줌인 + 살짝 기울었다 탄성있게 제자리로
-    // (등장 후 transform 정리 → 스크롤은 매끄럽게 유지)
-    g.from(".hero-lp", { autoAlpha: 0, y: 92, scale: 0.78, rotation: -5,
-      duration: 1.4, ease: "back.out(1.5)",
-      onComplete() { g.set(".hero-lp", { clearProps: "transform" }); } });
+    /* ── 4. 히어로 등장 오케스트레이션 ─────────────────────────────────
+       hero-stage 에서 reveal 클래스를 제거했으므로 GSAP이 단독으로 등장 관리.
+       레이어 순: 배경 → 필름 → LP → 배지 → 챕터 라벨 순차 타임라인.   */
+    const heroTL = g.timeline({ defaults: { ease: "power2.out" } });
 
-    // 브라운 위 음표: 스크롤 진입 시 하나씩 팝 등장 + 각자 살짝 둥실
+    // 0. 배경 이미지: 살짝 줌 아웃 + 페이드인
+    heroTL.from(".hero-bg-img", {
+      autoAlpha: 0, scale: 1.04,
+      duration: 1.1, ease: "power2.out",
+    }, 0);
+
+    // 1. 필름스트립: 오른쪽에서 슬라이드
+    heroTL.from(".filmstrip--hero", {
+      autoAlpha: 0, x: 30,
+      duration: 0.9, ease: "power2.out",
+    }, 0.18);
+
+    // 2. LP: 아래에서 떠오르며 탄성 (기존 연출 유지)
+    heroTL.from(".hero-lp", {
+      autoAlpha: 0, y: 92, scale: 0.78, rotation: -5,
+      duration: 1.4, ease: "back.out(1.5)",
+      onComplete() { g.set(".hero-lp", { clearProps: "transform" }); },
+    }, 0.12);
+
+    // 3. 배지: 아래서 + 탄성
+    heroTL.from(".hero-badge", {
+      autoAlpha: 0, y: 20,
+      duration: 0.7, ease: "back.out(1.6)",
+    }, 0.72);
+
+    // 4. 챕터 라벨: 살짝 위에서
+    heroTL.from(".hero-chapter", {
+      autoAlpha: 0, y: 10,
+      duration: 0.55, ease: "power2.out",
+    }, 0.90);
+
+    /* ── 5. 히어로 배경 패럴랙스 ─────────────────────────────────────── */
+    if (window.ScrollTrigger) {
+      window.ScrollTrigger.create({
+        trigger: ".hero",
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.2,
+        onUpdate(self) {
+          g.set(".hero-bg-img", { y: self.progress * -60 });
+        },
+      });
+
+      /* ── 6. ABOUT 사진 패럴랙스 ────────────────────────────────────── */
+      window.ScrollTrigger.create({
+        trigger: ".about-photo",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1.2,
+        onUpdate(self) {
+          g.set(".about-photo img", { y: self.progress * -40 });
+        },
+      });
+
+      /* ── 7. 배너 배경 줌 스크럽 ────────────────────────────────────── */
+      g.fromTo(".banner-bg",
+        { scale: 1.06 },
+        { scale: 1,
+          scrollTrigger: {
+            trigger: ".banner",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.5,
+          },
+        }
+      );
+
+      /* ── 8. hero-chapter 스크롤 페이드아웃 ─────────────────────────── */
+      g.to(".hero-chapter", {
+        autoAlpha: 0, y: 12,
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "30% top",
+          scrub: true,
+        },
+      });
+
+      /* ── 9. section-num pop (scale 0→1 back.out) ────────────────────
+         GSAP이 직접 관리하므로 해당 요소는 IO .reveal-left 와 충돌하지 않도록
+         gsap.set 으로 초기 상태를 인라인으로 미리 잡아둔다.               */
+      document.querySelectorAll(".section-num").forEach((num) => {
+        // IO가 transform:translateX(-56px) 을 넣기 전에 GSAP이 먼저 scale:0 확정
+        g.set(num, { scale: 0, transformOrigin: "50% 50%" });
+        g.to(num, {
+          scale: 1, duration: 0.55, ease: "back.out(2)",
+          scrollTrigger: {
+            trigger: num,
+            start: "top 84%",
+            once: true,
+          },
+          onComplete() { g.set(num, { clearProps: "scale,transformOrigin" }); },
+        });
+      });
+
+    }
+
+    /* ── 브라운 위 음표: 스크롤 진입 시 하나씩 팝 등장 + 각자 살짝 둥실 ── */
     if (storyNotes.length) {
       const els = storyNotes.map((o) => o.el);
       if (window.ScrollTrigger) {
@@ -385,7 +481,7 @@
       });
     }
 
-    // 히어로 LP 호버: 위로 음표(♪♫♬) 하나씩 둥실 떠오름
+    /* ── 히어로 LP 호버: 위로 음표(♪♫♬) 하나씩 둥실 떠오름 ───────────── */
     const heroLp = document.querySelector(".hero-lp");
     const heroStage = document.querySelector(".hero-stage");
     if (heroLp && heroStage) {
@@ -438,11 +534,12 @@
     }
 
     if (window.ScrollTrigger) {
-      // 스틸 스태거 등장 — 3D 카드 플립 인 (왼쪽 축으로 펼쳐지듯)
-      g.set(".still-grid", { perspective: 900 });
-      g.from(".still", { autoAlpha: 0, rotationY: -58, y: 16, transformOrigin: "left center",
-        stagger: { each: 0.09, from: "start" }, duration: 0.75, ease: "power3.out",
-        scrollTrigger: { trigger: ".still-grid", start: "top 80%", once: true } });
+      // 스틸 스태거 등장 — 아래에서 솟아오르며 살짝 팝(탄성), 격자 웨이브
+      g.from(".still", { autoAlpha: 0, y: 46, scale: 0.9,
+        stagger: { each: 0.08, from: "start", grid: "auto" },
+        duration: 0.7, ease: "back.out(1.5)",
+        scrollTrigger: { trigger: ".still-grid", start: "top 82%", once: true },
+        clearProps: "scale" });
     }
 
     // 호버 (GSAP 인라인이 CSS transform 위로 덮음) — 버튼/스틸/썸네일
@@ -458,6 +555,12 @@
     document.querySelectorAll(".thumb").forEach((t) =>
       hov(t, () => g.to(t, { y: -4, scale: 1.05, duration: 0.22, ease: "power2.out" }),
              () => g.to(t, { y: 0, scale: 1, duration: 0.22, ease: "power2.out" })));
+
+    /* ── 12. layoutNotes 후 ScrollTrigger.refresh() 순서 보장 ───────────
+       이미지 로드 완료 → 음표 재배치 → ScrollTrigger 재계산 (높이 변동 반영)   */
+    window.addEventListener("load", () => {
+      if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+    });
   }
 
   /* =====================================================================
@@ -470,7 +573,8 @@
      · 텍스트(이름/역할/설명/대사) stagger 슬라이드
      · 연타 안전: 진행 중 타임라인 kill + clearProps 후 새 타임라인 시작
      ===================================================================== */
-  let _swapTL = null;   // 현재 진행 중인 swap 타임라인 참조
+  let _swapTL = null;         // 현재 진행 중인 swap 타임라인 참조
+  let _spawnTimers = [];      // _spawnCharNotes setTimeout ID — 연타 시 clearTimeout용
 
   function _swapCharGSAP(gsap, key, data, dir) {
     const stage = document.querySelector(".char-visual");
@@ -484,6 +588,10 @@
       charMain.classList.remove("swapping");
     }
 
+    // 연타 시 이전 파티클 setTimeout도 모두 취소 (DOM 누적 방지)
+    _spawnTimers.forEach((id) => clearTimeout(id));
+    _spawnTimers = [];
+
     // 퇴장 방향: dir=+1(다음) → 위로 퇴장, dir=-1(이전) → 아래로 퇴장
     const exitY  = dir > 0 ? -55 : 55;
     const enterY = dir > 0 ?  60 : -60;
@@ -494,12 +602,11 @@
     const tl = gsap.timeline({ onComplete() { _swapTL = null; } });
     _swapTL = tl;
 
-    // ── 0. 퇴장: 현재 캐릭터 슬라이드 아웃 ──
+    // ── 0. 퇴장: 현재 캐릭터 슬라이드 아웃 (합성 전용 — filter 제거)
     // CSS transition이 GSAP과 충돌하지 않도록 transition 일시 제거
     charMain.style.transition = "none";
     tl.to(charMain, {
       y: exitY, scale: 0.82, opacity: 0,
-      filter: "blur(4px)",
       duration: 0.26, ease: "power3.in",
       transformOrigin: "50% 100%",
     }, 0);
@@ -527,15 +634,15 @@
       _spawnCharNotes(gsap, stage);
     }, null, 0.24);
 
-    // ── 2. 등장: 반대 방향에서 탄성 솟구침 ──
+    // ── 2. 등장: 반대 방향에서 탄성 솟구침 (합성 only — filter 없음, back.out 유지)
     tl.fromTo(charMain,
-      { y: enterY, scale: 0.78, opacity: 0, filter: "blur(6px)", rotation: dir > 0 ? 6 : -6, transformOrigin: "50% 100%" },
-      { y: 0,      scale: 1,    opacity: 1, filter: "blur(0px)", rotation: 0,
+      { y: enterY, scale: 0.78, opacity: 0, rotation: dir > 0 ? 6 : -6, transformOrigin: "50% 100%" },
+      { y: 0,      scale: 1,    opacity: 1, rotation: 0,
         duration: 0.62, ease: "back.out(1.8)",
         onComplete() {
           // CSS transition 복원 + 잔여 인라인 정리
           charMain.style.transition = "";
-          gsap.set(charMain, { clearProps: "filter,rotation,scale,x,y,opacity" });
+          gsap.set(charMain, { clearProps: "rotation,scale,x,y,opacity" });
         },
       }, 0.22);
 
@@ -567,7 +674,7 @@
     for (let i = 0; i < COUNT; i++) {
       // 딜레이 분산: 0~0.55s 사이에 등장 → 폭죽처럼 퍼짐
       const delay = rand(0, 0.55);
-      setTimeout(() => {
+      const tid = setTimeout(() => {
         const span = document.createElement("span");
         span.className = "char-note-particle";
         span.textContent = pick(GLYPHS);
@@ -599,6 +706,7 @@
             },
           });
       }, delay * 1000);
+      _spawnTimers.push(tid);
     }
   }
 })();

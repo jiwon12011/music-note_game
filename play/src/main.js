@@ -1,4 +1,5 @@
 // 게임 부트스트랩 — 타이틀 → 닉네임 → Ink 챕터1, 이어하기/컬렉션/설정 연결.
+import { playPrologue } from "./ui/prologue.js";
 import { createTitle } from "./ui/title.js";
 import { createNickname } from "./ui/nickname.js";
 import { startGame } from "./ui/game.js";
@@ -32,4 +33,7 @@ function showNickname() {
   app.appendChild(createNickname({ onConfirm: (name) => startGame(app, { player: name, onExit }) }));
 }
 
-showTitle();
+// 게임 진입 → 프롤로그(시네마틱 오프닝) 먼저 재생 → 타이틀 화면
+// (타이틀로 돌아올 땐 showTitle 직접 호출하므로 프롤로그는 최초 진입 1회만)
+clearApp();
+playPrologue(app, { onDone: showTitle });

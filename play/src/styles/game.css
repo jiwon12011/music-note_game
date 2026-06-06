@@ -475,3 +475,81 @@ button { font-family: inherit; cursor: pointer; }
   .title-cast { transition: none; }
   .screen { transition: none; }
 }
+
+/* ============================================================
+   프롤로그 (게임 진입 시 타이틀 전 시네마틱 오프닝)
+   ============================================================ */
+.prologue { background: #0c0809; overflow: hidden; }
+.pro-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background-size: cover; background-position: center;
+  transform: scale(1.12);
+  animation: proKen 22s ease-out forwards;
+}
+.pro-bg-next { z-index: 1; opacity: 0; transform: none; animation: none; transition: opacity .9s var(--ease); }
+.pro-bg-next.show { opacity: 1; }
+@keyframes proKen { from { transform: scale(1.12) translateY(1.5%); } to { transform: scale(1.0) translateY(-1.5%); } }
+
+/* 분위기 어둡게 + 비네팅 */
+.pro-vignette {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 42%, transparent 30%, rgba(8,5,6,.55) 78%, rgba(8,5,6,.85) 100%),
+    linear-gradient(180deg, rgba(8,5,6,.45) 0%, transparent 30%, transparent 55%, rgba(8,5,6,.78) 100%);
+}
+/* 시네마틱 레터박스 (위·아래 검은 띠, 시작 시 슬라이드 인) */
+.pro-bar { position: absolute; left: 0; right: 0; height: 8.5vh; z-index: 5; background: #000; pointer-events: none; }
+.pro-bar-top { top: 0; transform: translateY(-100%); animation: proBarTop 1s var(--ease) .15s forwards; }
+.pro-bar-bottom { bottom: 0; transform: translateY(100%); animation: proBarBottom 1s var(--ease) .15s forwards; }
+@keyframes proBarTop { to { transform: translateY(0); } }
+@keyframes proBarBottom { to { transform: translateY(0); } }
+
+/* 떠다니는 음표 */
+.pro-notes { position: absolute; inset: 0; z-index: 3; pointer-events: none; overflow: hidden; }
+.pro-note {
+  position: absolute; bottom: 8%; color: var(--c-primary); opacity: .32;
+  text-shadow: 0 2px 12px rgba(239,148,172,.5); animation: noteRise linear infinite;
+}
+
+/* 독백 자막 */
+.pro-line {
+  position: absolute; left: 50%; top: 60%; transform: translate(-50%, 0);
+  z-index: 6; width: min(86%, 760px); text-align: center;
+  font-family: var(--font-body); font-size: clamp(1.1rem, 2.6vw, 1.5rem); line-height: 1.7;
+  color: #fff; letter-spacing: .01em;
+  text-shadow: 0 2px 18px rgba(0,0,0,.7), 0 0 30px rgba(0,0,0,.5);
+}
+.pro-line.fade-in { animation: proLineIn .5s var(--ease) both; }
+.pro-line.fade-out { animation: proLineOut .42s var(--ease) both; }
+@keyframes proLineIn { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes proLineOut { from { opacity: 1; transform: translate(-50%, 0); } to { opacity: 0; transform: translate(-50%, -10px); } }
+.pro-cursor { color: var(--c-primary); animation: vnCursor 1s steps(1) infinite; }
+@keyframes vnCursor { 50% { opacity: 0; } }
+
+/* 건너뛰기 + 힌트 */
+.pro-skip {
+  position: absolute; top: calc(8.5vh + 18px); right: 28px; z-index: 8;
+  padding: 8px 18px; border-radius: 999px;
+  background: rgba(20,14,16,.5); border: 1px solid rgba(246,233,227,.28);
+  color: rgba(246,233,227,.82); font-family: var(--font-display); font-weight: 600; font-size: .82rem;
+  letter-spacing: .04em; cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  transition: background .24s var(--ease), color .24s var(--ease), border-color .24s var(--ease);
+}
+.pro-skip:hover { background: rgba(239,148,172,.22); color: #fff; border-color: var(--c-primary); }
+.pro-hint {
+  position: absolute; left: 0; right: 0; bottom: calc(8.5vh + 16px); z-index: 7; text-align: center;
+  font-size: .72rem; letter-spacing: .14em; color: rgba(246,233,227,.4);
+  animation: proHintPulse 2.4s ease-in-out infinite;
+}
+@keyframes proHintPulse { 0%,100% { opacity: .3; } 50% { opacity: .7; } }
+
+/* 종료 — 페이드 아웃 */
+.prologue.pro-out { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .pro-bg, .pro-bar-top, .pro-bar-bottom, .pro-note, .pro-hint { animation: none; }
+  .pro-bg { transform: scale(1.02); }
+  .pro-bar-top { transform: translateY(0); }
+  .pro-bar-bottom { transform: translateY(0); }
+  .pro-line.fade-in, .pro-line.fade-out { animation: none; }
+}
