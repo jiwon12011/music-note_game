@@ -6,10 +6,17 @@ import { startGame } from "./ui/game.js";
 import { openCollection } from "./ui/collection.js";
 import { openSettings } from "./ui/settings.js";
 import { toast } from "./ui/toast.js";
+import { audio } from "./ui/audio.js";
 import { continueSlot } from "./state/saves.js";
 
 const app = document.getElementById("app");
 const onExit = () => { toast("이야기를 끝까지 함께해 주셔서 고마워요 ♪", 2400); setTimeout(showTitle, 1400); };
+
+// 오토플레이 정책 — 첫 사용자 제스처에서 오디오 활성화
+const unlockAudio = () => audio.unlock();
+window.addEventListener("pointerdown", unlockAudio);
+window.addEventListener("touchstart", unlockAudio);
+window.addEventListener("keydown", unlockAudio);
 
 // 화면 교체: 떠나는 화면의 정리 훅(_cleanup)을 호출해 이벤트 리스너 누수 방지
 function clearApp() {
@@ -20,6 +27,7 @@ function clearApp() {
 
 function showTitle() {
   clearApp();
+  audio.setAmbient("none"); // 타이틀에선 배경음 정지
   app.appendChild(createTitle({
     onNew: showNickname,
     onContinue: () => { const s = continueSlot(); if (s == null) return toast("저장된 곡이 없어요"); startGame(app, { resumeSlot: s, onExit }); },

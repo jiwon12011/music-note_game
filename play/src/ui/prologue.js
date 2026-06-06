@@ -1,5 +1,6 @@
 // 프롤로그 — 게임 진입 시 타이틀 화면 전에 재생되는 시네마틱 오프닝 독백.
 // 클릭/스페이스로 진행을 빠르게, "건너뛰기"로 즉시 타이틀로. (랜딩 오프닝 모달과 같은 내레이션)
+import { audio, bgAmbient } from "./audio.js";
 
 const ASSET = "public/img";
 
@@ -55,6 +56,7 @@ export function playPrologue(app, { onDone }) {
   const setBg = (key) => {
     if (key === curBg) return;
     curBg = key;
+    audio.setAmbient(bgAmbient(key)); // 기차→지하철 등 장면 앰비언스
     // 진짜 크로스페이드: bgA(현재) 위로 bgB(다음)를 부드럽게 페이드인 → 끝난 뒤 bgA에 승격
     bgB.style.backgroundImage = `url('${ASSET}/bg/${key}.webp')`;
     requestAnimationFrame(() => bgB.classList.add("show"));

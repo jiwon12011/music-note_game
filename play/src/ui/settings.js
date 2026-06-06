@@ -1,6 +1,7 @@
 // 설정 오버레이 — 텍스트 속도 / BGM·SE 음량
 import { settings } from "../state/settings.js";
 import { openOverlay } from "./overlay.js";
+import { audio } from "./audio.js";
 
 export function openSettings() {
   const s = settings.get();
@@ -28,7 +29,7 @@ export function openSettings() {
     sl.addEventListener("input", () => {
       const k = sl.dataset.k;
       if (k === "textSpeed") { settings.set({ textSpeed: +sl.value }); panel.querySelector('[data-v="speed"]').textContent = speedLabel(+sl.value); }
-      else { const val = +sl.value / 100; settings.set({ [k]: val }); panel.querySelector(`[data-v="${k === "bgmVolume" ? "bgm" : "se"}"]`).textContent = sl.value + "%"; }
+      else { const val = +sl.value / 100; settings.set({ [k]: val }); audio.applyVolumes(); panel.querySelector(`[data-v="${k === "bgmVolume" ? "bgm" : "se"}"]`).textContent = sl.value + "%"; }
     });
   });
   panel.querySelector('[data-act="close"]').addEventListener("click", close);

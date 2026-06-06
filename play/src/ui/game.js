@@ -10,6 +10,7 @@ import { openCollection } from "./collection.js";
 import { openAffection } from "./affection.js";
 import { openOverlay } from "./overlay.js";
 import { toast } from "./toast.js";
+import { audio, bgAmbient } from "./audio.js";
 
 const ENDINGS_TOTAL = 12; // 해피 6 + 노멀 6 (솔로 제외)
 
@@ -77,7 +78,7 @@ export async function startGame(app, opts = {}) {
     cgEl.style.backgroundImage = `url('${ASSET}/cg/${id}.webp')`; cgEl.classList.add("show");
     const tr = trackByCg(id); if (tr) profile.unlockTrack(tr.id); // 컬렉션 해금
   };
-  const setBg = (k) => { if (k && k !== view.bg) { view.bg = k; bgEl.style.backgroundImage = `url('${ASSET}/bg/${k}.webp')`; clearCg(); } };
+  const setBg = (k) => { if (k && k !== view.bg) { view.bg = k; bgEl.style.backgroundImage = `url('${ASSET}/bg/${k}.webp')`; clearCg(); audio.setAmbient(bgAmbient(k)); } };
   const showChar = (k, o, p = "center") => {
     view.char = { key: k, outfit: o, pos: p };
     charEl.hidden = false; charEl.style.opacity = ""; charEl.className = `scene-char pos-${p} enter`;
@@ -104,7 +105,7 @@ export async function startGame(app, opts = {}) {
       const id = t.collect.trim(); let got = false;
       if (id.startsWith("pl-")) got = profile.unlockPolaroid(id);
       else if (id.startsWith("ly-")) got = profile.unlockLyric(id);
-      if (got) toast(id.startsWith("pl-") ? "📷 폴라로이드를 모았어요" : "🎵 가사 조각을 모았어요");
+      if (got) { audio.playSe("note"); toast(id.startsWith("pl-") ? "📷 폴라로이드를 모았어요" : "🎵 가사 조각을 모았어요"); }
     }
     if (t.note) showNote(t.note);   // 호칭 자막 등 감성 레이어
     if (t.popup) showPopup(t.popup); // 챕터3 분기 알림 등
