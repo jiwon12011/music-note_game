@@ -53,15 +53,15 @@ button { font-family: inherit; cursor: pointer; }
 }
 /* 배경 사진 — 어둡게/살짝 블러해 캐릭터를 띄움 */
 .title-bg { position: absolute; inset: 0; z-index: 0;
-  background-size: cover; background-position: center 38%;
+  background-size: cover; background-position: center 40%;
   transform: scale(1.08);
-  filter: brightness(.44) saturate(.9);
+  filter: brightness(.92) saturate(1.02);
   animation: titleDrift 26s ease-in-out infinite alternate;
 }
 .title-bg::after { content: ""; position: absolute; inset: 0;
   background:
-    radial-gradient(120% 80% at 50% 6%, rgba(239,148,172,.14), transparent 52%),
-    linear-gradient(180deg, rgba(18,12,15,.55) 0%, rgba(18,12,15,.34) 38%, rgba(18,12,15,.62) 78%, rgba(18,12,15,.92) 100%);
+    radial-gradient(120% 80% at 50% 4%, rgba(255,193,150,.16), transparent 50%),
+    linear-gradient(180deg, rgba(40,24,30,.22) 0%, transparent 30%, transparent 58%, rgba(24,14,18,.72) 100%);
 }
 @keyframes titleDrift { from { transform: scale(1.08) translateY(0); } to { transform: scale(1.13) translateY(-1.6%); } }
 
@@ -101,8 +101,8 @@ button { font-family: inherit; cursor: pointer; }
 /* 중앙 가독성 스크림 + 바닥 페이드 */
 .title-scrim { position: absolute; inset: 0; z-index: 6; pointer-events: none;
   background:
-    radial-gradient(ellipse 46% 86% at 50% 54%, rgba(15,10,13,.5) 0%, rgba(15,10,13,.28) 48%, rgba(15,10,13,0) 76%),
-    linear-gradient(180deg, rgba(15,10,13,.36) 0%, transparent 22%, transparent 60%, rgba(15,10,13,.88) 100%);
+    radial-gradient(ellipse 46% 84% at 50% 54%, rgba(20,12,16,.42) 0%, rgba(20,12,16,.2) 48%, rgba(20,12,16,0) 76%),
+    linear-gradient(180deg, rgba(20,12,16,.22) 0%, transparent 24%, transparent 62%, rgba(20,12,16,.72) 100%);
 }
 
 /* 떠다니는 음표 (장식, 절제) */

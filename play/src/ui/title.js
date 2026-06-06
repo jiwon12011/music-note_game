@@ -29,7 +29,7 @@ export function createTitle({ onNew, onContinue, onCollection, onSettings }) {
 
   screen.innerHTML = `
     <div class="title-stage" aria-hidden="true">
-      <div class="title-bg" style="background-image:url('${ASSET}/bg/rooftop-night.webp')"></div>
+      <div class="title-bg" style="background-image:url('${ASSET}/bg/station.webp')"></div>
       <div class="title-grooves"></div>
       <div class="title-cast">${castHTML}</div>
       <div class="title-scrim"></div>
