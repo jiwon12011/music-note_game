@@ -22,13 +22,18 @@ export function createTitle({ onNew, onContinue, onCollection, onSettings }) {
 
   const canContinue = hasAnySave();
 
+  // 랜딩으로 돌아가는 경로 — 통합 서빙(/play/)이면 상위, vite dev(play/가 루트)면 별도 랜딩 서버로
+  const inPlay = location.pathname.includes("/play/");
+  const isLocal = location.hostname === "localhost" || location.hostname === "127.0.0.1";
+  const homeHref = inPlay ? "../index.html" : (isLocal ? "http://localhost:8080/" : "/");
+
   const castHTML = CAST.map(
     (c) =>
       `<img class="cast cast-${c.pos}" src="${ASSET}/char/${c.name}/${c.slug}.webp" alt="${c.label}" draggable="false" loading="eager">`
   ).join("");
 
   screen.innerHTML = `
-    <a class="title-home" href="../index.html" aria-label="웹사이트로 돌아가기"><span>←</span> 웹사이트</a>
+    <a class="title-home" href="${homeHref}" aria-label="웹사이트로 돌아가기"><span>←</span> 웹사이트</a>
     <div class="title-stage" aria-hidden="true">
       <div class="title-bg" style="background-image:url('${ASSET}/bg/station.webp')"></div>
       <div class="title-grooves"></div>
