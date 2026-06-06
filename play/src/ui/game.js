@@ -9,6 +9,7 @@ import { openSettings } from "./settings.js";
 import { openCollection } from "./collection.js";
 import { openAffection } from "./affection.js";
 import { openOverlay } from "./overlay.js";
+import { toast } from "./toast.js";
 
 const ENDINGS_TOTAL = 12; // 해피 6 + 노멀 6 (솔로 제외)
 
@@ -99,6 +100,12 @@ export async function startGame(app, opts = {}) {
     if (t.char) { const [k, o, p] = t.char.split(/\s+/); showChar(k, o, p || "center"); }
     if (t.cg) showCg(t.cg); // CG 는 bg/char 다음 (화면 덮음)
     if (t.ending) { profile.markEnding(t.ending); lastEnding = t.ending; } // 본 엔딩 기록 + 크레딧용
+    if (t.collect) { // 서브 수집: 폴라로이드(pl-) / 가사조각(ly-)
+      const id = t.collect.trim(); let got = false;
+      if (id.startsWith("pl-")) got = profile.unlockPolaroid(id);
+      else if (id.startsWith("ly-")) got = profile.unlockLyric(id);
+      if (got) toast(id.startsWith("pl-") ? "📷 폴라로이드를 모았어요" : "🎵 가사 조각을 모았어요");
+    }
     if (t.note) showNote(t.note);   // 호칭 자막 등 감성 레이어
     if (t.popup) showPopup(t.popup); // 챕터3 분기 알림 등
     setSpeaker(t.speaker || null);
@@ -212,7 +219,7 @@ export async function startGame(app, opts = {}) {
       <button class="menu-item" data-a="title">타이틀로</button></div>`;
     const { close } = openOverlay(panel);
     panel.querySelector('[data-a="resume"]').addEventListener("click", close);
-    panel.querySelector('[data-a="save"]').addEventListener("click", () => { close(); openSaveLoad("save", { onPick: (slot) => { save(slot, story, getPreview()); } }); });
+    panel.querySelector('[data-a="save"]').addEventListener("click", () => { close(); openSaveLoad("save", { onPick: (slot) => { const ok = save(slot, story, getPreview()); toast(ok ? `슬롯 ${slot + 1}에 저장했어요 ♪` : "저장에 실패했어요"); } }); });
     panel.querySelector('[data-a="load"]').addEventListener("click", () => { close(); openSaveLoad("load", { onPick: (slot) => { startGame(app, { ...opts, resumeSlot: slot }); } }); });
     panel.querySelector('[data-a="affection"]').addEventListener("click", () => { close(); openAffection(story); });
     panel.querySelector('[data-a="settings"]').addEventListener("click", () => { close(); openSettings(); });

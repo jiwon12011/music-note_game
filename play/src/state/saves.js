@@ -1,7 +1,7 @@
 // 세이브 슬롯 (Ink 상태 직렬화). 진실=story.state.ToJson(), preview=슬롯목록 표시용 캐시.
 import { storage } from "./storage.js";
 
-export const SLOT_COUNT = 5;
+export const SLOT_COUNT = 6;
 const SCHEMA_V = 1;
 // 스토리 구조 버전 — 본편(Ink) 구조가 크게 바뀌면 올린다. 옛 세이브의 Ink 상태는
 // 컨테이너 인덱스가 어긋나 LoadJson 시 throw 할 수 있으므로, 불일치 세이브는 무효 처리.

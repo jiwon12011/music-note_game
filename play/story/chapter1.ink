@@ -84,6 +84,7 @@ VAR spoke_up = false              // 회의실에서 처음으로 목소리를 �
 # scene: 냉장고 앞
 # bg: kitchen
 # cg: cg-01
+# collect: pl-1
 늦은 밤. 물을 마시러 나왔다가, 냉장고 앞에서 다시 최준혁과 마주쳤다.
 # speaker: choijunhyeok
 안 자고 뭐 해요?
@@ -108,6 +109,7 @@ VAR spoke_up = false              // 회의실에서 처음으로 목소리를 �
 # char: yunjaeho coat center
 잠이 오지 않아 옥상에 올라갔다. 먼저 와 있는 사람이 있었다.
 작곡가 윤재호. 회사에서 나는, 그의 트랙 파일을 관리하는 보조다. 이 집에서 마주치는 건 오늘이 처음이다.
+# collect: ly-1
 난간에 기댄 그의 헤드폰 사이로 희미한 멜로디가 새어 나온다 — 한서아 데뷔곡의, 아직 완성되지 않은 트랙이라고 했다.
 끝나지 않은 노래처럼, 그도 어딘가 미완성으로 보였다.
 인기척에도 그는 돌아보지 않았다. 다만, 헤드폰 한쪽을 슬쩍 내렸다.
@@ -192,6 +194,7 @@ VAR spoke_up = false              // 회의실에서 처음으로 목소리를 �
     모니터엔 미완성 트랙의 파형. "…마감까지 3주." 그가 혼잣말처럼 중얼거리며, 의자 하나를 더 끌어다 줬다.
 * [오다은의 폴라로이드 정리를 돕는다]
     ~ aff_odaeun += 4
+    # collect: pl-2
     # speaker: odaeun
     오, 일손. 너 자주 와라. 진심으로.
 * [KAEL이 연습하는 소리에 귀 기울인다]
@@ -235,6 +238,7 @@ VAR spoke_up = false              // 회의실에서 처음으로 목소리를 �
 # bg: studio-night
 # char: yunjaeho work center
 오늘 오후, 정이안이 지시했다. "윤재호 트랙 폴더, 네가 백업 관리해요."
+# collect: ly-2
 새벽 스튜디오. 그가 말없이 트랙을 만지고 있다. 이제 저 파일들은, 내 책임이기도 하다.
 # speaker: yunjaeho
 …아직 안 갔어요?
@@ -277,6 +281,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 점심시간
 # bg: office
 # char: odaeun varsity center
+# collect: pl-3
 # speaker: odaeun
 점심! 근데 오늘 메뉴가 운명을 결정해. 진지하게 골라.
 오다은은 정말 진지한 얼굴로 메뉴판을 노려본다.
@@ -313,6 +318,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 사무실 야참
 # bg: office
 # char: odaeun jacket center
+# collect: pl-4
 야근이 길어진 밤. 자판기 앞에서 오다은과 정이안이 나란히 서 있었다.
 # speaker: odaeun
 이안 씨는 진짜… 커피를 무슨 밥처럼 먹어. 몸 좀 챙겨요.
@@ -1107,6 +1113,7 @@ KAEL 스케줄이 겹치는 사고. 오다은이 혼자 다 떠안다 무너지�
 # scene: 폴라로이드 앨범
 # bg: living-night
 # char: odaeun soft center
+# collect: pl-5
 오다은이 혼자만 보던 폴라로이드 앨범을 꺼냈다. 그 안엔, 내 사진이 제일 많았다.
 # speaker: odaeun
 …언제 이렇게 많이 찍었냐고? 모르게 찍었거든. 이 앨범 제일 앞 장이 너인 거 — 사실, 한참 됐어.
@@ -1123,6 +1130,7 @@ KAEL 스케줄이 겹치는 사고. 오다은이 혼자 다 떠안다 무너지�
 # scene: 무서운 마음
 # bg: rooftop-night
 # char: odaeun varsity center
+# collect: pl-6
 # speaker: odaeun
 나, 매니저 안 하면 아무것도 아닌데 — 너 앞에서는, 그냥 나 하나로도 괜찮을 것 같아서. 그게 무서워.
 * [“그냥 다은 씨가, 제일 좋아요.”]
@@ -1400,6 +1408,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 유실된 메모
 # bg: studio-night
 # char: yunjaeho tired center
+# collect: ly-4
 복구 실패한 파일 이야기가 나왔다.
 { ch3_helped_yunjaeho:
     # speaker: yunjaeho
@@ -1419,6 +1428,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 같은 이어폰
 # bg: rooftop-night
 # char: yunjaeho coat center
+# collect: ly-3
 옥상 새벽, 이어폰 한쪽씩 나눠 끼고 미완성 트랙을 들었다. 침묵이, 처음으로 편안했다.
 # speaker: yunjaeho
 …이 시간이, 요즘 제일 좋아요.
@@ -1471,6 +1481,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 === yunjaeho_e2_4 ===
 # scene: 문 앞의 악보
 # bg: room-night
+# collect: ly-5
 방문 앞에, 악보 한 장이 끼워져 있었다. 제목은 없고, 마지막 줄엔 — 내 이름만 적혀 있었다.
 말로 못 한 마음이, 음표로 거기 있었다.
 -> route_yunjaeho_e3
@@ -1502,6 +1513,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 무대 뒤
 # bg: backstage
 # char: yunjaeho green center
+# collect: ly-6
 공연이 끝난 백스테이지. 윤재호가, 처음으로 눈을 똑바로 마주쳤다.
 # speaker: yunjaeho
 말로는 늘 모자라다고 했는데… 오늘은, 말해도 될 것 같아요. {player}, 좋아해요.
