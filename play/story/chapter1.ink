@@ -106,7 +106,7 @@ VAR spoke_up = false              // 회의실에서 처음으로 목소리를 �
 === ch1_rooftop ===
 # scene: 옥상 밤바람
 # bg: rooftop-night
-# char: yunjaeho coat center
+# char: yunjaeho sweater center
 잠이 오지 않아 옥상에 올라갔다. 먼저 와 있는 사람이 있었다.
 작곡가 윤재호. 회사에서 나는, 그의 트랙 파일을 관리하는 보조다. 이 집에서 마주치는 건 오늘이 처음이다.
 # collect: ly-1
@@ -1427,7 +1427,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 === yunjaeho_e1_4 ===
 # scene: 같은 이어폰
 # bg: rooftop-night
-# char: yunjaeho coat center
+# char: yunjaeho sweater center
 # collect: ly-3
 옥상 새벽, 이어폰 한쪽씩 나눠 끼고 미완성 트랙을 들었다. 침묵이, 처음으로 편안했다.
 # speaker: yunjaeho
