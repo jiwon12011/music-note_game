@@ -38,7 +38,7 @@ export async function startGame(app, opts = {}) {
     <div class="vn-note" aria-hidden="true"></div>
     <div class="vn-popup" aria-hidden="true"></div>
     <div class="aff-popup"><span class="who"></span> <span class="heart">♥</span> <span class="delta"></span></div>
-    <button class="vn-menu-btn" title="메뉴 (ESC)">☰</button>
+    <button class="vn-menu-btn" title="메뉴 (ESC)" aria-label="메뉴"><span></span><span></span><span></span></button>
     <div class="scene-stage"><div class="vn-box">
       <span class="vn-speaker" hidden></span>
       <p class="vn-text"></p>
