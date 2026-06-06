@@ -25,6 +25,13 @@ export const TRACK_CATALOG = [
   { id: "t03", name: "냉장고 앞에서", bg: "kitchen", cg: "cg-01" },
   { id: "t04", name: "차가운 첫인상", bg: "living-day" },
   { id: "t05", name: "데뷔 무대", bg: "stage", cg: "cg-08" },
+  // 루트 전용 트랙 — 각 루트의 '그 사람의 밤' CG로 해금 (재플레이 동기)
+  { id: "t-hanseoa", name: "가사 속 네 이름 · 한서아", bg: "studio-night", cg: "cg-07-1" },
+  { id: "t-jeongian", name: "무언의 허락 · 정이안", bg: "studio-night", cg: "cg-07-2" },
+  { id: "t-odaeun", name: "갑옷을 벗은 밤 · 오다은", bg: "rooftop-night", cg: "cg-07-3" },
+  { id: "t-kael", name: "들켜버린 진심 · KAEL", bg: "rooftop-night", cg: "cg-07-4" },
+  { id: "t-yunjaeho", name: "메모가 일기였어요 · 윤재호", bg: "studio-night", cg: "cg-07-5" },
+  { id: "t-choijunhyeok", name: "혼자가 아니라는 말 · 최준혁", bg: "living-night", cg: "cg-07-6" },
 ];
 
 // `# cg: <id>` 로 해금된 CG → 매칭되는 트랙 찾기
