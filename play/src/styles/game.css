@@ -351,7 +351,13 @@ button { font-family: inherit; cursor: pointer; }
   position: absolute; bottom: 0; z-index: 1;
   height: 92%; width: auto; max-width: 70%;
   object-fit: contain; object-position: bottom;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,.45));
+  /* 어두운 배경에서도 캐릭터가 묻히지 않게 — 밝은 미세 림 + 은은한 핑크 글로우 + 바닥 그림자 + 살짝 밝기.
+     검은 머리·옷처럼 컷아웃이 어두운 스프라이트를 배경에서 분리해 준다. */
+  filter:
+    drop-shadow(0 0 1.5px rgba(246,233,227,.5))
+    drop-shadow(0 3px 16px rgba(239,148,172,.18))
+    drop-shadow(0 20px 40px rgba(0,0,0,.5))
+    brightness(1.05) saturate(1.03);
   transition: opacity .35s var(--ease), transform .35s var(--ease);
   pointer-events: none;
 }
@@ -396,7 +402,8 @@ button { font-family: inherit; cursor: pointer; }
 .vn-next[hidden] { display: none; }
 .vn-menu-btn {
   position: absolute; top: 18px; right: 20px; z-index: 4;
-  width: 44px; height: 44px; border-radius: 50%;
+  width: 44px; height: 44px; border-radius: 50%; padding: 0;
+  display: flex; align-items: center; justify-content: center; line-height: 1;
   background: rgba(43,33,32,.55); border: 1px solid rgba(239,148,172,.4);
   backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   color: var(--c-cream); font-size: 1.1rem; cursor: pointer;
