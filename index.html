@@ -13,10 +13,13 @@
   <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
-  <!-- LCP: 히어로 LP를 최우선으로 불러옴 -->
-  <link rel="preload" as="image" href="assets/hero-lp.webp" fetchpriority="high" />
+  <!-- LCP: 히어로 LP를 최우선으로 불러옴 (모바일은 900w 경량본) -->
+  <link rel="preload" as="image" href="assets/hero-lp.webp"
+        imagesrcset="assets/hero-lp-sm.webp 900w, assets/hero-lp.webp 1676w"
+        imagesizes="(max-width: 900px) 100vw, 1676px" fetchpriority="high" />
 </head>
 <body>
   <!-- ============ HEADER ============ -->
@@ -34,7 +37,7 @@
       <div class="header-actions">
         <a href="#home" class="btn btn-outline prologue-btn" id="prologueBtn">프롤로그</a>
         <a href="play/index.html" class="btn btn-primary start-btn">바로 시작하기</a>
-        <button class="icon-btn menu-toggle" id="menuToggle" aria-label="메뉴">≡</button>
+        <button class="icon-btn menu-toggle" id="menuToggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mainNav">≡</button>
       </div>
     </div>
   </header>
@@ -53,7 +56,7 @@
         <div class="hero-stage">
           <img class="hero-bg-img" src="assets/scene-station.webp" alt="" aria-hidden="true" width="1400" height="782" />
           <img class="filmstrip filmstrip--hero" src="assets/filmstrip.webp" alt="" aria-hidden="true" width="813" height="1442" />
-          <img class="hero-lp" src="assets/hero-lp.webp" alt="LP판 위의 등장인물들" width="1676" height="938" fetchpriority="high" />
+          <img class="hero-lp" src="assets/hero-lp.webp" srcset="assets/hero-lp-sm.webp 900w, assets/hero-lp.webp 1676w" sizes="(max-width: 900px) 100vw, 1676px" alt="LP판 위의 등장인물들" width="1676" height="938" fetchpriority="high" />
           <img class="hero-badge" src="assets/badge-play.webp" alt="지금 재생하기 — Play the Story" width="469" height="248" />
         </div>
       </div>
@@ -70,7 +73,7 @@
           <div class="section-head reveal-left">
             <span class="section-num">01</span>
             <div>
-              <span class="section-eyebrow">ABOUT</span>
+              <span class="section-eyebrow">STORY</span>
               <h2 class="section-title">한줄 소개</h2>
             </div>
           </div>
@@ -138,27 +141,27 @@
         <div class="still-grid reveal">
           <figure class="still">
             <img src="assets/still-stage.webp" alt="한서아 — 무대 위" loading="lazy" />
-            <figcaption class="still-cap"><span class="still-ch">한서아</span><span class="still-line">무대 위, 딱 한 사람만 보였어요</span></figcaption>
+            <figcaption class="still-cap"><span class="still-route">ROUTE 01</span><span class="still-ch">한서아</span><span class="still-line">무대 위, 딱 한 사람만 보였어요</span></figcaption>
           </figure>
           <figure class="still">
             <img src="assets/still-office.webp" alt="정이안 — 늦은 사무실" loading="lazy" />
-            <figcaption class="still-cap"><span class="still-ch">정이안</span><span class="still-line">완벽한 그녀의, 처음 보는 빈틈</span></figcaption>
+            <figcaption class="still-cap"><span class="still-route">ROUTE 02</span><span class="still-ch">정이안</span><span class="still-line">완벽한 그녀의, 처음 보는 빈틈</span></figcaption>
           </figure>
           <figure class="still">
             <img src="assets/scene-rooftop.webp" alt="KAEL — 도시가 내려다보이는 옥상" loading="lazy" />
-            <figcaption class="still-cap"><span class="still-ch">KAEL</span><span class="still-line">무대를 내려오면 — 관심 없는 척, 너만</span></figcaption>
+            <figcaption class="still-cap"><span class="still-route">ROUTE 03</span><span class="still-ch">KAEL</span><span class="still-line">무대를 내려오면 — 관심 없는 척, 너만</span></figcaption>
           </figure>
           <figure class="still">
             <img src="assets/scene-workroom.webp" alt="오다은 — 작업의 밤" loading="lazy" />
-            <figcaption class="still-cap"><span class="still-ch">오다은</span><span class="still-line">다 알고 있었다는 듯한, 그 미소</span></figcaption>
+            <figcaption class="still-cap"><span class="still-route">ROUTE 04</span><span class="still-ch">오다은</span><span class="still-line">다 알고 있었다는 듯한, 그 미소</span></figcaption>
           </figure>
           <figure class="still">
             <img src="assets/scene-rain.webp" alt="윤재호 — 빗속 귀가" loading="lazy" />
-            <figcaption class="still-cap"><span class="still-ch">윤재호</span><span class="still-line">말 대신, 빗속에 흘러나온 멜로디</span></figcaption>
+            <figcaption class="still-cap"><span class="still-route">ROUTE 05</span><span class="still-ch">윤재호</span><span class="still-line">말 대신, 빗속에 흘러나온 멜로디</span></figcaption>
           </figure>
           <figure class="still">
             <img src="assets/scene-study.webp" alt="최준혁 — 늦은 밤 서재" loading="lazy" />
-            <figcaption class="still-cap"><span class="still-ch">최준혁</span><span class="still-line">친절 뒤에 감춰둔, 한 사람의 자리</span></figcaption>
+            <figcaption class="still-cap"><span class="still-route">ROUTE 06</span><span class="still-ch">최준혁</span><span class="still-line">친절 뒤에 감춰둔, 한 사람의 자리</span></figcaption>
           </figure>
         </div>
       </div>
@@ -172,7 +175,7 @@
         <p class="banner-eyebrow">PLAYLIST : BETWEEN US</p>
         <h2 class="banner-title">우리 사이의 음표</h2>
         <p class="banner-desc">당신의 선택이 누군가의 노래가 됩니다. — 6개의 루트와 12가지 엔딩, 플레이할 때마다 당신만의 플레이리스트가 완성돼요.</p>
-        <a href="play/index.html" class="btn btn-primary">바로 시작하기 →</a>
+        <a href="play/index.html" class="btn btn-primary">첫 음표 재생하기 ♪</a>
       </div>
     </section>
   </main>
@@ -185,7 +188,7 @@
         <span class="logo-text"><strong>PLAYLIST</strong><small>BETWEEN US</small></span>
       </div>
       <nav class="footer-links">
-        <a href="proposal.html" class="footer-proposal">제안서 보기</a><a href="#">이용약관</a><a href="#">개인정보처리방침</a><a href="#">문의하기</a>
+        <a href="proposal.html" class="footer-proposal">제안서 보기</a><span class="footer-soon" aria-disabled="true" title="준비 중">이용약관</span><span class="footer-soon" aria-disabled="true" title="준비 중">개인정보처리방침</span><span class="footer-soon" aria-disabled="true" title="준비 중">문의하기</span>
       </nav>
       <p class="copyright">© 2026 Playlist : Between Us. All rights reserved.</p>
     </div>

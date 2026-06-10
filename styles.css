@@ -62,7 +62,7 @@ ul { list-style: none; }
    ============================================================ */
 .site-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1000; height: 76px;
-  background: rgba(250,241,236,.7); backdrop-filter: blur(14px);
+  background: rgba(250,241,236,.7); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid transparent;
   transition: background var(--dur), border-color var(--dur), box-shadow var(--dur);
 }
@@ -361,13 +361,18 @@ ul { list-style: none; }
   position: absolute; left: 0; right: 0; bottom: 0;
   display: flex; flex-direction: column; gap: 4px;
   padding: 16px 18px 14px;
-  background: linear-gradient(to top, rgba(43,33,32,.74), rgba(43,33,32,.3) 70%, transparent);
+  background: linear-gradient(to top, rgba(43,33,32,.82), rgba(43,33,32,.34) 70%, transparent);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-  color: #fff; text-align: left; text-shadow: 0 2px 6px rgba(0,0,0,.3);
+  color: #fff; text-align: left; text-shadow: 0 2px 8px rgba(0,0,0,.45);
   transform: translateY(101%); opacity: 0;
   transition: transform .42s var(--ease), opacity .42s var(--ease);
 }
 .still:hover .still-cap, .still:focus-within .still-cap { transform: translateY(0); opacity: 1; }
+/* 루트 번호 — 6컷이 6개 루트 진입점임을 암시 */
+.still-route {
+  font-family: var(--font-display); font-size: .58rem; font-weight: 700;
+  letter-spacing: .26em; color: rgba(246,201,214,.85);
+}
 .still-ch {
   font-family: var(--font-display); font-size: .68rem; font-weight: 700;
   letter-spacing: .16em; color: var(--color-primary);
@@ -405,6 +410,8 @@ ul { list-style: none; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 8px 16px; }
 .footer-links a { font-size: .88rem; opacity: .8; transition: opacity var(--dur), color var(--dur); }
 .footer-links a:hover { opacity: 1; color: var(--color-primary); }
+/* 아직 준비되지 않은 항목 — 링크처럼 안 보이게, 클릭/포커스 대상 아님 */
+.footer-soon { font-size: .88rem; opacity: .5; cursor: default; }
 .copyright { font-size: .8rem; opacity: .6; }
 
 /* ============================================================

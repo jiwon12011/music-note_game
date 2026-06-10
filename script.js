@@ -66,7 +66,7 @@
 
   /* ---------- 헤더 스크롤 효과 ---------- */
   const header = document.getElementById("siteHeader");
-  const onScroll = () => header.classList.toggle("scrolled", window.scrollY > 20);
+  const onScroll = () => { if (header) header.classList.toggle("scrolled", window.scrollY > 20); };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
 
@@ -104,8 +104,18 @@
   /* ---------- 모바일 메뉴 ---------- */
   const menuToggle = document.getElementById("menuToggle");
   const nav = document.getElementById("mainNav");
-  if (menuToggle) menuToggle.addEventListener("click", () => nav.classList.toggle("open"));
-  nav.addEventListener("click", (e) => { if (e.target.classList.contains("nav-link")) nav.classList.remove("open"); });
+  if (menuToggle && nav) {
+    menuToggle.addEventListener("click", () => {
+      const open = nav.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(open));
+    });
+  }
+  if (nav) nav.addEventListener("click", (e) => {
+    if (e.target.classList.contains("nav-link")) {
+      nav.classList.remove("open");
+      if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
+    }
+  });
 
   /* ---------- 인터랙티브 캐릭터 전환 ---------- */
   const CHARACTERS = {
@@ -201,6 +211,15 @@
   if (slot["-1"]) slot["-1"].addEventListener("click", () => go(-1));  // 위 미리보기 클릭 = 이전
   if (slot["1"]) slot["1"].addEventListener("click", () => go(1));     // 아래 미리보기 클릭 = 다음
   // 가운데(현재) 클릭은 변화 없음
+
+  // 키보드: 캐러셀에 포커스가 있을 때 화살표 키로 이전/다음 (WAI-ARIA 캐러셀 패턴)
+  const charSelector = document.querySelector(".char-selector");
+  if (charSelector) {
+    charSelector.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowUp" || e.key === "ArrowLeft") { e.preventDefault(); go(-1); }
+      else if (e.key === "ArrowDown" || e.key === "ArrowRight") { e.preventDefault(); go(1); }
+    });
+  }
 
   render(false);  // 초기 슬롯 셋업 (디테일은 HTML 기본값 유지)
 
@@ -336,7 +355,19 @@
     document.addEventListener("keydown", (e) => {
       if (!vnModal.classList.contains("open")) return;
       if (e.key === "Escape") { closeVn(); }
-      else if (e.key === " " || e.key === "Enter") { e.preventDefault(); advance(); }
+      else if (e.key === "Tab") {
+        // 포커스 트랩: 모달 안의 보이는 포커스 대상 사이에서만 순환 (배경으로 새지 않게)
+        const f = [vnClose, vnCta].filter((el) => el && el.offsetParent !== null);
+        if (!f.length) return;
+        const first = f[0], last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+        else if (!f.includes(document.activeElement)) { e.preventDefault(); first.focus(); }
+      }
+      // 대사 진행: 단, 닫기·CTA 버튼에 포커스가 있을 땐 그 버튼의 기본 동작을 살림
+      else if ((e.key === " " || e.key === "Enter") && e.target !== vnClose && e.target !== vnCta) {
+        e.preventDefault(); advance();
+      }
     });
   }
 
