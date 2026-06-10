@@ -25,19 +25,40 @@ function parseTags(tags) {
 
 export async function startGame(app, opts = {}) {
   const { player, onExit, resumeSlot } = opts;
-  const json = await fetch(STORY_URL).then((r) => r.text());
+
+  let json;
+  try {
+    const res = await fetch(STORY_URL);
+    if (!res.ok) throw new Error(`story ${res.status}`);
+    json = await res.text();
+  } catch (err) {
+    // 스토리 로드 실패(오프라인·404 등) → 빈 화면 대신 안내 후 타이틀 복귀
+    toast("이야기를 불러오지 못했어요. 잠시 후 다시 시도해 주세요.", 2600);
+    if (onExit) setTimeout(onExit, 1600);
+    return null;
+  }
   const story = new Story(json);
 
+  // 떠나는 화면의 정리 훅(_cleanup) 호출 — keydown 리스너 누수 방지
+  // (메뉴 '불러오기'/타이틀 '이어하기'가 startGame을 직접 호출하는 경로 보호)
+  app.querySelectorAll("*").forEach((el) => el._cleanup?.());
+  app._cleanup?.();
   app.innerHTML = "";
   const root = document.createElement("section");
   root.className = "screen scene active";
   root.innerHTML = `
     <div class="scene-bg"></div>
+    <div class="scene-bg scene-bg-next"></div>
     <img class="scene-char enter" alt="" hidden />
     <div class="scene-cg"></div>
     <div class="vn-note" aria-hidden="true"></div>
     <div class="vn-popup" aria-hidden="true"></div>
     <div class="aff-popup"><span class="who"></span> <span class="heart">♥</span> <span class="delta"></span></div>
+    <div class="vn-controls">
+      <button class="vn-ctrl" data-c="auto" aria-pressed="false" title="자동 진행"><span class="ctrl-ico">▶</span><span class="ctrl-lbl">AUTO</span></button>
+      <button class="vn-ctrl" data-c="skip" aria-pressed="false" title="빨리 감기"><span class="ctrl-ico">▸▸</span><span class="ctrl-lbl">SKIP</span></button>
+      <button class="vn-ctrl" data-c="log" title="지나온 대사"><span class="ctrl-ico">≡</span><span class="ctrl-lbl">로그</span></button>
+    </div>
     <button class="vn-menu-btn" title="메뉴 (ESC)" aria-label="메뉴"><span></span><span></span><span></span></button>
     <div class="scene-stage"><div class="vn-box">
       <span class="vn-speaker" hidden></span>
@@ -49,13 +70,15 @@ export async function startGame(app, opts = {}) {
   app.appendChild(root);
 
   const $ = (s) => root.querySelector(s);
-  const bgEl = $(".scene-bg"), charEl = $(".scene-char"), cgEl = $(".scene-cg");
+  const bgEl = $(".scene-bg:not(.scene-bg-next)"), bgNextEl = $(".scene-bg-next"), charEl = $(".scene-char"), cgEl = $(".scene-cg");
   const speakerEl = $(".vn-speaker"), textEl = $(".vn-text"), nextEl = $(".vn-next");
   const choicesEl = $(".vn-choices"), cardEl = $(".chapter-card"), affEl = $(".aff-popup");
   const noteEl = $(".vn-note"), popupEl = $(".vn-popup");
 
   let mode = "line", typing = false, typeTimer = null, curText = "", pending = null, suppressAff = false, cardTimer = null;
   let lastEnding = null, noteTimer = null, popupTimer = null;
+  // 한 줄 출력이 끝날 때 호출되는 훅 (Auto 진행 / 백로그 적재) — Wave 4에서 채움
+  let onLineDone = () => {};
 
   /* 호칭 자막(# note) — 대사창 위 별도 감성 레이어 */
   const showNote = (text) => {
@@ -78,12 +101,29 @@ export async function startGame(app, opts = {}) {
     cgEl.style.backgroundImage = `url('${ASSET}/cg/${id}.webp')`; cgEl.classList.add("show");
     const tr = trackByCg(id); if (tr) profile.unlockTrack(tr.id); // 컬렉션 해금
   };
-  const setBg = (k) => { if (k && k !== view.bg) { view.bg = k; bgEl.style.backgroundImage = `url('${ASSET}/bg/${k}.webp')`; clearCg(); audio.setAmbient(bgAmbient(k)); } };
+  let bgFadeTimer = null;
+  const setBg = (k) => {
+    if (!k || k === view.bg) return;
+    view.bg = k; clearCg(); audio.setAmbient(bgAmbient(k));
+    const url = `url('${ASSET}/bg/${k}.webp')`;
+    if (!bgEl.style.backgroundImage) { bgEl.style.backgroundImage = url; return; } // 첫 배경은 즉시
+    // 크로스페이드: 다음 배경을 위 레이어에 띄워 페이드인 → 끝나면 본 레이어로 승격(깜빡임 제거)
+    bgNextEl.style.backgroundImage = url;
+    requestAnimationFrame(() => bgNextEl.classList.add("show"));
+    clearTimeout(bgFadeTimer);
+    bgFadeTimer = setTimeout(() => { bgEl.style.backgroundImage = url; bgNextEl.classList.remove("show"); }, 600);
+  };
   const showChar = (k, o, p = "center") => {
     view.char = { key: k, outfit: o, pos: p };
-    charEl.hidden = false; charEl.style.opacity = ""; charEl.className = `scene-char pos-${p} enter`;
-    charEl.src = `${ASSET}/char/${k}/${o}.webp`; charEl.alt = charName(k);
-    requestAnimationFrame(() => requestAnimationFrame(() => charEl.classList.remove("enter")));
+    const url = `${ASSET}/char/${k}/${o}.webp`;
+    const reveal = () => {
+      charEl.hidden = false; charEl.style.opacity = ""; charEl.className = `scene-char pos-${p} enter`;
+      charEl.src = url; charEl.alt = charName(k);
+      requestAnimationFrame(() => requestAnimationFrame(() => charEl.classList.remove("enter")));
+    };
+    // 디코드 완료 후 표시 → 빈 이미지/깜빡임 프레임 방지
+    const pre = new Image(); pre.decoding = "async"; pre.src = url;
+    if (pre.decode) pre.decode().then(reveal).catch(reveal); else reveal();
   };
   const hideChar = () => { view.char = null; charEl.style.opacity = "0"; setTimeout(() => { charEl.hidden = true; }, 350); };
   const setSpeaker = (k) => {
@@ -112,15 +152,20 @@ export async function startGame(app, opts = {}) {
     setSpeaker(t.speaker || null);
   };
 
-  /* 타이핑 (속도=설정) */
-  const CURSOR = '<span class="cursor">▍</span>';
+  /* 타이핑 (속도=설정) — 본문은 textContent, 커서만 별도 span (innerHTML 미사용 → Ink 대사의 <,& 안전) */
+  const cursorEl = document.createElement("span");
+  cursorEl.className = "cursor"; cursorEl.textContent = "▍";
   const type = (text) => {
     clearTimeout(typeTimer); typing = true; curText = text; view.line = text; nextEl.hidden = true;
-    const ms = settings.get().textSpeed; let n = 0;
-    const tick = () => { n++; textEl.innerHTML = text.slice(0, n) + (n < text.length ? CURSOR : ""); if (n < text.length) typeTimer = setTimeout(tick, ms); else { typing = false; nextEl.hidden = false; } };
-    if (ms <= 0) { textEl.textContent = text; typing = false; nextEl.hidden = false; } else tick();
+    const ms = skipOn ? 0 : settings.get().textSpeed; let n = 0; // SKIP 중엔 즉시 출력
+    const tick = () => {
+      n++; textEl.textContent = text.slice(0, n);
+      if (n < text.length) { textEl.appendChild(cursorEl); typeTimer = setTimeout(tick, ms); }
+      else { typing = false; nextEl.hidden = false; onLineDone(); }
+    };
+    if (ms <= 0) { textEl.textContent = text; typing = false; nextEl.hidden = false; onLineDone(); } else tick();
   };
-  const finishTyping = () => { clearTimeout(typeTimer); typing = false; textEl.textContent = curText; nextEl.hidden = false; };
+  const finishTyping = () => { clearTimeout(typeTimer); typing = false; textEl.textContent = curText; nextEl.hidden = false; onLineDone(); };
 
   /* 호감도 +n */
   const prevAff = {};
@@ -199,6 +244,46 @@ export async function startGame(app, opts = {}) {
     next();
   };
 
+  /* ── AUTO(자동 진행) / SKIP(빨리 감기) / 백로그(대사 로그) ── */
+  let autoOn = false, skipOn = false, autoTimer = null;
+  const clearAuto = () => { clearTimeout(autoTimer); autoTimer = null; };
+  const scheduleNext = () => {
+    clearAuto();
+    if (mode !== "line") return;            // 선택지·챕터·엔딩에선 자동 진행 멈춤
+    if (skipOn) { autoTimer = setTimeout(advance, 240); return; }
+    if (!autoOn) return;
+    const wait = Math.min(4200, 1300 + curText.length * 42); // 글자 수에 비례한 읽기 시간
+    autoTimer = setTimeout(advance, wait);
+  };
+  const autoBtn = $('.vn-ctrl[data-c="auto"]'), skipBtn = $('.vn-ctrl[data-c="skip"]');
+  const setAuto = (on) => { autoOn = on; autoBtn.classList.toggle("on", on); autoBtn.setAttribute("aria-pressed", on); if (on) { if (skipOn) setSkip(false); scheduleNext(); } else clearAuto(); };
+  const setSkip = (on) => { skipOn = on; skipBtn.classList.toggle("on", on); skipBtn.setAttribute("aria-pressed", on); if (on) { if (autoOn) setAuto(false); scheduleNext(); } else clearAuto(); };
+  autoBtn.addEventListener("click", (e) => { e.stopPropagation(); setAuto(!autoOn); });
+  skipBtn.addEventListener("click", (e) => { e.stopPropagation(); setSkip(!skipOn); });
+
+  const history = [];
+  const pushHistory = () => { if (curText) history.push({ who: view.speaker, text: curText }); if (history.length > 240) history.shift(); };
+  const openBacklog = () => {
+    clearAuto();
+    const panel = document.createElement("div"); panel.className = "panel";
+    panel.innerHTML = `<h2 class="panel-title">지나온 대사</h2><div class="backlog-list"></div><div class="panel-actions"><button class="btn" data-act="close">닫기</button></div>`;
+    const list = panel.querySelector(".backlog-list");
+    if (!history.length) { list.innerHTML = `<div class="backlog-empty">아직 지나온 대사가 없어요.</div>`; }
+    else history.forEach((h) => {
+      const row = document.createElement("div"); row.className = "backlog-row";
+      if (h.who) { const w = document.createElement("span"); w.className = "backlog-who"; w.textContent = charName(h.who); row.appendChild(w); }
+      const l = document.createElement("span"); l.className = "backlog-line"; l.textContent = h.text; row.appendChild(l); // textContent → 안전
+      list.appendChild(row);
+    });
+    const { close } = openOverlay(panel);
+    panel.querySelector('[data-act="close"]').addEventListener("click", close);
+    requestAnimationFrame(() => { list.scrollTop = list.scrollHeight; }); // 최신 대사로 스크롤
+  };
+  $('.vn-ctrl[data-c="log"]').addEventListener("click", (e) => { e.stopPropagation(); openBacklog(); });
+
+  /* 한 줄 출력 완료 시: 백로그 적재 → Auto/Skip 다음 예약 */
+  onLineDone = () => { pushHistory(); scheduleNext(); };
+
   /* 메뉴(ESC) */
   const getPreview = () => ({ player: story.variablesState["player"], scene: view.scene, bg: view.bg, char: view.char, speaker: view.speaker, line: view.line, cg: view.cg });
   const restoreView = (pv) => {
@@ -210,6 +295,7 @@ export async function startGame(app, opts = {}) {
     textEl.textContent = pv.line || ""; view.line = pv.line || ""; view.scene = pv.scene || "";
   };
   const openMenu = () => {
+    clearAuto(); // 메뉴 떠 있는 동안 자동 진행 정지
     const panel = document.createElement("div"); panel.className = "panel";
     panel.innerHTML = `<h2 class="panel-title">메뉴</h2><div class="menu-list">
       <button class="menu-item" data-a="resume">계속하기</button>
@@ -227,11 +313,13 @@ export async function startGame(app, opts = {}) {
     panel.querySelector('[data-a="title"]').addEventListener("click", () => { close(); onExit && onExit(); });
   };
 
-  root.addEventListener("click", (e) => { if (e.target.closest(".vn-choice") || e.target.closest(".vn-menu-btn")) return; advance(); });
+  root.addEventListener("click", (e) => { if (e.target.closest(".vn-choice") || e.target.closest(".vn-menu-btn") || e.target.closest(".vn-controls")) return; advance(); });
   $(".vn-menu-btn").addEventListener("click", (e) => { e.stopPropagation(); openMenu(); });
   const onKey = (e) => {
+    // 오버레이(메뉴/설정/세이브 등)가 떠 있으면 그쪽 ESC 핸들러에 맡기고 게임 입력은 전부 무시
+    // (ESC를 먼저 처리하면 '설정창 닫기'와 동시에 게임 메뉴가 새로 열리는 버그가 남)
+    if (document.querySelector(".overlay.open")) return;
     if (e.key === "Escape") { openMenu(); return; }
-    if (document.querySelector(".overlay.open")) return; // 오버레이 떠 있으면 진행 막음
     if (e.key === " " || e.key === "Enter") { e.preventDefault(); advance(); }
   };
   document.addEventListener("keydown", onKey);

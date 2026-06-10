@@ -12,10 +12,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="src/styles/game.css" />
 
-  <!-- 타이틀 LCP 가속: 배경 + 주역 2인 우선 로딩 -->
-  <link rel="preload" as="image" href="public/img/bg/rooftop-night.webp" fetchpriority="high" />
-  <link rel="preload" as="image" href="public/img/char/hanseoa/stage.webp" fetchpriority="high" />
+  <!-- LCP 가속: 프롤로그 첫 배경(train) + 타이틀 배경(station) + 주역 2인 -->
+  <link rel="preload" as="image" href="public/img/bg/train.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="public/img/bg/station.webp" fetchpriority="high" />
+  <link rel="preload" as="image" href="public/img/char/hanseoa/stage.webp" />
   <link rel="preload" as="image" href="public/img/char/kael/leather.webp" />
+  <!-- 스토리 데이터 미리 받기(타이틀 동안) — 게임 시작 시 대기 단축 -->
+  <link rel="prefetch" as="fetch" href="public/story/chapter1.json" crossorigin />
 </head>
 <body>
   <div id="app"></div>

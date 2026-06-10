@@ -216,6 +216,8 @@ ul { list-style: none; }
 /* EX 기준: 리드/본문 모두 같은 스타일(24px medium), 리드 아래 34px·줄간 17px 비율 */
 .about-lead { font-size: 1.05rem; font-weight: 400; color: var(--color-cream); margin-bottom: 26px; line-height: 1.55; max-width: 38ch; }
 .about-body { font-size: 1.05rem; font-weight: 400; color: rgba(246,233,227,.92); line-height: 1.75; max-width: 52ch; }
+/* 한국어 문단 공통: 단어 중간 줄바꿈 금지 + 마지막 줄 외톨이 단어 방지 */
+.about-lead, .about-body, .banner-desc, .vn-text { word-break: keep-all; text-wrap: pretty; }
 .about-photo {
   position: relative; z-index: 1;  /* 지그재그(2) 아래 → 브라운이 위에서 덮음 */
   /* 브라운 아래로 밀어넣어 대각선이 사진 왼쪽을 덮게 */
@@ -261,12 +263,14 @@ ul { list-style: none; }
   background: var(--color-primary); color: #fff; border-radius: 999px; font-size: .85rem; font-weight: 700;
 }
 /* 캐릭터마다 대사/설명 줄 수가 달라도 왼쪽 텍스트 위치가 안 흔들리게 2줄 공간 고정 예약 */
-.char-desc { color: rgba(246,233,227,.92); max-width: 32ch; min-height: 3.4em; }
+.char-desc { color: rgba(246,233,227,.92); max-width: 32ch; min-height: 3.4em; word-break: keep-all; }
 /* 시그니처 대사 — serif 이탤릭으로 톤 대비, 핑크 큰따옴표로 비주얼노벨 예열 */
 .char-quote {
-  position: relative; margin-top: 18px; padding-left: 20px; max-width: 30ch;
+  position: relative; margin-top: 18px; padding-left: 20px; max-width: 18em;
   font-family: Georgia, 'Times New Roman', serif; font-style: italic;
   font-size: 1.08rem; line-height: 1.5; color: var(--color-cream); min-height: 3em;
+  /* 한국어: 단어 중간 줄바꿈 금지(공백에서만). 단문은 한 줄, 긴 대사만 문장 단위로 */
+  word-break: keep-all; text-wrap: balance;
 }
 .char-quote::before {
   content: "\201C"; position: absolute; left: -4px; top: -6px;
