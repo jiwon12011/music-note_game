@@ -102,7 +102,7 @@
 | black | 블랙 티 | 진지 |
 | surprised | 그레이 후디(당황) | 당황/반전 |
 
-## CG 이벤트 일러스트 (img/cg/) — 25장
+## CG 이벤트 일러스트 (img/cg/) — 43장
 webp(width 1600, q82). Ink `# cg: <id>` 로 표시+해금. 캐릭터 순서 = 1 한서아 / 2 정이안 / 3 오다은 / 4 KAEL / 5 윤재호 / 6 최준혁 (기획서 순, *확인 필요*).
 
 | 파일 | 장면 | 캐릭터 | 챕터 | 획득(제안) |
@@ -117,5 +117,23 @@ webp(width 1600, q82). Ink `# cg: <id>` 로 표시+해금. 캐릭터 순서 = 1 
 | cg-08 | 한서아 데뷔 무대(전체) | 공통 | 5 | 진행형 |
 | cg-09-n1~6 | 노멀 엔딩 | 각 캐릭터 | 5 | **1위 ♥50~69 → 그 캐릭터 노멀** |
 | cg-09-s1~6 | 해피 엔딩 | 각 캐릭터 | 5 | **1위 ♥70+ → 그 캐릭터 해피** |
+| cg-10-hanseoa-practice | 리허설 뒤 무너진 얼굴 | 한서아 | 루트 CH4 | 루트 진행 |
+| cg-11-jeongian-vending | 야근의 작은 틈 | 정이안 | 루트 CH4 | 루트 진행 |
+| cg-12-odaeun-polaroid | 폴라로이드 앨범 | 오다은 | 루트 CH4/CH6 | 루트 진행/폴라로이드 |
+| cg-13-kael-practice | 혼자 연습하는 밤 | KAEL | 루트 CH5 | 루트 진행 |
+| cg-14-yunjaeho-score | 방문 앞의 악보 | 윤재호 | 루트 CH5 | 가사 조각 |
+| cg-15-choijunhyeok-clock | 멈춘 시계와 계약서 | 최준혁 | 루트 CH5/CH6 | 루트 진행 |
+| cg-16-hanseoa-stage-late | 무대 직전의 약속 | 한서아 | 루트 CH6 | 루트 진행 |
+| cg-17-hanseoa-rooftop-lyric | 덮어둔 비밀 노트 | 한서아 | 루트 CH5 | 루트 진행 |
+| cg-18-jeongian-dawn-meeting | 크레딧에 남은 이름 | 정이안 | 루트 CH6 | 루트 진행 |
+| cg-19-jeongian-control-room | 안 끄고 둔 데모 | 정이안 | 루트 CH4/CH5 | 루트 진행 |
+| cg-20-odaeun-vending | 캔커피 두 개 | 오다은 | 공통/수집 | 폴라로이드 |
+| cg-21-odaeun-rain-polaroids | 젖은 우산과 기다림 | 오다은 | 루트 CH5 | 루트 진행 |
+| cg-22-kael-backstage | 고맙다는 말의 뒷모습 | KAEL | 루트 CH4/CH6 | 루트 진행 |
+| cg-23-kael-booth | 유리 너머의 진짜 곡 | KAEL | 루트 CH4 | 루트 진행 |
+| cg-24-yunjaeho-dawn-score | 새벽에 완성된 한 소절 | 윤재호 | 루트 CH4 | 루트 진행 |
+| cg-25-yunjaeho-backstage | 단 한 번의 무대 뒤 | 윤재호 | 루트 CH6 | 루트 진행 |
+| cg-26-choijunhyeok-kitchen | 둘도 나쁘지 않은 새벽 | 최준혁 | 루트 CH4 | 루트 진행 |
+| cg-27-choijunhyeok-locked-room | 잠긴 방이 열린 날 | 최준혁 | 루트 CH6 | 루트 진행 |
 
 엔진: `# cg: id` → 전체화면 CG 레이어(`.scene-cg`) + `trackByCg`로 컬렉션 트랙 해금. 다음 `# bg:` 에서 CG 해제.

@@ -558,7 +558,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 첫 단독 리허설
 # bg: practice
 # char: hanseoa stage center
-# cg: cg-02
+# cg: cg-10-hanseoa-practice
 데뷔 무대 리허설. 콘텐츠 촬영 때문에 따라간 자리에서, 나는 보고 말았다.
 혼자라고 생각한 한서아가, 같은 소절에서 세 번이나 음을 놓치고 — 끝내 주저앉는 걸.
 # speaker: hanseoa
@@ -651,6 +651,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 비밀 노트
 # bg: living-night
 # char: hanseoa knit center
+# cg: cg-17-hanseoa-rooftop-lyric
 잠 못 드는 새벽, 거실. 한서아가 노트에 뭔가를 적다가, 인기척에 덮었다.
 # speaker: hanseoa
 …뭐 쓰냐고요? 비밀. 나중에, 다 완성되면 보여줄게요.
@@ -703,7 +704,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 무대 직전
 # bg: backstage
 # char: hanseoa dress-white center
-# cg: cg-08
+# cg: cg-16-hanseoa-stage-late
 # track: t05
 공연 직전 백스테이지. 한서아가 노트 한 권을 내밀었다.
 # speaker: hanseoa
@@ -769,6 +770,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 늦은 야근
 # bg: studio-night
 # char: jeongian shirt center
+# cg: cg-11-jeongian-vending
 둘만 남은 야근. 정이안이 펜을 떨어뜨렸고, 주우려다 손이 닿았다. 그녀가 바로 손을 뺐다.
 # speaker: jeongian
 …미안해요.
@@ -804,7 +806,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 무언의 허락
 # bg: studio-night
 # char: jeongian knit center
-# cg: cg-07-2
+# cg: cg-19-jeongian-control-room
 밤늦은 작업실. 정이안이 예전 그 데모를 다시 틀었다. 이번엔, 내가 듣는 걸 아는 채로.
 # speaker: jeongian
 …안 끄고 둘게요. 한 번쯤은, 누가 들어줘도 괜찮을 것 같아서.
@@ -866,7 +868,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 신곡 시연
 # bg: studio-night
 # char: jeongian cardigan center
-# cg: cg-06
+# cg: cg-19-jeongian-control-room
 정이안이 직접 쓴 곡을, 나에게만 들려줬다. 가사 속에, 우리가 나눈 대화가 녹아 있었다.
 # speaker: jeongian
 …알아챘죠? 그럼, 더는 모른 척 못 하겠네요.
@@ -923,6 +925,7 @@ KAEL — 회사 메인 아티스트, 데뷔 선배. 신입인 나는 그의 기�
 # scene: 크레딧
 # bg: studio-night
 # char: jeongian knit center
+# cg: cg-18-jeongian-dawn-meeting
 새벽 녹음이 끝난 스튜디오. 정이안이 앨범 크레딧에 내 이름을 넣었다며, 물었다.
 # speaker: jeongian
 이 곡 제목, 뭐라고 하면 좋을까요.
@@ -1008,6 +1011,7 @@ KAEL 스케줄이 겹치는 사고. 오다은이 혼자 다 떠안다 무너지�
 # scene: 폴라로이드
 # bg: rooftop-dusk
 # char: odaeun varsity center
+# cg: cg-12-odaeun-polaroid
 오다은의 취미가 폴라로이드라는 걸 처음 알았다. 나를 몰래 찍으려다, 딱 걸렸다.
 # speaker: odaeun
 …아, 들켰다. 이건 그냥, 빛이 예뻐서.
@@ -1046,6 +1050,7 @@ KAEL 스케줄이 겹치는 사고. 오다은이 혼자 다 떠안다 무너지�
 # scene: 비 오는 밤
 # bg: house-ext-night
 # char: odaeun cardigan center
+# cg: cg-21-odaeun-rain-polaroids
 우산을 두고 나간 오다은이 흠뻑 젖어 돌아왔다. 현관엔, 나 혼자 기다리고 있었다.
 # speaker: odaeun
 …왜 안 자고. 기다린 거야?
@@ -1113,6 +1118,7 @@ KAEL 스케줄이 겹치는 사고. 오다은이 혼자 다 떠안다 무너지�
 # scene: 폴라로이드 앨범
 # bg: living-night
 # char: odaeun soft center
+# cg: cg-12-odaeun-polaroid
 # collect: pl-5
 오다은이 혼자만 보던 폴라로이드 앨범을 꺼냈다. 그 안엔, 내 사진이 제일 많았다.
 # speaker: odaeun
@@ -1197,7 +1203,7 @@ KAEL 스케줄이 겹치는 사고. 오다은이 혼자 다 떠안다 무너지�
 # scene: 스캔들 그 후
 # bg: backstage
 # char: kael white center
-# cg: cg-05
+# cg: cg-22-kael-backstage
 스캔들이 수습된 뒤, 혼자 남은 백스테이지. KAEL이 나에게만 "고마워"라고 말하고는, 바로 자리를 떴다.
 * [그 뒷모습을 따라간다]
     ~ aff_kael += 12
@@ -1212,6 +1218,7 @@ KAEL 스케줄이 겹치는 사고. 오다은이 혼자 다 떠안다 무너지�
 # scene: 새벽 작업
 # bg: studio-night
 # char: kael hoodie-gray center
+# cg: cg-23-kael-booth
 야밤 스튜디오. KAEL이 혼자, 발매용이 아닌 개인적인 곡을 쓰고 있었다. 눈이 마주쳤다.
 # speaker: kael
 …봤어? 못 본 걸로 해.
@@ -1237,6 +1244,7 @@ KAEL 스케줄이 겹치는 사고. 오다은이 혼자 다 떠안다 무너지�
 # scene: 혼자 연습
 # bg: practice
 # char: kael casual center
+# cg: cg-13-kael-practice
 무대 위의 그와 전혀 다르게, 혼자 연습하며 투덜대는 KAEL. 또, 나한테 들켰다.
 # speaker: kael
 …웃지 마. 이거 비밀이야.
@@ -1310,6 +1318,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 대결 전야
 # bg: backstage
 # char: kael white center
+# cg: cg-22-kael-backstage
 # speaker: kael
 나, 내일 소속사 결정 뒤집을 거야. 이 곡, 고치지 않고 그대로 낸다. …근데 일 커지면, 너까지 휩쓸려.
 # speaker: kael
@@ -1392,7 +1401,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 공동 작업
 # bg: studio-night
 # char: yunjaeho sweater center
-# cg: cg-03
+# cg: cg-24-yunjaeho-dawn-score
 윤재호가 가사 피드백을 부탁했다. "이 부분 듣다가, 새벽 기차가 떠올랐어요"라고 하자, 그가 멈췄다.
 # speaker: yunjaeho
 …그거예요. 내가 못 찾던 단어가.
@@ -1481,6 +1490,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 === yunjaeho_e2_4 ===
 # scene: 문 앞의 악보
 # bg: room-night
+# cg: cg-14-yunjaeho-score
 # collect: ly-5
 방문 앞에, 악보 한 장이 끼워져 있었다. 제목은 없고, 마지막 줄엔 — 내 이름만 적혀 있었다.
 말로 못 한 마음이, 음표로 거기 있었다.
@@ -1505,6 +1515,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 단 한 번의 무대
 # bg: stage
 # char: yunjaeho work center
+# cg: cg-25-yunjaeho-backstage
 윤재호가, 처음으로 무대에 섰다. 작은 쇼케이스. 오직 한 사람을 위해, 새 트랙을 직접 연주했다.
 객석 맨 앞에서, 나는 숨도 쉬지 못했다.
 -> yunjaeho_e3_3
@@ -1603,7 +1614,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 새벽의 루틴
 # bg: kitchen
 # char: choijunhyeok black center
-# cg: cg-01
+# cg: cg-26-choijunhyeok-kitchen
 매일 새벽 혼자 부엌에서 커피를 마시는 그의 루틴에, 우연히 함께하게 됐다.
 # speaker: choijunhyeok
 …이 시간엔, 보통 아무도 없거든요. 근데, 둘도 나쁘지 않네요.
@@ -1638,7 +1649,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 문구의 의미
 # bg: living-night
 # char: choijunhyeok intense center
-# cg: cg-07-6
+# cg: cg-15-choijunhyeok-clock
 # speaker: choijunhyeok
 …이 문구, 직접 쓰셨어요?
 * [“혹시, 준혁 씨한테 필요한 말이기도 했어요?”]
@@ -1665,6 +1676,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 방을 열다
 # bg: living-night
 # char: choijunhyeok knit center
+# cg: cg-27-choijunhyeok-locked-room
 최준혁이, 입주 첫날 봤던 그 잠긴 방을 처음으로 열어줬다. 안은 텅 비어 있었고 — 벽시계 하나가, 오래전에 멈춰 있었다.
 # speaker: choijunhyeok
 그 사람이 떠난 날, 시계도 멈췄어요. 다음 사람을 위해 비워뒀다고 했지만 — 사실은, 시간을 멈춰둔 거였어요.
@@ -1699,6 +1711,7 @@ KAEL이 소속사 몰래 쓰던 곡을, 나에게만 들려줬다. 가사 한 �
 # scene: 연장 계약서
 # bg: living-night
 # char: choijunhyeok surprised center
+# cg: cg-15-choijunhyeok-clock
 계약 종료 일주일 전. 최준혁이, 종이 한 장을 내밀었다.
 # speaker: choijunhyeok
 연장 계약서예요. 금액은… 없어요. 그냥, 더 있어줬으면 해서.
