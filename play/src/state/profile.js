@@ -45,6 +45,24 @@ export const TRACK_CATALOG = [
   { id: "t-kael", name: "들켜버린 진심 · KAEL", bg: "rooftop-night", cg: "cg-07-4" },
   { id: "t-yunjaeho", name: "메모가 일기였어요 · 윤재호", bg: "studio-night", cg: "cg-07-5" },
   { id: "t-choijunhyeok", name: "혼자가 아니라는 말 · 최준혁", bg: "living-night", cg: "cg-07-6" },
+  // 루트별 디테일 CG — 같은 루트라도 감정의 문턱을 따로 기억하게 한다.
+  { id: "t-hs-practice", name: "무대 밖에서 무너진 밤 · 한서아", bg: "practice", cg: "cg-10-hanseoa-practice" },
+  { id: "t-hs-note", name: "덮어둔 비밀 노트 · 한서아", bg: "rooftop-dusk", cg: "cg-17-hanseoa-rooftop-lyric" },
+  { id: "t-hs-stage", name: "무대 직전의 약속 · 한서아", bg: "stage", cg: "cg-16-hanseoa-stage-late" },
+  { id: "t-ji-late", name: "야근의 작은 틈 · 정이안", bg: "office", cg: "cg-11-jeongian-vending" },
+  { id: "t-ji-demo", name: "안 끄고 둔 데모 · 정이안", bg: "studio-night", cg: "cg-19-jeongian-control-room" },
+  { id: "t-ji-credit", name: "크레딧에 남은 이름 · 정이안", bg: "office", cg: "cg-18-jeongian-dawn-meeting" },
+  { id: "t-od-polaroid", name: "제일 앞 장의 사진 · 오다은", bg: "living-day", cg: "cg-12-odaeun-polaroid" },
+  { id: "t-od-rain", name: "젖은 우산과 기다림 · 오다은", bg: "house-ext-night", cg: "cg-21-odaeun-rain-polaroids" },
+  { id: "t-kl-backstage", name: "고맙다는 말의 뒷모습 · KAEL", bg: "backstage", cg: "cg-22-kael-backstage" },
+  { id: "t-kl-booth", name: "유리 너머의 진짜 곡 · KAEL", bg: "studio-night", cg: "cg-23-kael-booth" },
+  { id: "t-kl-practice", name: "멋있는 척이 안 되는 밤 · KAEL", bg: "practice", cg: "cg-13-kael-practice" },
+  { id: "t-yj-score", name: "방문 앞의 악보 · 윤재호", bg: "room-night", cg: "cg-14-yunjaeho-score" },
+  { id: "t-yj-dawn", name: "새벽에 완성된 한 소절 · 윤재호", bg: "studio-night", cg: "cg-24-yunjaeho-dawn-score" },
+  { id: "t-yj-stage", name: "단 한 번의 무대 뒤 · 윤재호", bg: "backstage", cg: "cg-25-yunjaeho-backstage" },
+  { id: "t-cj-kitchen", name: "둘도 나쁘지 않은 새벽 · 최준혁", bg: "kitchen", cg: "cg-26-choijunhyeok-kitchen" },
+  { id: "t-cj-clock", name: "멈춘 시계의 문장 · 최준혁", bg: "living-night", cg: "cg-15-choijunhyeok-clock" },
+  { id: "t-cj-room", name: "잠긴 방이 열린 날 · 최준혁", bg: "room-day", cg: "cg-27-choijunhyeok-locked-room" },
 ];
 
 // `# cg: <id>` 로 해금된 CG → 매칭되는 트랙 찾기
@@ -56,8 +74,8 @@ export const POLAROID_CATALOG = [
   { id: "pl-1", img: "cg-01",   isCg: true,  date: "D-179", cap: "냉장고 앞 — 처음 마주친 새벽" },
   { id: "pl-2", img: "living-day",  isCg: false, date: "D-168", cap: "첫 주말 — 일손 자처한 신입" },
   { id: "pl-3", img: "office",      isCg: false, date: "D-150", cap: "운명의 김치찌개 — 메뉴 고르던 점심" },
-  { id: "pl-4", img: "office",      isCg: false, date: "D-132", cap: "야근의 밤 — 자판기 앞 두 사람" },
-  { id: "pl-5", img: "cg-07-3", isCg: true,  date: "D-30",  cap: "갑옷을 벗은 밤 — 오다은의 진짜 얼굴" },
+  { id: "pl-4", img: "cg-20-odaeun-vending", isCg: true, date: "D-132", cap: "야근의 밤 — 캔커피 두 개" },
+  { id: "pl-5", img: "cg-12-odaeun-polaroid", isCg: true,  date: "D-30",  cap: "제일 앞 장 — 몰래 모아둔 마음" },
   { id: "pl-6", img: "rooftop-night", isCg: false, date: "D-7", cap: "옥상의 약속 — 이제 혼자 두지 않을게" },
 ];
 
