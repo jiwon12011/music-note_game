@@ -9,7 +9,7 @@ export function openSettings() {
   panel.className = "panel";
   const speedLabel = (v) => (v <= 8 ? "매우 빠름" : v <= 20 ? "빠름" : v <= 35 ? "보통" : "느림");
   panel.innerHTML = `
-    <h2 class="panel-title">설정</h2>
+    <h2 class="panel-title"><span class="panel-eyebrow">SETTINGS &#9834;</span>설정</h2>
     <div class="set-group">
       <div class="set-row"><span class="set-label">텍스트 속도</span><span class="set-val" data-v="speed">${speedLabel(s.textSpeed)}</span></div>
       <input class="set-slider" type="range" min="4" max="50" step="2" value="${s.textSpeed}" data-k="textSpeed" />

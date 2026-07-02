@@ -26,7 +26,7 @@ export function openSaveLoad(mode, { onPick } = {}) {
     }
   }
   panel.innerHTML = `
-    <h2 class="panel-title">${mode === "save" ? "저장하기" : "불러오기"}</h2>
+    <h2 class="panel-title"><span class="panel-eyebrow">${mode === "save" ? "SAVE" : "LOAD"} &#9834;</span>${mode === "save" ? "저장하기" : "불러오기"}</h2>
     <div class="slot-list">${slots.join("")}</div>
     <div class="panel-actions"><button class="btn btn-ghost" data-act="close">닫기</button></div>`;
 

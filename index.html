@@ -36,7 +36,9 @@
       </nav>
       <div class="header-actions">
         <a href="#home" class="btn btn-outline prologue-btn" id="prologueBtn">프롤로그</a>
-        <a href="play/index.html" class="btn btn-primary start-btn">바로 시작하기</a>
+        <!-- 디렉터리형 링크(play/): cleanUrls 서버가 /play(슬래시 없음)로 리다이렉트하면
+             게임의 상대 경로(src/, public/)가 /src/… 로 깨져 흰 화면이 되는 것 방지 -->
+        <a href="play/" class="btn btn-primary start-btn">바로 시작하기</a>
         <button class="icon-btn menu-toggle" id="menuToggle" aria-label="메뉴 열기" aria-expanded="false" aria-controls="mainNav">≡</button>
       </div>
     </div>
@@ -123,6 +125,7 @@
             <li><button class="thumb" data-slot="1"><img src="assets/char-jeongian.webp" alt="" loading="lazy" /></button></li>
           </ul>
           <button class="char-arrow" id="charNext" aria-label="다음 캐릭터">&#9660;</button>
+          <span class="char-count" id="charCount" aria-live="polite">01 <em>/ 06</em></span>
         </div>
       </div>
     </section>
@@ -175,7 +178,7 @@
         <p class="banner-eyebrow">PLAYLIST : BETWEEN US</p>
         <h2 class="banner-title">우리 사이의 음표</h2>
         <p class="banner-desc">당신의 선택이 누군가의 노래가 됩니다. — 6개의 루트와 12가지 엔딩, 플레이할 때마다 당신만의 플레이리스트가 완성돼요.</p>
-        <a href="play/index.html" class="btn btn-primary">첫 음표 재생하기 ♪</a>
+        <a href="play/" class="btn btn-primary">첫 음표 재생하기 ♪</a>
       </div>
     </section>
   </main>
@@ -206,7 +209,7 @@
         <span class="vn-speaker">나</span>
         <p class="vn-text" id="vnText"></p>
         <span class="vn-next" id="vnNext" aria-hidden="true">▼</span>
-        <a href="play/index.html" class="btn btn-primary vn-cta" id="vnCta">이야기 시작하기 →</a>
+        <a href="play/" class="btn btn-primary vn-cta" id="vnCta">이야기 시작하기 →</a>
       </div>
     </div>
   </div>

@@ -8,7 +8,7 @@ export function openCollection() {
   const panel = document.createElement("div");
   panel.className = "panel panel-coll";
   panel.innerHTML = `
-    <h2 class="panel-title">컬렉션</h2>
+    <h2 class="panel-title"><span class="panel-eyebrow">MY PLAYLIST &#9834;</span>컬렉션</h2>
     <div class="coll-tabs">
       <button class="coll-tab active" data-tab="tracks">플레이리스트</button>
       <button class="coll-tab" data-tab="polaroids">폴라로이드</button>

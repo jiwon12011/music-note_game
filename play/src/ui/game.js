@@ -266,7 +266,7 @@ export async function startGame(app, opts = {}) {
   const openBacklog = () => {
     clearAuto();
     const panel = document.createElement("div"); panel.className = "panel";
-    panel.innerHTML = `<h2 class="panel-title">지나온 대사</h2><div class="backlog-list"></div><div class="panel-actions"><button class="btn" data-act="close">닫기</button></div>`;
+    panel.innerHTML = `<h2 class="panel-title"><span class="panel-eyebrow">LOG &#9834;</span>지나온 대사</h2><div class="backlog-list"></div><div class="panel-actions"><button class="btn" data-act="close">닫기</button></div>`;
     const list = panel.querySelector(".backlog-list");
     if (!history.length) { list.innerHTML = `<div class="backlog-empty">아직 지나온 대사가 없어요.</div>`; }
     else history.forEach((h) => {
@@ -296,14 +296,15 @@ export async function startGame(app, opts = {}) {
   };
   const openMenu = () => {
     clearAuto(); // 메뉴 떠 있는 동안 자동 진행 정지
-    const panel = document.createElement("div"); panel.className = "panel";
-    panel.innerHTML = `<h2 class="panel-title">메뉴</h2><div class="menu-list">
-      <button class="menu-item" data-a="resume">계속하기</button>
-      <button class="menu-item" data-a="save">저장하기</button>
-      <button class="menu-item" data-a="load">불러오기</button>
-      <button class="menu-item" data-a="affection">호감도</button>
-      <button class="menu-item" data-a="settings">설정</button>
-      <button class="menu-item" data-a="title">타이틀로</button></div>`;
+    const panel = document.createElement("div"); panel.className = "panel panel--menu";
+    // 일시정지 메뉴를 '플레이리스트 트랙 목록'처럼 — 타이틀 메뉴와 같은 디자인 언어
+    panel.innerHTML = `<h2 class="panel-title"><span class="panel-eyebrow">PAUSE &#9834;</span>메뉴</h2><div class="menu-list">
+      <button class="menu-item" data-a="resume"><span class="mi-no">01</span><span class="mi-lbl">계속하기</span><span class="mi-go">&#9656;</span></button>
+      <button class="menu-item" data-a="save"><span class="mi-no">02</span><span class="mi-lbl">저장하기</span><span class="mi-go">&#9656;</span></button>
+      <button class="menu-item" data-a="load"><span class="mi-no">03</span><span class="mi-lbl">불러오기</span><span class="mi-go">&#9656;</span></button>
+      <button class="menu-item" data-a="affection"><span class="mi-no">04</span><span class="mi-lbl">호감도</span><span class="mi-go">&#9656;</span></button>
+      <button class="menu-item" data-a="settings"><span class="mi-no">05</span><span class="mi-lbl">설정</span><span class="mi-go">&#9656;</span></button>
+      <button class="menu-item menu-item--exit" data-a="title"><span class="mi-no">06</span><span class="mi-lbl">타이틀로</span><span class="mi-go">&#9656;</span></button></div>`;
     const { close } = openOverlay(panel);
     panel.querySelector('[data-a="resume"]').addEventListener("click", close);
     panel.querySelector('[data-a="save"]').addEventListener("click", () => { close(); openSaveLoad("save", { onPick: (slot) => { const ok = save(slot, story, getPreview()); toast(ok ? `슬롯 ${slot + 1}에 저장했어요 ♪` : "저장에 실패했어요"); } }); });

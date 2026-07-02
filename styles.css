@@ -333,6 +333,13 @@ ul { list-style: none; }
   box-shadow: 0 0 0 3px rgba(239,148,172,.45), 0 6px 16px rgba(150,100,110,.22);
 }
 .thumb.center:hover { transform: none; }
+/* 현재 위치 카운터 — 캐러셀이 6명 순환임을 한눈에 (밴드 파스텔 위 마룬으로 대비 확보) */
+.char-count {
+  margin-top: 4px;
+  font-family: var(--font-display); font-weight: 800; font-size: .8rem;
+  letter-spacing: .16em; color: #7a2020; user-select: none;
+}
+.char-count em { font-style: normal; font-weight: 700; color: rgba(122,32,32,.45); }
 
 /* ============================================================
    STILL CUT (04)
@@ -372,6 +379,10 @@ ul { list-style: none; }
   transition: transform .42s var(--ease), opacity .42s var(--ease);
 }
 .still:hover .still-cap, .still:focus-within .still-cap { transform: translateY(0); opacity: 1; }
+/* 터치 기기(호버 없음): 호버로만 열리면 영영 못 보는 정보라 캡션 상시 노출 */
+@media (hover: none) {
+  .still-cap { transform: none; opacity: 1; }
+}
 /* 루트 번호 — 6컷이 6개 루트 진입점임을 암시 */
 .still-route {
   font-family: var(--font-display); font-size: .58rem; font-weight: 700;

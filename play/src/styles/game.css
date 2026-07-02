@@ -181,15 +181,46 @@ button { font-family: inherit; cursor: pointer; }
 .btn-ghost { background: rgba(250,241,236,.08); color: var(--c-on-dark); border: 1.5px solid rgba(239,148,172,.4); box-shadow: none; }
 .btn-ghost:hover { background: rgba(239,148,172,.16); }
 
-/* 메뉴(ESC) 항목 */
-.menu-list { display: flex; flex-direction: column; gap: 2px; }
-.menu-item {
-  width: 100%; padding: 15px 20px; border: none; border-radius: 12px; background: transparent;
-  color: var(--c-on-dark); font-family: var(--font-display); font-weight: 600; font-size: 1rem; text-align: left;
-  transition: background .2s var(--ease), padding-left .2s var(--ease);
+/* 메뉴(ESC) — 일시정지를 '트랙 목록'처럼: 번호 + 곡명(항목) + 호버 재생 화살표 */
+.panel--menu { width: min(100%, 420px); padding: 30px 24px 26px; }
+.panel-eyebrow {
+  display: block; margin-bottom: 7px;
+  font-size: .66rem; font-weight: 700; letter-spacing: .34em;
+  color: var(--c-primary); opacity: .9;
 }
-.menu-item:hover { background: rgba(239,148,172,.15); padding-left: 26px; color: #fff; }
+.menu-list { display: flex; flex-direction: column; gap: 3px; }
+.menu-item {
+  display: flex; align-items: center; gap: 16px;
+  width: 100%; padding: 14px 18px; border: none; border-radius: 12px; background: transparent;
+  color: var(--c-on-dark); font-family: var(--font-display); font-weight: 600; font-size: 1rem; text-align: left;
+  cursor: pointer;
+  transition: background .2s var(--ease), color .2s var(--ease);
+}
+.menu-item + .menu-item { position: relative; }
+.menu-item + .menu-item::before {
+  content: ""; position: absolute; top: -2px; left: 18px; right: 18px; height: 1px;
+  background: rgba(246,233,227,.08);
+}
+.menu-item .mi-no {
+  flex-shrink: 0; width: 24px;
+  font-size: .76rem; font-weight: 700; letter-spacing: .08em;
+  color: var(--c-primary); opacity: .75;
+  transition: opacity .2s var(--ease);
+}
+.menu-item .mi-lbl { flex: 1; transition: transform .2s var(--ease); }
+.menu-item .mi-go {
+  color: var(--c-primary); font-size: .9rem;
+  opacity: 0; transform: translateX(-6px);
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
+}
+.menu-item:hover, .menu-item:focus-visible { background: rgba(239,148,172,.15); color: #fff; outline: none; }
+.menu-item:hover .mi-no, .menu-item:focus-visible .mi-no { opacity: 1; }
+.menu-item:hover .mi-lbl, .menu-item:focus-visible .mi-lbl { transform: translateX(4px); }
+.menu-item:hover .mi-go, .menu-item:focus-visible .mi-go { opacity: 1; transform: translateX(0); }
 .menu-item:disabled { opacity: .4; }
+/* 타이틀로(이탈) — 톤을 한 단계 낮춰 실수 클릭 무게감 표시 */
+.menu-item--exit .mi-lbl { color: rgba(246,233,227,.72); }
+.menu-item--exit:hover .mi-lbl, .menu-item--exit:focus-visible .mi-lbl { color: #fff; }
 
 /* 설정 */
 .set-group { margin-bottom: 22px; }

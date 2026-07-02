@@ -139,6 +139,7 @@
   const charQuote = document.getElementById("charQuote");
   const charPrev = document.getElementById("charPrev");
   const charNext = document.getElementById("charNext");
+  const charCount = document.getElementById("charCount");
 
   // 슬롯 버튼: data-slot -1(위/이전) · 0(가운데/현재) · 1(아래/다음)
   const slot = {};
@@ -201,6 +202,7 @@
     setThumb(slot["-1"], ORDER[mod(current - 1, n)]);
     setThumb(slot["0"], cur);
     setThumb(slot["1"], ORDER[mod(current + 1, n)]);
+    if (charCount) charCount.innerHTML = `${String(mod(current, n) + 1).padStart(2, "0")} <em>/ ${String(n).padStart(2, "0")}</em>`;
     if (animateDetail) applyDetail(cur, dir);
   };
 
@@ -378,7 +380,7 @@
     heroBadge.setAttribute("role", "link");
     heroBadge.setAttribute("tabindex", "0");
     heroBadge.setAttribute("aria-label", "지금 재생하기 — 게임 시작");
-    const goPlay = () => { window.location.href = "play/index.html"; };
+    const goPlay = () => { window.location.href = "play/"; };
     heroBadge.addEventListener("click", (e) => { e.stopPropagation(); goPlay(); });
     heroBadge.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); goPlay(); } });
   }
@@ -420,11 +422,13 @@
       duration: 0.7, ease: "back.out(1.6)",
     }, 0.72);
 
-    // 4. 챕터 라벨: 살짝 위에서
-    heroTL.from(".hero-chapter", {
-      autoAlpha: 0, y: 10,
-      duration: 0.55, ease: "power2.out",
-    }, 0.90);
+    // 4. 챕터 라벨: 살짝 위에서 (마크업에서 뺀 상태면 건너뜀 — GSAP 경고 방지)
+    if (document.querySelector(".hero-chapter")) {
+      heroTL.from(".hero-chapter", {
+        autoAlpha: 0, y: 10,
+        duration: 0.55, ease: "power2.out",
+      }, 0.90);
+    }
 
     /* ── 5. 히어로 배경 패럴랙스 ─────────────────────────────────────── */
     if (window.ScrollTrigger) {
@@ -462,16 +466,18 @@
         }
       );
 
-      /* ── 8. hero-chapter 스크롤 페이드아웃 ─────────────────────────── */
-      g.to(".hero-chapter", {
-        autoAlpha: 0, y: 12,
-        scrollTrigger: {
-          trigger: ".hero",
-          start: "top top",
-          end: "30% top",
-          scrub: true,
-        },
-      });
+      /* ── 8. hero-chapter 스크롤 페이드아웃 (요소 있을 때만) ─────────── */
+      if (document.querySelector(".hero-chapter")) {
+        g.to(".hero-chapter", {
+          autoAlpha: 0, y: 12,
+          scrollTrigger: {
+            trigger: ".hero",
+            start: "top top",
+            end: "30% top",
+            scrub: true,
+          },
+        });
+      }
 
       /* ── 9. section-num pop (scale 0→1 back.out) ────────────────────
          GSAP이 직접 관리하므로 해당 요소는 IO .reveal-left 와 충돌하지 않도록
